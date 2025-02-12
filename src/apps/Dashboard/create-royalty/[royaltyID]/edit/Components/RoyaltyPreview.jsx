@@ -5,8 +5,9 @@ import ChallanTemp from "./preview/ChallanTemp";
 import SellerDetailsTemp from "./preview/SellerDeatilsTemp";
 import TextTEmp from "./preview/TextTEmp";
 
-const RoyaltyPreview = ({ qrCode }) => {
+const RoyaltyPreview = ({ qrCode, }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
+    console.log(RoyaltyData, "RoyaltyData-------------------------------------------------------->")
     const royaltyRef = useRef(null); // Reference for capturing the component
 
     const handleDownloadPDF = async () => {
