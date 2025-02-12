@@ -1,0 +1,1432 @@
+export const Dummydata = [
+  {
+    Qunatit: 150.9,
+    NameofPurchaser: "Smran Sen",
+    Registration_No: "WB73F0980",
+    Capacity: 16400,
+    VehicleType: 18,
+    Address: "Matigara",
+    Distic: "Darjeeling",
+    State: "west bengal",
+    PoliceStaion: "Matigara",
+    Mobile: "9832088456",
+    CrateDate: "31-01-2025",
+    CreteTime: "12-30-59 AM",
+    ValidDate: "01-01-2025",
+    validTime: "12-30-59 PM",
+    RoyaltyOWners: [
+      {
+        Name: "Lattu DAs",
+        SandId: "123456S",
+        ChalanId: "8967876",
+        OwnerAddress: "Nasalbari",
+        OwnwerPhone: "9876543210",
+        mouza: "matigara",
+        dist: "Darjeeling",
+        OwnerPoliceStation: "Nasakbari",
+        GPWord: "nasakbari",
+        river: "Mechi",
+        subDevison: "Khoribari",
+      },
+      {
+        Name: "Lattu DAs",
+        SandId: "123456S",
+        ChalanId: "8967876",
+        OwnerAddress: "Nasalbari",
+        OwnwerPhone: "9876543210",
+        mouza: "matigara",
+        dist: "Darjeeling",
+        OwnerPoliceStation: "Nasakbari",
+        GPWord: "nasakbari",
+        river: "Mechi",
+        subDevison: "Khoribari",
+      },
+      {
+        Name: "Nitu Dubey",
+
+        SandId: "098765N",
+        ChalanId: "0987654321",
+        OwnerAddress: "Matibari",
+        OwnwerPhone: "9876543210",
+        mouza: "matigaraN",
+        dist: "DarjeelingN",
+        OwnerPoliceStation: "N-Nasakbari",
+        GPWord: "nasakbari-N",
+        river: "Mechi_N",
+        subDevison: "Khoribari_N",
+      },
+    ],
+  },
+];
+// --------------------->
+import axios from "axios";
+
+const API_KEY = import.meta.env.VITE_STRAPI_API_KEY;
+const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY; // ✅ Fix
+
+console.log("Clerk Publishable Key:", CLERK_PUBLISHABLE_KEY); // Debugging
+console.log("Strapi API Key:", API_KEY); // Debugging
+
+const axiosClient = axios.create({
+  baseURL: "http://localhost:1337/api/",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${API_KEY}`,
+  },
+});
+
+// Function to add a new vehicle
+const addNewVehicle = (data) => axiosClient.post("/vehicle-numbers", data);
+const GetUserRoyalties = (userEmail) =>
+  axiosClient.get("/vehicle-numbers?filters[userEmail][$eq]=" + userEmail);
+const updatePurchaserDetails = async (params, data) => {
+  try {
+
+    const response = await axiosClient.put(
+      `/vehicle-numbers/${params?.royaltyID}`,
+      { data }
+    );
+    return response;
+  } catch (error) {
+    console.error(
+      "Error updating purchaser details:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+export { addNewVehicle, GetUserRoyalties, updatePurchaserDetails };
+// -------------------->
+import { useContext, useEffect, useState } from "react";
+import { z } from "zod";
+import { RoyaltyInfoContext } from "../../../../../../../Context/RoyaltyInfoContext";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useParams } from "react-router-dom";
+import {
+  GetUserRoyalties,
+  updatePurchaserDetails,
+} from "../../../../../../../../Apis/GlobalApi";
+
+const quantitySchema = z
+  .string()
+  .regex(
+    /^\d{1,3}(\.\d{0,3})?$/,
+    "Only up to 3 digits before and after the decimal allowed"
+  );
+
+const PurchaserForm = ({ enableNext }) => {
+  const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
+  const params = useParams();
+  const [formData, setFormData] = useState({
+    quantity: "",
+    NameofPurchaser: "",
+    Registration_No: "",
+    VehicleType: "",
+  });
+
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  // Fetch data when component mounts
+  useEffect(() => {
+    console.log(params, "params");
+    console.log(params?.royaltyID, "royaltyID");
+    const fetchData = async () => {
+      try {
+        const response = await GetUserRoyalties();
+        console.log("API Response:", response.data);
+
+        if (response.data && response.data.length > 0) {
+          const fetchedData = response.data[0].attributes; // Ensure correct path
+          setFormData({
+            quantity: fetchedData.quantity || "",
+            NameofPurchaser: fetchedData.NameofPurchaser || "",
+            Registration_No: fetchedData.Registration_No || "",
+            VehicleType: fetchedData.VehicleType || "",
+          });
+
+          setRoyaltyData({
+            ...RoyaltyData,
+            quantity: fetchedData.quantity || "",
+            NameofPurchaser: fetchedData.userName || "",
+            Registration_No: fetchedData.Registration_No || "",
+            VehicleType: fetchedData.VehicleType || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user royalties:", error);
+      }
+    };
+
+    fetchData();
+    console.log(RoyaltyData, "gggggggggg");
+  }, []);
+
+  const handleInputChange = (e) => {
+    enableNext(false);
+    const { name, value } = e.target;
+
+    if (!name) {
+      console.error("Missing name attribute in input field:", e.target);
+      return;
+    }
+
+    let errorMsg = "";
+
+    if (name === "quantity") {
+      const result = quantitySchema.safeParse(value);
+      if (!result.success) errorMsg = result.error.issues[0].message;
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: errorMsg }));
+
+    setFormData({ ...formData, [name]: value });
+    setRoyaltyData({ ...RoyaltyData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    console.log("Data being sent:", formData); // Add this!
+    try {
+      const response = await updatePurchaserDetails(params, formData); // Pass formData
+
+      enableNext(true);
+    } catch (error) {
+      console.error("Error updating purchaser details:", error);
+      // Handle error, e.g., display an error message
+      setErrors({ api: "Error saving data. Please try again." });
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="grid grid-cols-1 mt-3 gap-3">
+        {/* Quantity Input */}
+        <label className="text-sm text-red-400 font-bold">Quantity</label>
+        <div className="w-full">
+          <Input
+            name="quantity"
+            required
+            type="text"
+            value={formData.quantity}
+            onChange={handleInputChange}
+          />
+          {errors.quantity && (
+            <p className="text-red-500 text-sm">{errors.quantity}</p>
+          )}
+        </div>
+
+        {/* Purchaser Name Input */}
+        <div>
+          <label className="text-sm text-red-400 font-bold">
+            Name of Purchaser
+          </label>
+          <div className="w-full">
+            <Input
+              name="NameofPurchaser"
+              required
+              type="text"
+              value={formData.NameofPurchaser}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
+        {/* Vehicle Number */}
+        <div>
+          <label className="text-sm text-red-400 font-bold">
+            Confirm Vehicle NO
+          </label>
+          <div className="w-full">
+            <Input
+              name="Registration_No"
+              required
+              type="text"
+              value={formData.Registration_No}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
+        {/* Vehicle Type Dropdown */}
+        <div>
+          <label className="text-sm text-red-400 font-bold">Vehicle Type</label>
+          <div className="w-full">
+            <select
+              name="VehicleType"
+              required
+              value={formData.VehicleType}
+              onChange={handleInputChange}
+            >
+              <option value="">Vehicle Type</option>
+              {[
+                "6 Wheels",
+                "10 Wheels",
+                "12 Wheels",
+                "14 Wheels",
+                "16 Wheels",
+                "18 Wheels",
+                "22 Wheels",
+              ].map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="mt-5">
+          <Button
+            type="submit"
+            className="bg-blue-500 text-white p-2 rounded-md"
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save and Continue"}
+          </Button>
+        </div>
+      </div>
+    </form>
+  );
+};
+
+export default PurchaserForm;
+// ------------------------>
+import PropTypes from "prop-types"; // Import PropTypes
+import { useContext } from "react";
+import { RoyaltyInfoContext } from "../../../../../../../Context/RoyaltyInfoContext";
+
+const BuyerDetailsTemp = ({ formData }) => {
+    const { RoyaltyData }=useContext(RoyaltyInfoContext)
+    // Merging form data with dummy data as fallback
+    const data =   RoyaltyData;
+
+    const buyerFields = [
+        { label: "Name Of Purchaser", value: data?.NameofPurchaser },
+        { label: "Mobile No", value: data?.MobileNO },
+        { label: "Address", value: data?.Address },
+        { label: "Police Station", value: data?.PoliceStaion },
+        { label: "District", value: data?.Distic },
+        { label: "State", value: data?.State },
+        { label: "Registration No", value: data?.Registration_No },
+        { label: "Vehicle Type", value: data?.VehicleType },
+        { label: "Capacity (in Kg)", value: data?.Capacity },
+    ];
+
+    return (
+        <div>
+            <p className="font-bookman italic">Vehicle & Destination Details</p>
+
+            <div className="border border-gray-500 p-2"
+                style={{
+                    height: "8.8cm",
+                    width: "8.6cm",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "start",
+                    gap: "0.5cm",
+                    fontSize: "8px",
+                    fontWeight: "bold",
+                }}
+            >
+                {buyerFields.map((item, index) => (
+                    <p className="flex font-arial" key={index}>
+                        <span className="w-[150px]">{item.label}</span>
+                        <span className="mr-[5px]">:</span>
+                        <span>{item.value}</span>
+                    </p>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+// ✅ PropTypes Validation
+BuyerDetailsTemp.propTypes = {
+    formData: PropTypes.shape({
+        NameofPurchsser: PropTypes.string,
+        MobileNO: PropTypes.string,
+        Address: PropTypes.string,
+        PoliceStaion: PropTypes.string,
+        Distic: PropTypes.string,
+        State: PropTypes.string,
+        Registration_No: PropTypes.string,
+        VehicleType: PropTypes.string,
+        Capacity: PropTypes.string,
+    }),
+};
+
+export default BuyerDetailsTemp;
+// ------------------------------------------->
+import { Dummydata } from "../../../../../../../../Apis/DummyData";
+import PropTypes from "prop-types"; // Import PropTypes
+const SellerDetailsTemp = ({ formData }) => {
+    // Use user input if available, otherwise fallback to Dummydata
+    const data = formData?.NameofPurchsser ? formData : Dummydata[0];
+
+    const sellerFields = [
+        { label: "Name Of Purchaser", value: data?.NameofPurchsser },
+        { label: "Mobile No", value: data?.MobileNO },
+        { label: "Address", value: data?.Address },
+        { label: "Police Station", value: data?.PoliceStaion },
+        { label: "District", value: data?.Distic },
+        { label: "State", value: data?.State },
+        { label: "Registration No", value: data?.Registration_No },
+        { label: "Vehicle Type", value: data?.VehicleType },
+        { label: "Capacity (in Kg)", value: data?.Capacity },
+    ];
+
+    return (
+        <div>
+            <p className="font-bookman italic font-bold">SAND Block & Leaseholder Details</p>
+
+            <div className="border border-gray-500 p-2"
+                style={{
+                    height: "8.8cm",
+                    width: "8.6cm",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "start",
+                    gap: "0.5cm",
+                    fontSize: "8px",
+                    fontWeight: "bold",
+                }}
+            >
+                {sellerFields.map((item, index) => (
+                    <p className="flex font-arial" key={index}>
+                        <span className="w-[150px]">{item.label}</span>
+                        <span className="mr-[5px]">:</span>
+                        <span>{item.value}</span>
+                    </p>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default SellerDetailsTemp;
+SellerDetailsTemp.propTypes = {
+    formData: PropTypes.shape({
+        NameofPurchsser: PropTypes.string,
+        MobileNO: PropTypes.string,
+        Address: PropTypes.string,
+        PoliceStaion: PropTypes.string,
+        Distic: PropTypes.string,
+        State: PropTypes.string,
+        Registration_No: PropTypes.string,
+        VehicleType: PropTypes.string,
+        Capacity: PropTypes.string,
+    }),
+};
+// ------------------------------>
+import React from "react";
+import { useParams } from "react-router-dom";
+import { Dummydata } from "../../../../../../../../Apis/DummyData";
+
+export const ChallanDetails = () => {
+    const { challanId } = useParams(); // Get challanId from URL
+
+    // Find the corresponding challan
+    const challanData = Dummydata[0].RoyaltyOWners.find(
+        (owner) => owner.ChalanId === challanId
+    );
+
+    if (!challanData) return <h2>Challan Not Found</h2>;
+
+    return (
+        <div>
+            <h1>WBMDTCL e-Challan</h1>
+            <p><strong>Challan No:</strong> {challanData.ChalanId}</p>
+            <p><strong>River:</strong> {challanData.river}</p>
+            <p><strong>District:</strong> {challanData.dist}</p>
+            <p><strong>Lessee/MDO:</strong> {challanData.Name}</p>
+            <p><strong>Purchaser Name:</strong> {Dummydata[0].NameofPurchaser}</p>
+            <p><strong>Vehicle No:</strong> {Dummydata[0].Registration_No}</p>
+            <p><strong>Quantity:</strong> {Dummydata[0].Qunatit} cft</p>
+        </div>
+    );
+};
+// ------------------------>
+import React from "react";
+import { QRCodeSVG } from "qrcode.react";
+import { Link } from "react-router-dom";
+import { Dummydata } from "../../../../../../../../Apis/DummyData";
+
+export const QRGenerator = () => {
+  const challanId = Dummydata[0].RoyaltyOWners[0].ChalanId; // Extract first challanId
+  const link = `/challan/${challanId}`; // Correct path
+
+  return (
+    <div>
+      <h2>Scan QR Code to View Challan</h2>
+      <Link to={link}>
+        <QRCodeSVG value={link} size={128} />
+      </Link>
+    </div>
+  );
+};
+// ------------------------------------------->
+import { MoveLeft, MoveRight } from "lucide-react";
+import PurchaserForm from "./Forms/PurchaserForm";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+
+const AddRoyaltyForm = () => {
+  // State to track the active form index
+  const [activeFormIndex, setActiveFormIndex] = useState(1);
+  const [enableNext, SetEnableNext] = useState(false);
+  useEffect(() => {}, []);
+  return (
+    <div className="p-4">
+      <h2 className="text-lg font-semibold mb-4">Add Royalty Form</h2>
+
+      {/* Navigation Buttons */}
+      <div className="flex justify-end gap-4 mb-4">
+        {activeFormIndex > 1 && (
+          <Button
+            onClick={() => setActiveFormIndex((prev) => Math.max(prev - 1, 1))}
+            size="sm"
+            variant="outline"
+            className=" hover:bg-red-600 flex items-center gap-2"
+          >
+            <MoveLeft /> Back
+          </Button>
+        )}
+        {activeFormIndex < 3 && (
+          <Button
+            disabled={!enableNext}
+            onClick={() => setActiveFormIndex((prev) => Math.min(prev + 1, 3))}
+            size="sm"
+            className="bg-green-500 hover:bg-green-700 flex items-center gap-2"
+          >
+            Next <MoveRight />
+          </Button>
+        )}
+      </div>
+
+      {/* Form Component */}
+      {activeFormIndex === 1 ? (
+        <PurchaserForm enableNext={(v) => SetEnableNext(v)} />
+      ) : null}
+    </div>
+  );
+};
+
+export default AddRoyaltyForm;
+// ------------------------------------>
+import { useContext } from "react";
+import { Dummydata } from "../../../../../../../Apis/DummyData";
+import PropTypes from "prop-types"; // Import PropTypes
+import { RoyaltyInfoContext } from "../../../../../../Context/RoyaltyInfoContext";
+import { Card, CardContent } from "../../../../../../components/ui/card";
+import { QRCodeCanvas } from "qrcode.react";
+const ChallanTemp = ({ formData }) => {
+  const { RoyaltyData } = useContext(RoyaltyInfoContext)
+  // Merge form data with dummy data as fallback
+  const data =  RoyaltyData;
+  const qrData =true
+  return (
+    <div className="p-4">
+      {/* Title */}
+      <p className="font-bold text-lg">ROAD E-Challan for Sand / Riverbed Materials Transport</p>
+
+      {/* Container for Details & QR Code */}
+      <div className="flex gap-4 mt-2">
+
+        {/* Challan Details Section */}
+        <div className="h-[3.6cm] w-[14.1cm] border border-black p-2">
+          
+          <div>
+            <p className="flex font-bold font-arial">
+              <span className="w-[150px]">E-Challan No.</span>
+              <span className="mr-[5px]">:</span>
+              <span>{data?.EChallanNo}</span>
+            </p>
+          </div>
+          <div>
+            <p className="flex font-bold font-arial" >
+              <span className="w-[150px]">Issue Date</span>
+              <span className="mr-[5px]">:</span>
+              <span>{data.IssueDate}</span>
+            </p>
+          </div>
+          <div>
+            <p className="flex font-bold font-arial" >
+              <span className="w-[150px]">Validity Till</span>
+              <span className="mr-[5px]">:</span>
+              <span>{data.ValidityTill}</span>
+            </p>
+            <div>
+              <p className="flex font-bold font-arial" >
+                <span className="w-[150px]">Quantity</span>
+                <span className="mr-[5px]">:</span>
+                <span>{`${RoyaltyData.quantity} ctf`}<span>{`(Eight hundred ctf)`}</span></span>
+              </p>
+            </div>
+          </div>
+          <div>
+            <p className="flex font-bold font-arial">
+              <span className="w-[150px]">Vehicle No.</span>
+              <span className="mr-[5px]">:</span>
+              <span>{`${RoyaltyData.Registration_No} (${RoyaltyData.VehicleType})`}</span>
+            </p>
+          </div>
+          
+        </div>
+
+        {/* QR Code Section (2.5cm × 2.5cm) */}
+        <div className="border border-black h-[2.5cm] w-[2.5cm] flex items-center justify-center">
+          <Card className="w-[2.5cm] h-[2.5cm] flex justify-center items-center border">
+            <CardContent>
+              {qrData ? (
+                <QRCodeCanvas value={qrData} size={90} />
+              ) : (
+                <p className="text-center text-gray-500">QR Code Here</p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default ChallanTemp;
+ChallanTemp.propTypes = {
+  formData: PropTypes.shape({
+    EChallanNo: PropTypes.string,
+    IssueDate: PropTypes.string,
+    ValidityTill: PropTypes.string,
+    Quantity: PropTypes.string,
+    VehicleNo: PropTypes.string,
+    VehicleType: PropTypes.string,
+
+  }),
+};
+// -------------------------------------->
+import { useContext } from "react";
+import BuyerDetailsTemp from "./preview/BuyerDetailsTemp";
+import SellerDeatilsTemp from "./preview/SellerDeatilsTemp";
+import { RoyaltyInfoContext } from "../../../../../../Context/RoyaltyInfoContext";
+import TextTEmp from "./TextTEmp";
+import ChallanTemp from "./ChallanTemp";
+import { QRGenerator } from "./QrCode/QrCodeGen";
+
+const RoyaltyPreview = () => {
+  const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
+
+  return (
+    <div>
+      <QRGenerator />
+      <p className="text-center font-bold">
+        <strong>RoyaltyPreview</strong>
+      </p>
+      <div className="grid grid-rows-1 shadow-lg p-14 h-[29.7cm] w-[21cm] border-t-[20px]">
+        {/* A4 Sized Container */}
+        <div className="relative w-[18.9cm] h-[27.4cm] border border-black p-[1.2cm] bg-white flex flex-col gap-[0.3cm]">
+          {/* Challan Section */}
+          <ChallanTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
+
+          {/* Image Behind Content */}
+          <div className="relative flex justify-center items-center">
+            <img
+              className="absolute w-[5cm] h-[5cm] object-contain opacity-40"
+              src="../../../../../../../public/mid_imga.png"
+              alt="background"
+            />
+
+            {/* Buyer & Seller Details */}
+            <div className="relative z-10 flex justify-between w-full gap-[0.3cm]">
+              <SellerDeatilsTemp
+                RoyaltyData={{ RoyaltyData, setRoyaltyData }}
+              />
+              <BuyerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Text Section */}
+        <div className="z-10">
+          <TextTEmp />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default RoyaltyPreview;
+// ---------------------------------->
+
+
+const TextTEmp = () => {
+  return (
+    <div className="h-[8.5cm]">
+      <div className="px-5 ">
+        <p className="font-arial size-25">Note :</p>
+        <p className="font-arial size-25">
+          {"1) Prior approval for excarvation permission was accorded by : "}
+          <strong>{`ADM and DL & LRO, DARJEELING `}</strong>vide permit no:{" "}
+          {` 47993/S/24-25/ DD_MM_YY-hh-MM-SS`}{" "}
+        </p>
+        <p className="font-arial size-25">
+          {
+            "2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify authenticity of the E-challan, please scan above  QR Code using smart ohone."
+          }
+        </p>
+        <p className="font-arial size-25">
+          {
+            "3) This is a system generated document and does not requried any signature"
+          }
+        </p>
+        <div className="px-2">
+          <p>
+            {
+              "4) Self Certitication by Lessee/MDO : I/WE(Lessee/MDO/Q.P.) hereby declare that the above statements are correct and complete to be best of my knowledge and belied."
+            }
+            <strong>{"Seller Name"}</strong>
+          </p>
+        </div>
+      </div>
+      <div className="grid justify-end">
+        <p>Issued by</p>
+        <p className="font-bold">{"Seller name"}</p>
+        <p className="font-bold">{"Sand Block Id 2462/SB2024"}</p>
+      </div>
+      <p>{`** On QR code scanning pl check that the website address bar shows mdtcl.wb.gov.in as that is the only genuine website of the government.`}</p>
+    </div>
+  );
+};
+
+export default TextTEmp;
+// ----------------------------------->
+import { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom"
+import AddRoyaltyFrom from "./Components/AddRoyaltyFrom";
+import RoyaltyPreview from "./Components/RoyaltyPreview";
+import { RoyaltyInfoContext } from "../../../../../Context/RoyaltyInfoContext";
+import { Dummydata } from "../../../../../../Apis/DummyData";
+
+const EditRoyalty = () => {
+  const [RoyaltyData, setRoyaltyData] = useState(Dummydata);
+
+  useEffect(() => {
+    setRoyaltyData(Dummydata);
+  }, []);
+  return (
+    <RoyaltyInfoContext.Provider value={{ RoyaltyData, setRoyaltyData }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 p-10 gap-5">
+        <AddRoyaltyFrom />
+        <RoyaltyPreview />
+      </div>
+    </RoyaltyInfoContext.Provider>
+  );
+};
+
+export default EditRoyalty;
+// ------------------------------------>
+import { Button } from "@/components/ui/button.jsx";
+import CreateRoyalty from "../../components/Comp/CreateRoyalty";
+import { useUser } from "@clerk/clerk-react";
+import { useEffect, useState } from "react";
+import { GetUserRoyalties } from "../../../Apis/GlobalApi";
+import RoyaltyCard from "./RoyaltyCard";
+
+const Dashboard = () => {
+  const { user } = useUser(); // Destructure 'user' for readability
+  const [userRoyaltyData, setUserRoyaltyData] = useState([]); // State to hold royalty data
+
+  // Effect to fetch royalty data when user is available (only runs on user change)
+  useEffect(() => {
+    // Check if the user has a valid email address
+    if (user?.primaryEmailAddress?.emailAddress) {
+      fetchUserRoyaltyList(); // Fetch royalty list
+    }
+  }, []); // Only run this effect when the user changes
+
+  /**
+   * Fetches the user's royalty list from the API.
+   */
+  const fetchUserRoyaltyList = async () => {
+    try {
+      // API call to fetch royalties based on the user's email
+      const response = await GetUserRoyalties(
+        user.primaryEmailAddress.emailAddress
+      );
+
+      // Check if the response contains valid data and update state
+      const royalties = response?.data?.data || [];
+      setUserRoyaltyData(royalties);
+
+      console.log("Royalty Data:", royalties); // Debugging - Log fetched data
+    } catch (error) {
+      // Error handling in case API request fails
+      console.error("Error fetching user royalties:", error);
+    }
+  };
+
+  return (
+    <div className="p-6">
+      {/* Title Section */}
+      <h2 className="font-bold text-3xl">Generate Royalty with QR Code</h2>
+
+      {/* QR Code Generation & Search Section */}
+      <div className="flex justify-evenly p-10 md:p-20 lg:p-30">
+        <CreateRoyalty />
+        <Button>Search</Button>
+      </div>
+
+      {/* Royalty Cards Section */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        {userRoyaltyData.length > 0 ? (
+          // Map over the royalty data and display a card for each
+          userRoyaltyData.map((data, index) => (
+            <RoyaltyCard key={index} data={data} />
+          ))
+        ) : (
+          // If no data exists, show a message
+          <p className="text-center text-gray-500 col-span-2 md:col-span-5">
+            No royalty data available.
+          </p>
+        )}
+      </div>
+
+      {/* Demo Button Section */}
+      <div className="mt-6">
+        <Button>Demo</Button>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
+// ------------------------------------------>
+import { Link } from "react-router-dom"; // Ensure you import Link from react-router-dom
+import { Truck } from "lucide-react";
+import PropTypes from "prop-types"; // To handle prop validation
+
+const RoyaltyCard = ({ data }) => {
+    console.log(data.documentId,"documentId")
+    return (
+        <Link to={`/dashboard/create-royalty/${data.documentId}/edit`} className="block">
+            <div
+                className={`p-6 text-center rounded-2xl shadow-md hover:shadow-lg h-[280px] transition-shadow duration-300 
+            ${data?.Registration_No? "bg-blue-100" : "bg-gray-200"}`}
+            >
+                <div className="flex justify-center">
+                    <Truck color="#48ea9e" size={60} />
+                </div>
+                {/* Conditionally render vehicle and owner */}
+                <h3 className="text-xl font-semibold text-gray-800 mt-4">{data?.Registration_No}</h3>
+                <p className="text-gray-600">{data?.NameofPurchaser}</p>
+            </div>
+        </Link>
+    );
+};
+
+// PropTypes validation for better type safety
+RoyaltyCard.propTypes = {
+    data: PropTypes.shape({
+        Registration_No: PropTypes.string.isRequired,
+        NameofPurchaser: PropTypes.string.isRequired,
+        documentId:PropTypes.string,
+        userID: PropTypes.string.isRequired, // Added validation for userID
+    }).isRequired,
+};
+
+export default RoyaltyCard;
+// ------------------------------------------>
+
+import Header from "../../components/Customs/Header";
+import Landing from "./Landing";
+
+const Home = () => {
+  return (
+    <div>
+      <Header />
+      <Landing />
+    </div>
+  );
+};
+
+export default Home;
+// ------------------------------->
+import RegisterTruck from "../../components/Comp/CreateRoyalty";
+
+const Landing = () => {
+  return (
+    <div className="relative mb-(-200) z-0 bg-gradient-to-r from-purple-300 via-blue-300 to-pink-300 w-full h-screen flex items-center justify-center">
+      <RegisterTruck />
+    </div>
+  );
+};
+
+export default Landing;
+// ----------------------------------->
+import { Asterisk, Loader2, ShieldEllipsis } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input.jsx";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { addNewVehicle } from "../../../Apis/GlobalApi";
+import { useUser } from "@clerk/clerk-react";
+
+const RegisterTruck = () => {
+  // State variables for managing dialog states, form inputs, and loading states
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [vehicleDialogOpen, setVehicleDialogOpen] = useState(false);
+  const [desireCTF, setDesireCTF] = useState(""); // Desired CTF value from user
+  const [maxLimitForCtf, setMaxLimitForCtf] = useState(0); // Max CTF limit based on balance
+  const [Registration_No, setRegistration_No] = useState(); // Vehicle number input
+  const [isLoading, setIsLoading] = useState(false); // Loading state for API calls
+  const navigate = useNavigate(); // To handle navigation after certain conditions
+  const { user } = useUser(); // Get user data from Clerk
+
+  const handleCTFChange = (e) => {
+    const value = e.target.value;
+
+    // Allow only numbers, decimals, and a single decimal point
+    if (/^\d*\.?\d*$/.test(value)) {
+      setDesireCTF(value); // Update state with valid input
+    }
+  };
+  // Calculate max CTF limit based on balance when the component mounts
+  useEffect(() => {
+    const balance = 900; // Example balance, should come from actual data
+    const calculatedMaxLimitForCtf = Math.floor(balance / 3); // Max CTF limit (integer)
+    setMaxLimitForCtf(calculatedMaxLimitForCtf); // Set the max limit
+  }, []);
+
+  // Handle the form submission logic, including validation and dialog transitions
+  const handleSubmit = () => {
+    const parsedDesireCTF = parseInt(desireCTF, 10); // Parse the desireCTF to integer
+
+    // Validate the input CTF value
+    if (isNaN(parsedDesireCTF) || parsedDesireCTF <= 0) {
+      alert("Please enter a valid numerical value for CTF.");
+      return;
+    }
+
+    // Check if the desired CTF is within the valid range
+    if (maxLimitForCtf >= parsedDesireCTF) {
+      setDesireCTF(desireCTF);
+      setVehicleDialogOpen(true); // Show the vehicle dialog
+      setDialogOpen(false); // Close the current dialog
+    } else if (maxLimitForCtf < 150 || parsedDesireCTF > maxLimitForCtf) {
+      navigate("/recharge"); // Redirect to recharge page if CTF is invalid
+    }
+  };
+  const onCreate = async () => {
+    if (
+      !Registration_No ||
+      !user?.primaryEmailAddress?.emailAddress ||
+      !user?.fullName
+    ) {
+      console.error(
+        "Missing required fields: Registration_No, userEmail, or userName."
+      );
+      return;
+    }
+
+    setIsLoading(true); // Set loading state before API call
+
+    const uuid = uuidv4(); // Generate a unique identifier
+
+    const data = {
+      data: {
+        royaltyID: uuid,
+        Registration_No: Registration_No,
+        userEmail: user?.primaryEmailAddress?.emailAddress,
+        userName: user?.fullName,
+        quantity: desireCTF,
+      },
+    };
+
+    console.log("Payload being sent:", JSON.stringify(data));
+
+    try {
+      const response = await addNewVehicle(data);
+
+      // Log the actual API response
+      console.log("API Response:", response);
+
+      const documentId = response?.data?.data?.documentId; // Correct key name
+
+      if (!documentId) {
+        console.error("Error: documentId is undefined in API response");
+        return;
+      }
+
+      console.log("New Document ID:", documentId);
+
+      // Navigate using the correct documentId
+      navigate(`/dashboard/create-royalty/${documentId}/edit`);
+    } catch (error) {
+      console.error("API Error:", error.response?.data || error.message);
+    } finally {
+      setIsLoading(false);
+      setVehicleDialogOpen(false);
+    }
+  };
+
+  return (
+    <div>
+      <h1 className="text-xl font-semibold">Create Royalty</h1>
+
+      {/* Button to trigger the main dialog */}
+      <div
+        className="py-10 px-10 md:px-20 flex flex-col justify-center bg-secondary items-center 
+                rounded-lg mt-10 h-[280px] hover:scale-105 transition-all hover:shadow-md cursor-pointer border-dotted"
+        onClick={() => setDialogOpen(true)} // Open the main dialog on click
+      >
+        <ShieldEllipsis size={48} />
+        <span className="mt-4 text-lg font-medium text-primary">
+          Create Royalty
+        </span>
+      </div>
+
+      {/* Main Dialog for CTF Verification */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="w-[90%] md:w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="text-center font-extrabold">
+              <h2>Verify Limit</h2>
+            </DialogTitle>
+            <DialogDescription>
+              <p className="text-red-500 font-bold">
+                <h3>
+                  <Asterisk /> Verify CTC
+                </h3>
+              </p>
+
+              {/* Input for Desire CTF */}
+              <div className="mt-4 px-5 text-black font-extrabold flex justify-normal gap-3 text-center align-middle">
+                <Input
+                  className="px-5"
+                  type="number"
+                  value={desireCTF}
+                  onChange={handleCTFChange}
+                  placeholder="455.500"
+                />
+                <h2 className="font-extrabold text-black text-center align-middle">
+                  CFT
+                </h2>
+              </div>
+            </DialogDescription>
+
+            <div className="flex flex-col sm:flex-row justify-between gap-5">
+              <Button
+                onClick={() => setDialogOpen(false)}
+                variant="ghost"
+                className="w-full sm:w-auto"
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleSubmit} className="w-full sm:w-auto">
+                Continue
+              </Button>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      {/* Vehicle Dialog for Vehicle Number Input */}
+      <Dialog open={vehicleDialogOpen} onOpenChange={setVehicleDialogOpen}>
+        <DialogContent className="w-[90%] md:w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add Vehicle Information</DialogTitle>
+            <DialogDescription>
+              <div className="mt-4 font-bold text-black">
+                <Input
+                  onChange={(e) =>
+                    setRegistration_No(e.target.value.toUpperCase())
+                  } // Ensure uppercase for vehicle number
+                  value={Registration_No}
+                  type="text"
+                  placeholder="WB00AA0000"
+                  className="mt-4 px-5"
+                  style={{ textTransform: "uppercase" }} // Visual enforcement of uppercase
+                />
+              </div>
+            </DialogDescription>
+
+            <div className="flex flex-col sm:flex-row justify-between gap-5 mt-4">
+              <Button
+                onClick={() => setVehicleDialogOpen(false)}
+                variant="ghost"
+                className="w-full sm:w-auto"
+              >
+                Cancel
+              </Button>
+              <Button
+                disabled={!Registration_No || isLoading}
+                onClick={() => onCreate()}
+                className="w-full sm:w-auto"
+              >
+                {isLoading ? <Loader2 className="animate-spin" /> : "Submit"}
+              </Button>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default RegisterTruck;
+// ------------------------------------------>
+
+import { Navigate, Outlet } from "react-router-dom";
+import "./App.css";
+import { useUser } from "@clerk/clerk-react";
+import Header from "./components/Customs/Header";
+
+function App() {
+  const { isSignedIn, isLoaded } = useUser();
+
+  if (!isSignedIn && isLoaded) {
+    return <Navigate to={"/auth/sign-in"} />;
+  }
+  return (
+    <>
+      <Header />
+      <Outlet />
+    </>
+  );
+}
+
+export default App;
+----------------------------->
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import SignInPage from './auth/sign-in/index.jsx';
+import Home from './apps/Landing/Home.jsx';
+import { ClerkProvider } from '@clerk/clerk-react';
+import Dashboard from './apps/Dashboard/Dashboard.jsx';
+import EditRoyalty from './apps/Dashboard/create-royalty/[royaltyID]/edit/index.jsx';
+import EChallan from './apps/Dashboard/create-royalty/[royaltyID]/edit/Components/ChallanTemp.jsx';
+import { ChallanDetails } from './apps/Dashboard/create-royalty/[royaltyID]/edit/Components/QrCode/ChallanId.jsx';
+
+
+// ✅ Fetch Clerk Publishable Key Correctly
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("❌ Missing Publishable Key - Check .env.local or Vercel!");
+}
+
+
+const router = createBrowserRouter([
+  {
+    element: <App />,
+    children: [
+      { path: "/dashboard", element: <Dashboard /> },
+      { path: "/dashboard/create-royalty/:royaltyID/edit", element: <EditRoyalty /> },
+      { path: "/recharge", element: "recharge" },
+    ]
+  },
+  { path: "/", element: <Home /> },
+  { path: "/auth/sign-in", element: <SignInPage /> },
+  { path:"/ech", element:< EChallan/> },
+  { path: "/challan/:challanId", element: < ChallanDetails /> }
+
+]);
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+      <RouterProvider router={router} />
+    </ClerkProvider>
+  </StrictMode>
+);
+// -------------------------->
+{
+  "name": "one-royalty",
+  "homepage": "https://IAkashMondal.github.io/oneroylty",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "@clerk/clerk-react": "^5.22.7",
+    "@radix-ui/react-accordion": "^1.2.2",
+    "@radix-ui/react-dialog": "^1.1.5",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@shadcn/ui": "^0.0.4",
+    "axios": "^1.7.9",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "gh-pages": "^6.3.0",
+    "input-otp": "^1.4.2",
+    "lucide-react": "^0.474.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.3",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.0.5",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.10",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^8",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.0.5"
+  }
+}
+
+Array(2)
+0
+: 
+{id: 2, documentId: 'w2qbaaziyo2ybgdw1071mp32', OwnerName: 'Nitu Dubey', SandID: '2462/SB2024', OwnerAddress: 'North Rathkhola, Naxalbari', …}
+1
+: 
+{id: 4, documentId: 'tifyvbz30n2k1g7i03uclw75', OwnerName: 'LALTU DUTTA', SandID: '2362/SB2023', OwnerAddress: 'PAHARESWAR, DUBRAJPUR, DUBRAJPUR, Birbhum, West Bengal.', …}
+length
+: 
+2
+[[Prototype]]
+: 
+Array(0)
+
+GETTIN THIS 
+
+
+import { useContext, useEffect, useState } from "react";
+import { z } from "zod";
+import { RoyaltyInfoContext } from "../../../../../../../Context/RoyaltyInfoContext";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useParams } from "react-router-dom";
+import { GetOwnersDeatils, GetParticularVehicle, updatePurchaserDetails } from "../../../../../../../../Apis/GlobalApi";
+import PropTypes from "prop-types"; // 
+import { toast } from "sonner";
+const quantitySchema = z
+    .string()
+    .regex(/^\d{1,3}(\.\d{0,3})?$/, "Only up to 3 digits before and after the decimal allowed");
+
+const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
+    const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
+    const [ownersData, setOwnersData] = useState([]);
+    const params = useParams();
+    const [formDataAdd, setFormDataAdd] = useState({
+        PurchaserAdd: "",
+        PurchaserPoliceStation: "",
+        PurchaseDristic: "",
+        ValidityDate: ""
+    });
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+
+    // Fetch data when component mounts
+    useEffect(() => {
+        const fetchVehicleDetails = async () => {
+            try {
+                if (!params?.royaltyID) {
+                    console.warn("Royalty ID is missing");
+                    return;
+                }
+                const ownersResponse = await GetOwnersDeatils()
+                setOwnersData(ownersResponse?.data.data)
+                const response = await GetParticularVehicle(params.royaltyID); // Await API call
+
+
+                if (response.data?.data) {
+                    console.log("Fetched Vehicle Data:", response.data.data); // Log specific data if exists
+                } else {
+                    console.warn("No vehicle data found for this Royalty ID.");
+                }
+
+            } catch (error) {
+                console.error("Error fetching vehicle details:", error.response?.data || error.message);
+            }
+        };
+
+        fetchVehicleDetails();
+    }, [params?.royaltyID]); // Run when royaltyID changes
+
+
+    const handleInputChangeAdd = (e) => {
+        enableNext(false);
+        const { name, value } = e.target;
+
+        if (!name) {
+            console.error("Missing name attribute in input field:", e.target);
+            return;
+        }
+
+        let errorMsg = "";
+
+
+        setErrors((prev) => ({ ...prev, [name]: errorMsg }));
+        setFormDataAdd({ ...formDataAdd, [name]: value });
+        setRoyaltyData({ ...RoyaltyData, [name]: value });
+    };
+
+    const handleSubmitAdd = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        console.log("Data being sent:", formDataAdd); // Add this!
+        try {
+            const response = await updatePurchaserDetails(params?.royaltyID, formDataAdd); // Pass formData
+            console.log(response)
+            enableNext(true);
+            toast("Purchaser Address added.")
+            setActiveFormIndex((prev) => Math.min(prev + 1, 3))
+        } catch (error) {
+            console.error("Error updating purchaser details:", error);
+            // Handle error, e.g., display an error message
+            setErrors({ api: "Error saving data. Please try again." });
+        } finally {
+            setLoading(false);
+        }
+    };
+    console.log("owners Details==========>:", ownersData); // Log full response
+    return (
+        <div className="grid justify-center w-full p-2">
+            <h1 className="text-lg font-semibold mb-4 flex-1 justify-center ml-[2cm] text-teal-500">Add Buyer Adress Form</h1>
+            <form onSubmit={handleSubmitAdd} >
+                <div className="grid grid-cols-1 mt-3 gap-3">
+                    {/* Quantity Input */}
+                    <label className="text-lg text-red-400 font-bold">Purchaser Address</label>
+                    <div className="w-full">
+                        <Input
+                            className="w-80"
+                            name="PurchaserAdd"
+                            placeholder="Haldia"
+                            required
+                            type="text"
+                            Value={RoyaltyData?.PurchaserAdd}
+                            onChange={handleInputChangeAdd}
+                        />
+                    </div>
+                </div>
+                {/* Purchaser Name PoliceStation */}
+                <div>
+                    <label className="text-sm text-red-400 font-bold">Police Station</label>
+                    <div className="w-full">
+                        <Input
+                            className="w-80"
+                            name="PurchaserPoliceStation"
+                            required
+                            type="text"
+                            value={RoyaltyData?.PurchaserPoliceStation}
+                            onChange={handleInputChangeAdd}
+                        />
+                    </div>
+                </div>
+                {/* Vehicle Dristic */}
+                <div>
+                    <label className="text-sm text-red-400 font-bold">Dirstic</label>
+                    <div >
+                        <select
+                            className="w-80 border shadow-sm  border-gray-200 rounded-sm"
+                            name="PurchaseDristic"
+                            required
+                            onChange={handleInputChangeAdd}
+                        >
+                            <option value=""> Dirstic</option>
+                            {["Malda", "Jalpaiguri", "Alipurduar", "Dakshin Dinajpur", "Uttar Dinajpur", "Murshidabad", "Darjeeling"
+                            ].map((type) => (
+                                <option key={type} value={type}>{type}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                {/* Challan ValidityTime */}
+                <div>
+                    <label className="text-sm text-red-400 font-bold">Validity Till</label>
+                    <div className="w-full">
+                        <Input
+                            className="w-80"
+                            name="ValidityDate"
+                            placeholder="02/01/2015 12:30 AM"
+                            defaultValue={RoyaltyData?.ValidityDate}
+                            required
+                            type="datetime-local"
+                            value={RoyaltyData?.ValidityDate}
+                            onChange={handleInputChangeAdd}
+                        />
+                    </div>
+                </div>
+
+                <div className=" w-80">
+                    <h2 className="text-lg font-bold mb-2">Select Owner</h2>
+                    <select onChange={handleInputChangeAdd} className="border p-2 rounded w-80">
+                        <option value="">Select an owner</option>
+                        {ownersData?.map((owner, index) => (
+                            <option key={index} value={owner.OwnerName}>
+                                {owner.OwnerName}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="mt-5 flex justify-center">
+                    <Button type="submit" className="bg-pink-400 text-white p-2 w-72 rounded-md" disabled={loading}>
+                        {loading ? "Saving..." : "Save and Continue"}
+                    </Button>
+                </div>
+
+            </form>
+        </div>
+    );
+};
+
+export default PurchaserAdd;
+//  PropTypes validation
+PurchaserAdd.propTypes = {
+    enableNext: PropTypes.func.isRequired, // enableNext is a function
+    setActiveFormIndex: PropTypes.func.isRequired, // setActiveFormIndex is a function
+};
+
+depends on owner I want send data to api
+
+OwnerName
+Text 	
+Edit OwnerName
+Delete OwnerName
+SandID
+Text 	
+Edit SandID
+Delete SandID
+River
+Text 	
+Edit River
+Delete River
+OwnerDistrict
