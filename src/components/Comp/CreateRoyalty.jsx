@@ -10,7 +10,6 @@ import { useUser } from '@clerk/clerk-react';
 import { generateNewChallanID, generateTimeObject, numberToWords } from '../../../Apis/GlobalFunction';
 
 const RegisterTruck = () => {
-
     // State variables for managing dialog states, form inputs, and loading states
     const [dialogOpen, setDialogOpen] = useState(false);
     const [vehicleDialogOpen, setVehicleDialogOpen] = useState(false);
@@ -65,8 +64,6 @@ const RegisterTruck = () => {
     };
     // Calculate max CTF limit based on balance when the component mounts
     useEffect(() => {
-
-
         const balance = 90000000000; // Example balance, should come from actual data
         const calculatedMaxLimitForCtf = Math.floor(balance / 3); // Max CTF limit (integer)
         setMaxLimitForCtf(calculatedMaxLimitForCtf); // Set the max limit
