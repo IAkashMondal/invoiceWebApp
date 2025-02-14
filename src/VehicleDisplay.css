@@ -1,0 +1,21 @@
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-[1.5rem] font-medium leading-[1.2] mb-2 mt-0;
+  }
+  
+  .text-info {
+    @apply text-[#17a2b8];
+  }
+
+  .card {
+    @apply relative flex flex-col min-w-0 bg-white border border-black/10 rounded-md;
+  }
+
+  .card-header {
+    @apply p-[0.75rem_1.25rem_0.05rem] bg-black/5 border-b border-black/10;
+  }
+
+  body {
+    @apply text-base font-normal leading-6 text-[#212529] bg-[#e9ecef] pt-[60px] pb-[100px] m-0 p-0 text-black overflow-x-hidden h-full;
+  }
+}

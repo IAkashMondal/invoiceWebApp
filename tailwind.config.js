@@ -7,11 +7,34 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Poppins", "sans-serif"], // Add your custom font
+        Poppins: ["Poppins", "sans-serif"], // Add your custom font
         serif: ['"Times New Roman"', "serif"], // Example: Add a serif font
         bookman: ['"Bookman Old Style"', "serif"], // Adding Bookman Old Style
-        helvetica: ['Helvetica', "serif"],
+        helvetica: ["Helvetica", "serif"],
         arial: ["Arial", "sans-serif"], // Add your custom font
+        mono: [
+          "SFMono-Regular",
+          "Menlo",
+          "Monaco",
+          "Consolas",
+          '"Liberation Mono"',
+          '"Courier New"',
+          "monospace",
+        ],
+        robo: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"Segoe UI"',
+          "Roboto",
+          '"Helvetica Neue"',
+          "Arial",
+          '"Noto Sans"',
+          "sans-serif",
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+          '"Noto Color Emoji"',
+        ],
       },
       borderRadius: {
         lg: "var(--radius)",

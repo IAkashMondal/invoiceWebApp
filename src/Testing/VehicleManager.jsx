@@ -5,7 +5,7 @@ import { QRCodeSVG } from "qrcode.react";
 
 const API_KEY = import.meta.env.VITE_STRAPI_API_KEY;
 const axiosClient = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL + "/api/", // Your Strapi API URL
+    baseURL: import.meta.env.VITE_BASE_URL + "api/", // Your Strapi API URL
     headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${API_KEY}`,
@@ -54,7 +54,6 @@ const VehicleManager = () => {
         const regB = (b.attributes?.Registration_No || "").toUpperCase();
         return regA.localeCompare(regB);
     });
-    console.log(vehicles, "vehicles-mander----------->")
     return (
         <table className="p-20">
 

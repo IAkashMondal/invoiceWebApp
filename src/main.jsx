@@ -15,7 +15,6 @@ import RoyaltyPreview from './apps/Dashboard/create-royalty/[royaltyID]/edit/Com
 
 // ✅ Fetch Clerk Publishable Key Correctly
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
 if (!PUBLISHABLE_KEY) {
   throw new Error("❌ Missing Publishable Key - Check .env.local or Vercel!");
 }

@@ -8,9 +8,13 @@ import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import PropTypes from "prop-types";
 
+
 const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
   const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
+  const [EChallanId, setChallanID] = useState("Error");
   const [vehicleNoQnt, setVehicleNoQnt] = useState("");
+  const [loading, setLoading] = useState(false);
+  const params = useParams();
   const [formData, setFormData] = useState({
     NameofPurchaser: "",
     VehicleCapacity: "",
@@ -18,10 +22,7 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
     PurchaserMobileNo: ""
   });
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const params = useParams();
 
-  const [EChallanId, setChallanID] = useState("Error");
 
   const fetchVehicles = async () => {
 
@@ -35,7 +36,7 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
 
   useEffect(() => {
     fetchVehicles();
-  }, []);
+  }, [params?.royaltyID]);
   useEffect(() => {
     const fetchVehicleDetails = async () => {
       try {
@@ -65,18 +66,28 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
       console.error("Missing name attribute in input field:", e.target);
       return;
     }
-
     setFormData({ ...formData, [name]: value, });
-    setRoyaltyData({ ...RoyaltyData, [name]: value, GeneratedDT: vehicleNoQnt?.GeneratedDT });
+    setRoyaltyData(
+      {
+        ...RoyaltyData, [name]: value,
+        EchallanId: EChallanId,
+        GeneratedDT: vehicleNoQnt?.GeneratedDT,
+        VehicleQunText: vehicleNoQnt.VehicleQunText,
+        EChallanDT: vehicleNoQnt.EChallanDT,
+        quantity: vehicleNoQnt.quantity,
+        Registration_No: vehicleNoQnt.Registration_No
+      });
     setErrors((prev) => ({ ...prev, [name]: "" }));
+    
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const QRBASEURL = import.meta.env.VITE_QR_CODE_BASE_URL;
     try {
       await updatePurchaserDetails(params?.royaltyID, formData);
-      generateQrCode(EChallanId)
+      generateQrCode(QRBASEURL, EChallanId)
       enableNext(true);
       toast.success("Purchaser vehicle added.");
       setActiveFormIndex((prev) => Math.min(prev + 1, 3));
@@ -121,6 +132,7 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
               placeholder="Ram Chandra"
               value={formData.NameofPurchaser}
               required
+              autoFocus
               type="text"
               onChange={handleInputChange}
             />
@@ -188,4 +200,5 @@ export default PurchaserForm;
 PurchaserForm.propTypes = {
   enableNext: PropTypes.func.isRequired,
   setActiveFormIndex: PropTypes.func.isRequired,
+  generateQrCode: PropTypes.func.isRequired,
 };

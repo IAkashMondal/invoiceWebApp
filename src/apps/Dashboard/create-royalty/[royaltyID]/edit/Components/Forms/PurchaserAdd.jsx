@@ -11,11 +11,13 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
     const [ownersData, setOwnersData] = useState([]);
     const [selectedOwner, setSelectedOwner] = useState("");
-    const [Validypreview, setValidypreview] = useState("");
+    const [Validitypreview, setValidypreview] = useState("");
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
     const params = useParams();
     const [IssueDates, setIssueDates] = useState({
-        generatedTime: Number,
-        issueDate: ""
+        generatedTime: 0,
+        IssueDate: ""
     })
     const [formDataAdd, setFormDataAdd] = useState({
         PurchaserAdd: "",
@@ -24,9 +26,6 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         ValidityDate: "",
         OwnerName: ""
     });
-    const [errors, setErrors] = useState({});
-    const [loading, setLoading] = useState(false);
-
     const handelValidityCalculate = async (e) => {
         if (!e || !e.target) {
             console.error("Invalid event object:", e);
@@ -35,21 +34,19 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
 
         const { value } = e.target;
         const { validityTime, VerefyChallanNum, } = await addTimeToGeneratedTime(IssueDates?.generatedTime, value);
-        console.log(validityTime, "Genar")
         setValidypreview(validityTime)
         // Save validity time in formDataAdd
         setFormDataAdd((prev) => ({
             ...prev,
-            ValidityDate: Validypreview,
+            ValidityDate: validityTime,
             VerefyChallanNum: VerefyChallanNum  // Store calculated time in ValidityDate
 
         }));
         setRoyaltyData((prev) => ({
             ...prev,
-            ValidityDate: Validypreview,  // Store calculated time in ValidityDate
+            ValidityDate: validityTime,
         }));
     };
-    // console.log(formDataAdd, "fromdata------------------------------------------>")
     const handleOwnerChange = (e) => {
         const selectedValue = e.target.value;
         setSelectedOwner(selectedValue);
@@ -83,11 +80,10 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
 
                 },
 
-            })); console.log(ownerDetails, "owners detais selected")
+            }));
         }
 
     };
-    // console.logRoyaltyData, "check why not updated----r data----------->")
 
     useEffect(() => {
         const fetchVehicleDetails = async () => {
@@ -98,8 +94,13 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                 }
                 const ownersResponse = await GetOwnersDeatils();
                 const { generatedTime, issueDate } = generateTimeObject();
-                setIssueDates({ generatedTime, issueDate })
+                setIssueDates({ generatedTime, IssueDate: issueDate });
                 setOwnersData(ownersResponse?.data.data);
+                setRoyaltyData((prev) => ({
+                    ...prev,
+                    IssueDate: issueDate,
+                    ValidityDate: Validitypreview
+                }));
 
                 const response = await GetParticularVehicle(params.royaltyID);
                 if (response.data?.data) {
@@ -113,7 +114,8 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         };
 
         fetchVehicleDetails();
-    }, [params?.royaltyID]);
+    }, [params?.royaltyID,]);
+
 
     const handleInputChangeAdd = (e) => {
 
@@ -128,7 +130,8 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         setErrors((prev) => ({ ...prev, [name]: "" }));
         setFormDataAdd((prev) => ({
             ...prev, [name]: value,
-            IssueDate: IssueDates?.issueDate,
+            IssueDate: IssueDates?.IssueDate,
+            ValidityDate: Validitypreview,
             CreatedTimeStamp: IssueDates?.generatedTime
         }));
         setRoyaltyData((prev) => ({ ...prev, [name]: value }));
@@ -137,7 +140,6 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
     const handleSubmitAdd = async (e) => {
         e.preventDefault();
         setLoading(true);
-        console.log("Data being sent:", formDataAdd);
         try {
             await updatePurchaserDetails(params?.royaltyID, formDataAdd);
             enableNext(true);
@@ -149,104 +151,116 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
             setLoading(false);
         }
     };
-
     return (
-        <form onSubmit={handleSubmitAdd}>
-            <h1>Address</h1>
-            <div className="border border-red-300 p-3 shadow-sm rounded-md bg-gray-100 w-80">
-                <div className="w-80">
-                    <h4 className="text-sm text-gray-500 font-bold">Issue Date</h4>
-                    <h3 className="font-semibold">{IssueDates?.issueDate || "N/A"}</h3>
-                </div>
-            </div>
-            <div className="grid grid-cols-1 mt-3 gap-3">
-                <label className="text-sm text-red-400 font-bold">Purchaser Address</label>
-                <div className="w-80">
-                    <Input
-                        className="w-80"
-                        name="PurchaserAdd"
-                        placeholder="Haldia"
-                        required
-                        type="text"
-                        value={formDataAdd.PurchaserAdd}
-                        onChange={handleInputChangeAdd}
-                    />
-                </div>
-            </div>
+        <div className="flex justify-center w-full p-4">
+            <div className="max-w-lg w-full bg-white shadow-lg rounded-lg p-6">
+                <h1 className="text-lg font-semibold text-center text-teal-500 mb-4">
+                    Buyer Adddress Details
+                </h1>
+                <form onSubmit={handleSubmitAdd}>
 
-            <div>
-                <label className="text-sm text-red-400 font-bold">Police Station</label>
-                <div className="w-80">
-                    <Input
-                        className="w-80"
-                        name="PoliceStation"
-                        required
-                        type="text"
-                        value={formDataAdd.PoliceStation}
-                        onChange={handleInputChangeAdd}
-                    />
-                </div>
-            </div>
+                    <div className=" flex justify-evenly border border-red-300 p-3 shadow-sm rounded-md bg-gray-100 w-full">
+                        <div className="w-full">
+                            <h4 className="text-sm text-gray-500 font-bold">Issue Date</h4>
+                            <h3 className="font-semibold text-green-500">{IssueDates.IssueDate || "N/A"}</h3>
+                        </div>
+                        <div className="w-full">
+                            <h4 className="text-sm text-gray-500 font-bold"> Validity Till </h4>
+                            <h3 className="font-semibold text-red-500">{Validitypreview || "N/A"}</h3>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 mt-3 gap-2">
+                        <label className="text-sm text-red-400 font-bold">Purchaser Address</label>
+                        <div className="w-full">
+                            <Input
+                                className="w-full"
+                                name="PurchaserAdd"
+                                placeholder="Haldia"
+                                autoFocus
+                                required
+                                type="text"
+                                value={formDataAdd.PurchaserAdd}
+                                onChange={handleInputChangeAdd}
+                            />
+                        </div>
+                    </div>
 
-            <div className="border border-rose-500 w-80 m-0">
-                <label className="text-sm text-red-400 font-bold">Dristic</label>
-                <div>
-                    <select
-                        className="w-80"
-                        name="PurchaserDristic"
-                        required
-                        value={formDataAdd.PurchaserDristic}
-                        onChange={handleInputChangeAdd}
-                    >
-                        <option value="">Select District</option>
-                        {["Malda", "Jalpaiguri", "Alipurduar", "Dakshin Dinajpur", "Uttar Dinajpur", "Murshidabad", "Darjeeling"].map(
-                            (type) => (
-                                <option key={type} value={type}>
-                                    {type}
+                    <div className="grid grid-cols-1 mt-3 gap-2">
+                        <label className="text-sm text-red-400 font-bold ">Police Station</label>
+                        <div className="w-full">
+                            <Input
+                                className="w-full"
+                                name="PoliceStation"
+                                required
+                                placeholder="Ram Ganj"
+                                type="text"
+                                value={formDataAdd.PoliceStation}
+                                onChange={handleInputChangeAdd}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 mt-3 gap-2 w-full">
+                        <label className="text-sm text-red-400 font-bold">Dristic</label>
+                        <div className="w-full">
+                            <select
+                                className="border p-2 rounded w-full"
+                                name="PurchaserDristic"
+                                required
+                                value={formDataAdd.PurchaserDristic}
+                                onChange={handleInputChangeAdd}
+                            >
+                                <option value="">Select District</option>
+                                {["Malda", "Jalpaiguri", "Alipurduar", "Dakshin Dinajpur", "Uttar Dinajpur", "Murshidabad", "Darjeeling"].map(
+                                    (type) => (
+                                        <option key={type} value={type}>
+                                            {type}
+                                        </option>
+                                    )
+                                )}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 mt-3 gap-2">
+                        <label className="text-sm text-red-400 font-bold">Validity Till:<span className="text-lime-500 px-5">{`  ${Validitypreview}`}</span></label>
+                        <div className="w-full">
+                            <Input
+                                className="w-full"
+                                name="ValidityCallculation"
+                                placeholder="1.45 - HH.MM"
+                                type="text"
+                                onChange={handelValidityCalculate}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 mt-3 gap-2 w-full">
+                        <h2 className="text-sm font-bold mb-2 text-rose-500 w-full">Select Royalty Owner</h2>
+                        <select
+                            className="border p-2 rounded w-full"
+                            name="OwnerName"
+                            required
+                            value={selectedOwner}
+                            onChange={handleOwnerChange}
+                        >
+                            <option value="">Select Royalty owner</option>
+                            {ownersData?.map((owner, index) => (
+                                <option key={index} value={owner.OwnerName}>
+                                    {owner.OwnerName}
                                 </option>
-                            )
-                        )}
-                    </select>
-                </div>
-            </div>
+                            ))}
+                        </select>
+                    </div>
 
-            <div>
-                <label className="text-sm text-red-400 font-bold">Validity Till:<span className="text-lime-500 px-5">{`  ${Validypreview}`}</span></label>
-                <div className="w-80">
-                    <Input
-                        name="ValidityCallculation"
-                        placeholder="1.45 - HH.MM"
-                        type="text"
-
-                        onChange={handelValidityCalculate}
-                    />
-                </div>
+                    <div className="mt-5 flex justify-center w-full">
+                        <Button type="submit" className="bg-pink-500 text-white p-2 rounded-md w-full" disabled={loading}>
+                            {loading ? "Saving..." : "Save and Continue"}
+                        </Button>
+                    </div>
+                </form>
             </div>
-
-            <div className=" w-80">
-                <h2 className="text-sm font-bold mb-2 text-rose-500 w-80">Select Owner</h2>
-                <select
-                    className="border p-2 rounded w-80"
-                    name="OwnerName"
-                    required
-                    value={selectedOwner}
-                    onChange={handleOwnerChange}
-                >
-                    <option value="">Select an owner</option>
-                    {ownersData?.map((owner, index) => (
-                        <option key={index} value={owner.OwnerName}>
-                            {owner.OwnerName}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div className="mt-5">
-                <Button type="submit" className="bg-blue-500 text-white p-2 rounded-md" disabled={loading}>
-                    {loading ? "Saving..." : "Save and Continue"}
-                </Button>
-            </div>
-        </form>
+        </div>
     );
 };
 

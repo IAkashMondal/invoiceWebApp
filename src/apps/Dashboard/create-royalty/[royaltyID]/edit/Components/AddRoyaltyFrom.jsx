@@ -3,10 +3,12 @@ import PurchaserForm from "./Forms/PurchaserForm";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import PurchaserAdd from "./Forms/PurchaserAdd";
-import PreData from "./Forms/PreData";
+// import PreData from "./Forms/PreData";
 import PropTypes from "prop-types"; // ✅ Fix import (lowercase "prop-types")
 
-const AddRoyaltyForm = ({ generateQrCode, qrCode } ) => {
+const AddRoyaltyForm = ({ generateQrCode }) => {
+
+
   const [activeFormIndex, setActiveFormIndex] = useState(1);
   const [enableNext, SetEnableNext] = useState(false);
 
@@ -39,7 +41,7 @@ const AddRoyaltyForm = ({ generateQrCode, qrCode } ) => {
       {/* Form Component */}
       {activeFormIndex === 1 && <PurchaserForm enableNext={SetEnableNext} setActiveFormIndex={setActiveFormIndex} generateQrCode={generateQrCode} />}
       {activeFormIndex === 2 && <PurchaserAdd enableNext={SetEnableNext} setActiveFormIndex={setActiveFormIndex} />}
-      {activeFormIndex === 3 && <PreData  enableNext={SetEnableNext} setActiveFormIndex={setActiveFormIndex} qrCode={qrCode}/>}
+      {/* {activeFormIndex === 3 && <PreData enableNext={SetEnableNext} setActiveFormIndex={setActiveFormIndex} qrCode={qrCode} RoyaltyData={RoyaltyData} />} */}
     </div>
   );
 };
@@ -47,6 +49,7 @@ const AddRoyaltyForm = ({ generateQrCode, qrCode } ) => {
 // ✅ Fix: Change `PropTypes` to `propTypes` and ensure correct syntax
 AddRoyaltyForm.propTypes = {
   generateQrCode: PropTypes.func.isRequired,
+  qrCode: PropTypes.string,
 };
 
 export default AddRoyaltyForm;

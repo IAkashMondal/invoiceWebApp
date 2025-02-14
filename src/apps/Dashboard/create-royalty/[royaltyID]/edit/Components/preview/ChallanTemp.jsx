@@ -1,48 +1,7 @@
-import PropTypes from "prop-types"; // Import PropTypes
-import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { QRCodeSVG } from "qrcode.react";
-import { GetParticularVehicle } from "../../../../../../../../Apis/GlobalApi";
-import { useParams } from "react-router-dom";
-import { numberToWords } from "../../../../../../../../Apis/GlobalFunction";
-const ChallanTemp = ({ RoyaltyData, qrCode }) => {
-  // State variables
 
-  const [EChallanId, setChallanID] = useState("Error");
-  const [vehicleRegData, setvehicleRegData] = useState({});
-  // Get formatted date & time
-
-  // Get params from URL
-  const params = useParams();
-
-  // Convert quantity to words
-  const TextAmount = vehicleRegData.quantity ? numberToWords(Number(vehicleRegData.quantity)) : "";
-
-  useEffect(() => {
-    // Fetch vehicle details based on the Royalty ID
-
-    const fetchVehicleDetails = async () => {
-      if (!params?.royaltyID) {
-        console.warn("Royalty ID is missing");
-        return;
-      }
-
-      try {
-        const response = await GetParticularVehicle(params.royaltyID);
-        setChallanID(response?.data?.data.EchallanId)
-        if (response.data?.data) {
-          setvehicleRegData(response.data.data);
-          setChallanID(response?.data?.data.EchallanId)
-        } else {
-          console.warn("No vehicle data found for this Royalty ID.");
-        }
-      } catch (error) {
-        console.error("Error fetching vehicle details:", error.response?.data || error.message);
-      }
-    };
-    fetchVehicleDetails();
-  }, [params?.royaltyID]); // Run effect when `royaltyID` changes
-
-
+const ChallanTemp = ({ qrCode, RoyaltyData }) => {
   return (
     <div className="mb-[0.4cm]">
       {/* Title */}
@@ -58,27 +17,27 @@ const ChallanTemp = ({ RoyaltyData, qrCode }) => {
             <p className="flex font-bold font-serif  text-[13pt] ml-1  mb-[-1.5mm] ">
               <span className="w-[3.6cm]">E-Challan No.</span>
               <span className="mr-[0.2cm]">:</span>
-              <span>{`${EChallanId}/S/${vehicleRegData?.EChallanDT}/PS`}</span>
+              <span>{`${RoyaltyData?.EchallanId}/S/${RoyaltyData?.EChallanDT}/PS`}</span>
             </p>
           </div>
           <div>
             <p className="flex font-bold font-serif  text-[13pt] ml-1 mb-[-1.5mm]" >
               <span className="w-[3.6cm]" >Issue Date</span>
               <span className="mr-[0.2cm]">:</span>
-              <span>{vehicleRegData?.IssueDate}</span>
+              <span>{RoyaltyData?.IssueDate}</span>
             </p>
           </div>
           <div>
             <p className="flex font-bold font-serif  text-[13pt] ml-1 mb-[-1.5mm]" >
               <span className="w-[3.6cm]">Validity Till</span>
               <span className="mr-[0.2cm]">:</span>
-              <span>{vehicleRegData?.ValidityDate}</span>
+              <span>{RoyaltyData?.ValidityDate}</span>
             </p>
             <div>
               <p className="flex font-bold font-serif  text-[13pt] ml-1  mb-[-1.5mm]" >
                 <span className="w-[3.6cm]">Quantity</span>
                 <span className="mr-[0.2cm]">:</span>
-                <span>{`${vehicleRegData.quantity}.00 ctf`}<span className="font font-normal font-serif  text-[9pt]">{`(${TextAmount} ctf)`}</span></span>
+                <span>{`${RoyaltyData.quantity}.00 ctf`}<span className="font font-normal font-serif  text-[9pt]">{`(${RoyaltyData.VehicleQunText} ctf)`}</span></span>
               </p>
             </div>
           </div>
@@ -86,7 +45,7 @@ const ChallanTemp = ({ RoyaltyData, qrCode }) => {
             <p className="flex font-bold font-serif  text-[13pt] ] ml-1  mb-[-1.5mm]">
               <span className="w-[3.6cm]">Vehicle No.</span>
               <span className="mr-[0.2cm]">:</span>
-              <span>{`${vehicleRegData.Registration_No} (${RoyaltyData?.RoyaltyData.VehicleType})`}</span>
+              <span>{`${RoyaltyData.Registration_No} (${RoyaltyData?.VehicleType})`}</span>
             </p>
           </div>
 
@@ -114,15 +73,16 @@ const ChallanTemp = ({ RoyaltyData, qrCode }) => {
 export default ChallanTemp;
 ChallanTemp.propTypes = {
   RoyaltyData: PropTypes.shape({
-    EChallanNo: PropTypes.string,
-    IssueDate: PropTypes.string,
-    ValidityDate: PropTypes.string,
-    Quantity: PropTypes.string,
-    VehicleNo: PropTypes.string,
+    EchallanId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), // Ensure it handles string/number formats
+    EChallanDT: PropTypes.string.isRequired, // Expected date string
+    IssueDate: PropTypes.string.isRequired,
+    ValidityDate: PropTypes.string.isRequired,
+    quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, // Should be a number, not string
+    Registration_No: PropTypes.string.isRequired, // Used in JSX
+    VehicleQunText: PropTypes.string,
     VehicleType: PropTypes.string,
-    RoyaltyData: PropTypes.object,
-    quantity: PropTypes.string,
-    Registration_No: PropTypes.string,
 
   }),
+  qrCode: PropTypes.string, // QR code should be a string (URL or encoded data)
+
 };

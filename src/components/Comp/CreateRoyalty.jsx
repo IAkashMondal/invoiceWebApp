@@ -5,11 +5,12 @@ import { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input.jsx";
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from "uuid";
-import { addNewVehicle, addPerChallaID, generateQrCodeUrl, GetPrevChallanID } from '../../../Apis/GlobalApi';
+import { addNewVehicle, addPerChallaID, GetPrevChallanID } from '../../../Apis/GlobalApi';
 import { useUser } from '@clerk/clerk-react';
 import { generateNewChallanID, generateTimeObject, numberToWords } from '../../../Apis/GlobalFunction';
 
 const RegisterTruck = () => {
+
     // State variables for managing dialog states, form inputs, and loading states
     const [dialogOpen, setDialogOpen] = useState(false);
     const [vehicleDialogOpen, setVehicleDialogOpen] = useState(false);
@@ -23,7 +24,6 @@ const RegisterTruck = () => {
     const [documentID, setdocumentID] = useState(null)
     const navigate = useNavigate(); // To handle navigation after certain conditions
     const { user } = useUser(); // Get user data from Clerk
-    const [qrCode, setQrCode] = useState(null);
     const [VehicleQunText, setVehicleQunText] = useState("");
     const [Generatedon, setGeneratedon] = useState({
         EChallanDT: "",
@@ -73,26 +73,19 @@ const RegisterTruck = () => {
         // Fetch previous E-Challan ID
         const fetchPrevChallanID = async () => {
             try {
-
-                const getID = await GetPrevChallanID();
-                if (getID.data?.data) {
-                    setdocumentID(getID?.data.data[0].documentId);
-                } else {
-                    console.warn("No previous Challan ID found.");
-                }
                 const response = await GetPrevChallanID();
-                if (response.data?.data) {
-                    console.log(response, "chech pre challan id-------------------------------------->")
-                    setPrevChallanID(response?.data.data[0]?.PrevChallanID);
-                    setIsLoadingID(true)
+                if (response.data?.data?.length > 0) {
+                    setdocumentID(response?.data.data[0].documentId);
+                    setPrevChallanID(response?.data.data[0].PrevChallanID);
+                    setIsLoadingID(true);
                 } else {
                     console.warn("No previous Challan ID found.");
+                    setPrevChallanID(null); // Explicitly setting null to handle missing data
                 }
             } catch (error) {
                 console.error("Error fetching previous Challan ID:", error.response?.data || error.message);
             }
-
-        }
+        };
 
         const getChallanID = async () => {
             const newID = generateNewChallanID(PrevEChallanId);
@@ -153,7 +146,6 @@ const RegisterTruck = () => {
         }
         try {
             const response = await addPerChallaID(documentID, ChalldIdData);
-            console.log(response, "challa respons")
         } catch (error) {
             console.error("API Error:", error.response?.data || error.message);
         } finally {
@@ -167,11 +159,6 @@ const RegisterTruck = () => {
                 console.error("Error: documentId is undefined in API response");
                 return;
             }
-            if (newEChallanId) {
-                const qrUrl = generateQrCodeUrl(newEChallanId);
-                setQrCode(qrUrl);
-            }
-
             // Navigate using the correct documentId
             navigate(`/dashboard/create-royalty/${documentId}/edit`);
         } catch (error) {
@@ -180,11 +167,10 @@ const RegisterTruck = () => {
             setIsLoading(false);
             setVehicleDialogOpen(false);
         }
-
     };
 
     return (
-        <div>
+        <div className='sm:translate-y-100px'>
             <h1 className="text-xl font-semibold">Create Royalty</h1>
 
             {/* Button to trigger the main dialog */}
@@ -257,7 +243,7 @@ const RegisterTruck = () => {
 
                         <div className='flex flex-col sm:flex-row justify-between gap-5 mt-4 sm:w-64'>
                             <Button onClick={() => setVehicleDialogOpen(false)} variant="ghost" className="w-full sm:w-auto">Cancel</Button>
-                            <Button disabled={!Registration_No || !isLoadingId || isLoading} onClick={() => onCreate()} className="w-full sm:w-auto">
+                            <Button disabled={!newEChallanId && !Registration_No && !isLoadingId && isLoading} onClick={() => onCreate()} className="w-full sm:w-auto">
                                 {isLoading ? <Loader2 className='animate-spin' /> : "Submit"}
                             </Button>
                         </div>

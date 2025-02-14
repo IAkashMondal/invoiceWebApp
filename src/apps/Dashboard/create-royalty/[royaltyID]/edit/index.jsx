@@ -6,13 +6,12 @@ import Dummydata from "../../../../../../Apis/DummyData";
 
 const EditRoyalty = () => {
     const [RoyaltyData, setRoyaltyData] = useState(Dummydata);
-    const [selectedOwner, setSelectedOwner] = useState(null);
     const [qrCode, setQrCode] = useState(null);
 
 
 
-    const generateQrCode = (EChallanId) => {
-        const url = `/WBMD/Page/each/aspx/id/${encodeURIComponent(EChallanId)}/S/24-25/RPS`;
+    const generateQrCode = (QRBASEURL, EChallanId) => {
+        const url = `${QRBASEURL}/WBMD/Page/each/aspx/id/${encodeURIComponent(EChallanId)}/S/24-25/RPS`;
         setQrCode(url);
     };
     useEffect(() => {
@@ -25,14 +24,14 @@ const EditRoyalty = () => {
             <div id="no-print" >
                 {/* Left Section - Form */}
                 <div className="flex justify-center items-center">
-                    <AddRoyaltyFrom generateQrCode={generateQrCode} qrCode={qrCode} />
+                    <AddRoyaltyFrom generateQrCode={generateQrCode} qrCode={qrCode} RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData}/>
                 </div>
 
                 {/* Right Section - Preview */}
 
             </div>
             <div className="flex justify-center items-center sm:h-full w-full">
-                <RoyaltyPreview RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData} selectedOwner={selectedOwner} qrCode={qrCode} />
+                <RoyaltyPreview RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData}qrCode={qrCode} />
             </div>
         </RoyaltyInfoContext.Provider>
     );

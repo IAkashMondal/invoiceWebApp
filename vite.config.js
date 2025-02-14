@@ -15,11 +15,14 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // server: {
-  //   host: "0.0.0.0", // Allows access from local network (192.168.1.102)
-  //   port: 5173, // Ensures port 5173 is used
-  //   strictPort: true, // Prevents auto-changing ports
-  //   cors: true, // Enables cross-origin access
-  //   force: true, // Forces reloads properly
-  // },
+  server: {
+    host: "0.0.0.0", // Allows access from local network
+    port: 5173, // Ensures port 5173 is used
+    strictPort: true, // Prevents auto-changing ports
+    cors: {
+      origin: "*", // Allows requests from any origin
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed methods
+      allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    },
+  },
 });
