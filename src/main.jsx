@@ -8,8 +8,8 @@ import Home from './apps/Landing/Home.jsx';
 import { ClerkProvider } from '@clerk/clerk-react';
 import Dashboard from './apps/Dashboard/Dashboard.jsx';
 import EditRoyalty from './apps/Dashboard/create-royalty/[royaltyID]/edit/index.jsx';
-import VehicleDetailPage from './Testing/VehicleDetailPage.jsx';
 import RoyaltyPreview from './apps/Dashboard/create-royalty/[royaltyID]/edit/Components/RoyaltyPreview.jsx';
+import VehicleDetailPage from './components/Comp/VehicleDetailPage.jsx';
 
 
 
@@ -32,10 +32,7 @@ const router = createBrowserRouter([
   },
   { path: "/", element: <Home /> },
   { path: "/auth/sign-in", element: <SignInPage /> },
-  // { path: "mdtcl.wb.gov.in/WBMD/Page/:echid", element: <VehicleDetailPage /> },
-  { path: `/WBMD/Page/each/aspx/id/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
-  // { path: "mdtcl.wb.gov.in/WBMD/Page/ech.aspxx?:EChallanId/S/24-25/RPS", element: <VehicleDetailPage /> },
-
+  { path: `/WMDD/Page/each/aspx/id/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
 ]);
 
 createRoot(document.getElementById('root')).render(
