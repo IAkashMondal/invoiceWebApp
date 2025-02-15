@@ -85,6 +85,10 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
     e.preventDefault();
     setLoading(true);
     const QRBASEURL = import.meta.env.VITE_QR_CODE_BASE_URL;
+    if (QRBASEURL) {
+      console.log("QRBASEURL on Captured")
+    }
+
     try {
       await updatePurchaserDetails(params?.royaltyID, formData);
       generateQrCode(QRBASEURL, EChallanId)
