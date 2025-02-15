@@ -24,14 +24,14 @@ const EditRoyalty = () => {
             <div id="no-print" >
                 {/* Left Section - Form */}
                 <div className="flex justify-center items-center">
-                    <AddRoyaltyFrom generateQrCode={generateQrCode} qrCode={qrCode} RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData}/>
+                    <AddRoyaltyFrom generateQrCode={generateQrCode} qrCode={qrCode} RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData} />
                 </div>
 
                 {/* Right Section - Preview */}
 
             </div>
             <div className="flex justify-center items-center sm:h-full w-full">
-                <RoyaltyPreview RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData}qrCode={qrCode} />
+                <RoyaltyPreview RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData} qrCode={qrCode} />
             </div>
         </RoyaltyInfoContext.Provider>
     );
