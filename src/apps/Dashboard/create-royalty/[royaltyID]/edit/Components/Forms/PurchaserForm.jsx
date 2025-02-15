@@ -78,7 +78,7 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
         Registration_No: vehicleNoQnt.Registration_No
       });
     setErrors((prev) => ({ ...prev, [name]: "" }));
-    
+
   };
 
   const handleSubmit = async (e) => {
