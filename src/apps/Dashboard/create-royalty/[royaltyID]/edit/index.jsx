@@ -7,11 +7,14 @@ import Dummydata from "../../../../../../Apis/DummyData";
 const EditRoyalty = () => {
     const [RoyaltyData, setRoyaltyData] = useState(Dummydata);
     const [qrCode, setQrCode] = useState(null);
+
+
+
     const generateQrCode = (QRBASEURL, EChallanId) => {
         if (!QRBASEURL) {
             console.log("QRBASEURL no found")
         }
-        const url = `${QRBASEURL}/${EChallanId}/S/24-25/RPS`;
+        const url = `${QRBASEURL}/WBMD/Page/each/aspx/id/${EChallanId}/S/24-25/RPS`;
         setQrCode(url);
     };
     useEffect(() => {

@@ -25,19 +25,18 @@ const router = createBrowserRouter([
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/dashboard/create-royalty/:royaltyID/edit", element: <EditRoyalty /> },
       { path: "/recharge", element: "recharge" },
-      { path: "/Royalty-Download", element: <RoyaltyPreview /> }
+      { path: "/Royalty-Download", element: <RoyaltyPreview /> },
+      { path: `/WBMD/Page/each/aspx/id/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
     ]
   },
   { path: "/", element: <Home /> },
   { path: "/auth/sign-in", element: <SignInPage /> },
-  // { path: `/WBMD/Page/each/aspx/id/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
-  { path: `/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
+  { path: `/WBMD/Page/each/aspx/id/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
+  // { path: `/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <RouterProvider router={router} />
-    </ClerkProvider>
-  </StrictMode>
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <RouterProvider router={router} />
+  </ClerkProvider>
 );
