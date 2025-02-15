@@ -11,7 +11,7 @@ const EditRoyalty = () => {
 
 
     const generateQrCode = (QRBASEURL, EChallanId) => {
-        const url = `${QRBASEURL}/WBMD/Page/each/aspx/id/${encodeURIComponent(EChallanId)}/S/24-25/RPS`;
+        const url = `${QRBASEURL}/${EChallanId}/S/24-25/RPS`;
         setQrCode(url);
     };
     useEffect(() => {
