@@ -18,7 +18,6 @@ const EditRoyalty = () => {
         setQrCode(url);
     };
     useEffect(() => {
-
         setRoyaltyData(Dummydata);
     }, []);
 

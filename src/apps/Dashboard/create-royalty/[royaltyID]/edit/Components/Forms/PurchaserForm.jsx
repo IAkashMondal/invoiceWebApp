@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import PropTypes from "prop-types";
 
-
 const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
   const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
   const [EChallanId, setChallanID] = useState("Error");
