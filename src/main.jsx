@@ -26,7 +26,6 @@ const router = createBrowserRouter([
       { path: "/dashboard/create-royalty/:royaltyID/edit", element: <EditRoyalty /> },
       { path: "/recharge", element: "recharge" },
       { path: "/Royalty-Download", element: <RoyaltyPreview /> },
-      { path: `/WBMD/Page/each/aspx/id/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
     ]
   },
   { path: "/", element: <Home /> },
