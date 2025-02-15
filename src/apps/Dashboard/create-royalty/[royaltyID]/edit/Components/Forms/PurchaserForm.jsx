@@ -81,11 +81,7 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const QRBASEURL = import.meta.env.VITE_QR_CODE_BASE_URL;
-    if (QRBASEURL) {
-      console.log("QRBASEURL on Captured")
-    }
-
+    const QRBASEURL = import.meta.env.VITE_QR_CODE_BASE_URL || `https://oneroyalty-cf7qp82h6-iakashmondals-projects.vercel.app`;
     try {
       await updatePurchaserDetails(params?.royaltyID, formData);
       generateQrCode(QRBASEURL, EChallanId)
