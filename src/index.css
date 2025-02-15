@@ -41,14 +41,6 @@ body {
     size: A4;
     margin: 0;
   }
-  @media (max-width: 480px) {
-    #print-container {
-      width: 20%;
-      max-width: 20%;
-      height: 20%;
-      max-height: 20%;
-    }
-  }
 }
 .card {
   position: relative;
