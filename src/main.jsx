@@ -31,10 +31,9 @@ const router = createBrowserRouter([
   },
   { path: "/", element: <Home /> },
   { path: "/auth/sign-in", element: <SignInPage /> },
-  { path: `/WBMD/Page/each/aspx/id/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
+  // { path: `/WBMD/Page/each/aspx/id/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
   // { path: `/:EchallanId/S/24-25/RPS`, element: <VehicleDetailPage /> },
 ]);
-
 createRoot(document.getElementById('root')).render(
   <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
     <RouterProvider router={router} />

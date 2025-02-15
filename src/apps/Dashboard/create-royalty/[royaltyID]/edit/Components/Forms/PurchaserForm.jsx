@@ -21,8 +21,6 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
     PurchaserMobileNo: ""
   });
   const [errors, setErrors] = useState({});
-
-
   const fetchVehicles = async () => {
 
     try {

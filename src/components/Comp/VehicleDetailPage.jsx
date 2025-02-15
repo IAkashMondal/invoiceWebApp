@@ -15,7 +15,6 @@ const VehicleDetailPage = () => {
     useEffect(() => {
         if (vehicledata?.VerefyChallanNum && generatedTimeV) {
             setexpire(vehicledata.VerefyChallanNum > generatedTimeV ? "" : "e-Challan Validity Expired");
-
         }
 
     }, [vehicledata, generatedTimeV]); // Dependencies added for reactivity
