@@ -41,7 +41,7 @@ const RoyaltyPreview = ({ qrCode }) => {
         window.print();
     };
     return (
-        <div id="" className="flex flex-col items-center sm:w-full">
+        <div id="" className="flex flex-col items-center">
             {/* The entire Royalty Preview component wrapped inside a reference */}
             <div className="">
                 <div id="print" ref={royaltyRef} className="m-0 relative w-[21.1cm] h-[29.9cm] p-[0.5cm] ">

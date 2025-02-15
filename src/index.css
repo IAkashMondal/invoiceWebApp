@@ -9,7 +9,6 @@ body {
 /* Mobile View: Fit on screen */
 #print-container {
   width: 100%;
-  max-width: 90vw; /* Fit screen width */
   height: 29.7cm;
   padding: 0;
 }
