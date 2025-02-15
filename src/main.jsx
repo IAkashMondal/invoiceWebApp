@@ -11,8 +11,6 @@ import EditRoyalty from './apps/Dashboard/create-royalty/[royaltyID]/edit/index.
 import RoyaltyPreview from './apps/Dashboard/create-royalty/[royaltyID]/edit/Components/RoyaltyPreview.jsx';
 import VehicleDetailPage from './components/Comp/VehicleDetailPage.jsx';
 
-
-
 // ✅ Fetch Clerk Publishable Key Correctly
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
