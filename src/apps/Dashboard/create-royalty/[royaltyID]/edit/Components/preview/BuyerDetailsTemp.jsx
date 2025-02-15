@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { GetParticularVehicle } from "../../../../../../../../Apis/GlobalApi";
 
 const BuyerDetailsTemp = ({ RoyaltyData }) => {
-     const [vehicleNoQnt, setvehicleNoQnt] = useState("");
+    const [vehicleNoQnt, setvehicleNoQnt] = useState("");
     const params = useParams();
     useEffect(() => {
         const fetchVehicleDetails = async () => {
@@ -27,12 +27,12 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
         };
 
         fetchVehicleDetails();
-    }, [params?.royaltyID, setvehicleNoQnt]); 
+    }, [params?.royaltyID, setvehicleNoQnt]);
     return (
         <div className="m-0 ml-[0.3cm] mr-[0.5cm]">
 
             <div>
-                <p className="font font-semibold font-serif italic text-[9pt] ml-[0.7cm]">Vehicle & Destination Details</p>
+                <p className="font font-semibold font-serif italic text-[10pt] ml-[0.3cm]">Vehicle & Destination Details</p>
 
                 <div className="border border-black"
                     style={{
@@ -41,7 +41,7 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "start",
-                        marginTop:"1mm"
+                        marginTop: "1mm"
                     }}
                 >
                     {/* Directly access and display each RoyaltyData?.RoyaltyData. point */}

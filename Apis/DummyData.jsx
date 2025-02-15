@@ -14,6 +14,7 @@ const Dummydata = {
   GeneratedDT: "",
   EchallanId: 0,
   VehicleQunText:"",
+  PrintButtonEnable: false,
   RoyaltyOwners: {
     id: 1,
     OwnerName: "",

@@ -3,7 +3,7 @@ import PropTypes  from "prop-types";
 
 const TextTEmp = ({ RoyaltyData }) => {
     return (
-        <div className="h-[8cm] m-0 mt-[4mm]">
+        <div className="h-[8cm] m-0 mt-[0mm]">
             <div className="p-[5mm]">
                 <p className="font-serif text-[10.7pt]">Note :</p>
                 <p className="font-serif text-[10.7pt]">{"1) Prior approval for excarvation permission was accorded by : "}
@@ -20,7 +20,7 @@ const TextTEmp = ({ RoyaltyData }) => {
                 <p className="font-serif text-[10.7pt] italic">Remarks :</p>
             </div>
 
-            <p className=" grid justify-end font-serif text-[10.7pt] mt-[6mm] mr-[5mm]">Issued by</p>
+            <p className=" grid justify-end font-serif text-[10.7pt] mt-[0mm] mr-[5mm]">Issued by</p>
             <p className=" grid justify-end font font-bold font-serif text-[10.7pt]  mr-[5mm] ">{`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName}`}</p>
             <p className="grid justify-end font font-bold font-serif text-[10.7pt]  mr-[5mm]">{`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.SandID}`}</p>
 

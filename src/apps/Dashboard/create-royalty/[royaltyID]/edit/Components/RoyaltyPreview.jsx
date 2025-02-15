@@ -41,12 +41,12 @@ const RoyaltyPreview = ({ qrCode }) => {
         window.print();
     };
     return (
-        <div id="print-container" className="flex flex-col items-center sm:w-full ">
+        <div id="" className="flex flex-col items-center sm:w-full">
             {/* The entire Royalty Preview component wrapped inside a reference */}
-            <div className="border">
-                <div id="print" ref={royaltyRef} className="m-0 relative w-[21.1cm] h-[29.7cm] p-[1.3cm]">
+            <div className="">
+                <div id="print" ref={royaltyRef} className="m-0 relative w-[21.1cm] h-[29.9cm] p-[0.5cm] ">
                     {/* A4 Sized Container */}
-                    <div className="border-[1px] border-indigo-700  m-0  bg-white flex flex-col">
+                    <div className="border-[1px] border-indigo-700 p-[0.5cm] pb-[1.7cm] m-0 pt-[0mm] bg-white flex flex-col">
 
                         {/* Challan Section */}
                         <ChallanTemp qrCode={qrCode} RoyaltyData={RoyaltyData} vehicleRegData={vehicleRegData} />
@@ -54,7 +54,7 @@ const RoyaltyPreview = ({ qrCode }) => {
                         {/* Image Behind Content */}
                         <div className="relative flex justify-center items-center ">
                             <img
-                                className="absolute w-[7.5cm] h-[7.55cm] object-contain opacity-40 mt-[8.2cm]"
+                                className="absolute w-[8.5cm] h-[8.5cm] object-contain opacity-40 mt-[8.9cm]"
                                 src="/mid_imga.png"
                                 alt="background"
                             />
@@ -82,7 +82,7 @@ const RoyaltyPreview = ({ qrCode }) => {
             {/* Button to Download as PDF */}
             <button id="no-print" disabled={!isLoading}
                 onClick={handleDownloadPDF}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-[100px]"
             >
                 Download as PDF
             </button>
