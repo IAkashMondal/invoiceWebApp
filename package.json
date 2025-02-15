@@ -1,6 +1,6 @@
 {
-  "name": "one-royalty",
-  "homepage": "https://IAkashMondal.github.io/oneroylty",
+  "name": "RoyaltyWebApp",
+  "homepage": "https://github.com/IAkashMondal/RoyaltyWebApp/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -53,6 +53,7 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "postcss": "^8.5.1",
+    "rollup-plugin-visualizer": "^5.14.0",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.5"
   }
