@@ -7,11 +7,25 @@ import TextTEmp from "./preview/TextTEmp";
 import { GetParticularVehicle } from "../../../../../../../Apis/GlobalApi";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useReactToPrint } from "react-to-print";
 const RoyaltyPreview = ({ qrCode }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
     const royaltyRef = useRef(null); // Reference for capturing the component
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoadind] = useState(false);
+    const contentRef = useRef(null);
+    const reactToPrintFn = useReactToPrint({
+        content: () => contentRef.current,
+        onBeforePrint: () => {
+            document.title = `WBMD_TP_${RoyaltyData.EchallanId}_S_24-25_RPS`;
+        },
+        onAfterPrint: () => {
+            setTimeout(() => {
+                document.title = "Your Original Title"; // Reset the title after printing
+            }, 1000);
+        }
+    });
+
     // Get formatted date & time
     // Get params from URL
     const params = useParams();
@@ -44,7 +58,7 @@ const RoyaltyPreview = ({ qrCode }) => {
         <div id="" className="flex flex-col items-center">
             {/* The entire Royalty Preview component wrapped inside a reference */}
             <div className="">
-                <div id="print" ref={royaltyRef} className="m-0 relative w-[21.1cm] h-[29.9cm] p-[0.5cm] ">
+                <div id="print" ref={contentRef} className="m-0 relative w-[21.1cm] h-[29.9cm] p-[0.5cm]">
                     {/* A4 Sized Container */}
                     <div className="border-[1px] border-indigo-700 p-[0.5cm] pb-[1.7cm] m-0 pt-[0mm] bg-white flex flex-col">
 
@@ -71,7 +85,7 @@ const RoyaltyPreview = ({ qrCode }) => {
                             <TextTEmp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                         </div>
                     </div>
-                    <div className="flex h-[1.25cm]">
+                    <div className="flex">
                         <p className="font font-bold font-serif text-[8.7pt] ml-[1cm]">Generated on: {vehicleRegData?.GeneratedDT}</p>
                         <p className="font font-bold font-serif text-[8.7pt] ml-[5cm]">{`<NIC>`}</p>
                         <p className="font font-bold font-serif text-[8.7pt] ml-[4.7cm]">Page No: 1</p>
@@ -82,7 +96,7 @@ const RoyaltyPreview = ({ qrCode }) => {
             {/* Button to Download as PDF */}
             <button id="no-print" disabled={!isLoading}
                 onClick={handleDownloadPDF}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-[100px]"
+                className="mt-32 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-[100px]"
             >
                 Download as PDF
             </button>

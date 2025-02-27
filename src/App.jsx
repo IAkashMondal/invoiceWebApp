@@ -1,9 +1,9 @@
 
 import { Navigate, Outlet } from 'react-router-dom'
 import './App.css'
-import { useUser } from '@clerk/clerk-react'
-import Header from './components/Customs/Header';
+import { useUser } from '@clerk/clerk-react';
 import { Toaster } from 'sonner';
+import InvoiceHeader from './components/Customs/InvoiceHeader';
 
 function App() {
   const { isSignedIn, isLoaded } = useUser();
@@ -13,7 +13,7 @@ function App() {
   }
   return (
     <>
-      <Header />
+      <InvoiceHeader />
       <Outlet />
       <Toaster id="no-print" />
     </>

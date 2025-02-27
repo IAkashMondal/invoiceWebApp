@@ -68,6 +68,21 @@ const updatePurchaserDetails = async (royaltyID, data) => {
     throw error;
   }
 };
+/**
+ * ✅ Sends feedback for validation to Strapi backend.
+ * @param {string} feedback - User's feedback input.
+ * @returns {Promise<Object>} - Response from Strapi.
+ */
+const validateFeedback = async (feedback) => {
+  try {
+    const response = await axiosClient.post("/api/validate-feedback", { feedback });
+    return response.data; // Return only the data
+  } catch (error) {
+    console.error("❌ Error validating feedback:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 
 /**
  * ✅ Fetches data for a specific E-Challan ID.
@@ -144,4 +159,5 @@ export {
   GetOwnersDeatils,
   GetEchallanData,
   Getvehicles,
+  validateFeedback,
 };

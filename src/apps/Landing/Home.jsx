@@ -1,5 +1,5 @@
 
-import Header from "../../components/Customs/Header"
+import InvoiceHeader from "../../components/Customs/InvoiceHeader"
 import Landing from "./Landing"
 
 
@@ -7,7 +7,7 @@ import Landing from "./Landing"
 const Home = () => {
   return (
     <div>
-      <Header />
+      <InvoiceHeader />
       <Landing />
 
     </div>

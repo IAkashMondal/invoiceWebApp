@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/clerk-react";
 import { Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 
-const Header = () => {
+const RoyaltyHeader = () => {
   const { isSignedIn } = useUser();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -18,7 +18,7 @@ const Header = () => {
       >
         {/* Left: Hamburger Menu (Hidden on lg screens) */}
         <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <SheetTrigger className="lg:hidden">
+          <SheetTrigger className="">
             <Menu className="w-6 h-6 cursor-pointer" />
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-4">
@@ -79,4 +79,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default RoyaltyHeader;

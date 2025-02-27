@@ -9,6 +9,7 @@ import Dashboard from './apps/Dashboard/Dashboard.jsx';
 import EditRoyalty from './apps/Dashboard/create-royalty/[royaltyID]/edit/index.jsx';
 import RoyaltyPreview from './apps/Dashboard/create-royalty/[royaltyID]/edit/Components/RoyaltyPreview.jsx';
 import VehicleDetailPage from './components/Comp/VehicleDetailPage.jsx';
+import FeedbackFrom from './apps/FedBack/FeedbackFrom.jsx';
 
 // ✅ Fetch Clerk Publishable Key Correctly
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -21,7 +22,8 @@ const router = createBrowserRouter([
   {
     element: <App />,
     children: [
-      { path: "/dashboard", element: <Dashboard /> },
+      { path: "/dashboard-create-roylaty", element: <Dashboard /> },
+      { path: "/dashboard/feedback", element: <FeedbackFrom /> },
       { path: "/dashboard/create-royalty/:royaltyID/edit", element: <EditRoyalty /> },
       { path: "/recharge", element: "recharge" },
       { path: "/Royalty-Download", element: <RoyaltyPreview /> },

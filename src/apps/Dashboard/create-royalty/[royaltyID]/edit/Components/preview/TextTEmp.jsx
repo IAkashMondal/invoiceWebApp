@@ -1,10 +1,10 @@
-import PropTypes  from "prop-types";
+import PropTypes from "prop-types";
 
 
 const TextTEmp = ({ RoyaltyData }) => {
     return (
-        <div className="h-[8cm] m-0 mt-[0mm]">
-            <div className="p-[5mm]">
+        <div className="h-[6.6cm] m-0 mt-[0mm]">
+            <div className="mt-[5mm]">
                 <p className="font-serif text-[10.7pt]">Note :</p>
                 <p className="font-serif text-[10.7pt]">{"1) Prior approval for excarvation permission was accorded by : "}
                     <span className="font font-bold">{`ADM and DL & LRO, DARJEELING `}</span>
