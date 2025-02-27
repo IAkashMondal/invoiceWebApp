@@ -1,6 +1,6 @@
 import Ownerdetails from "./From/Ownerdetails"
 
-const Invoice = () => {
+const InvoiceP = () => {
   return (
     <div>
       <Ownerdetails />
@@ -8,4 +8,4 @@ const Invoice = () => {
   )
 }
 
-export default Invoice
+export default InvoiceP;
