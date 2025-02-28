@@ -3,7 +3,7 @@ import { QRCodeSVG } from "qrcode.react";
 
 const ChallanTemp = ({ qrCode, RoyaltyData }) => {
   return (
-    <div className="mb-4 w-full max-w-[20cm] mx-auto" id="pdf-container">
+    <div className="mb-4 w-full flex-col max-w-[20cm] mx-auto" id="pdf-container">
       {/* Title */}
       <p className="font-bold text-xl md:text-2xl text-center m-2">
         ROAD E-Challan for sand / riverbed materials Transport
@@ -51,7 +51,7 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
         </div>
 
         {/* QR Code Section */}
-        <div className="flex items-center justify-center ml-[3mm]">
+        <div className=" flex justify-center items-center ml-[3mm]">
           {qrCode && (
             <QRCodeSVG
               value={qrCode}
