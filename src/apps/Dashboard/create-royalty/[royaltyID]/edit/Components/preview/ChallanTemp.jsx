@@ -8,7 +8,6 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
       <p className="font-bold text-xl md:text-2xl text-center m-2">
         ROAD E-Challan for sand / riverbed materials Transport
       </p>
-
       {/* Container for Details & QR Code */}
       <div className="grid grid-cols-1 md:grid-cols-[auto_3cm] gap-4 md:gap-2">
         {/* Challan Details Section */}
@@ -49,7 +48,6 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
             </p>
           </div>
         </div>
-
         {/* QR Code Section */}
         <div className=" flex justify-center items-center ml-[3mm]">
           {qrCode && (
