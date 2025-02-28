@@ -1,19 +1,19 @@
 import PropTypes, { array, object } from "prop-types"; // Import PropTypes
 const SellerDetailsTemp = ({ RoyaltyData, }) => {
-    
+
     return (
-        <div className="m-0 ml-[0.5cm]">
+        <div className="m-0">
 
             <div>
-                <p className="font font-semibold font-serif italic text-[10pt] ml-[-0.3cm]">SAND Block & leaseholder/MDO Details</p>
+                <p className="font font-semibold font-serif italic text-[10pt] ml-[0.3cm]">SAND Block & leaseholder/MDO Details</p>
                 <div className="border border-black"
                     style={{
                         height: "10.3cm",
-                        width: "9.3cm",
+                        width: "9.2cm",
                         display: "flex",
                         flexDirection: "column",
                         marginTop: "1mm",
-                        marginLeft:"-0.5cm"
+                        justifyContent: "start",
                     }}
                 >
                     {/* Directly access and display each RoyaltyData point */}
@@ -70,7 +70,7 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
                         <span className="w-[3.6cm]"></span>
                         <div className="grid grid-flow-row">
                             <span className=" p-0">{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 || ""}</span>
-                        <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 || ""}</span>
+                            <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 || ""}</span>
                         </div>
                     </p>
                 </div>

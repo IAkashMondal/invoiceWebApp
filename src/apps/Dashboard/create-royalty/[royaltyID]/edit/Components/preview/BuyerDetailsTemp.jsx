@@ -29,7 +29,7 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
         fetchVehicleDetails();
     }, [params?.royaltyID, setvehicleNoQnt]);
     return (
-        <div className="m-0 ml-[0.3cm] mr-[0.5cm]">
+        <div className="m-0 ml-[0.3cm]">
 
             <div>
                 <p className="font font-semibold font-serif italic text-[10pt] ml-[0.3cm]">Vehicle & Destination Details</p>
@@ -37,7 +37,7 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                 <div className="border border-black"
                     style={{
                         height: "10.3cm",
-                        width: "9.3cm",
+                        width: "9.2cm",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "start",
