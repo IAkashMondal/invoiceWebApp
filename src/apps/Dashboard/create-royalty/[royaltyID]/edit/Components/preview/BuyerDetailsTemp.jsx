@@ -37,7 +37,7 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                 <div className="border border-black"
                     style={{
                         height: "10.3cm",
-                        width: "8.6cm",
+                        width: "9.3cm",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "start",

@@ -5,15 +5,15 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
         <div className="m-0 ml-[0.5cm]">
 
             <div>
-                <p className="font font-semibold font-serif italic text-[10pt] ml-[0.3cm]">SAND Block & leaseholder/MDO Details</p>
+                <p className="font font-semibold font-serif italic text-[10pt] ml-[-0.3cm]">SAND Block & leaseholder/MDO Details</p>
                 <div className="border border-black"
                     style={{
                         height: "10.3cm",
-                        width: "8.6cm",
+                        width: "9.3cm",
                         display: "flex",
                         flexDirection: "column",
                         marginTop: "1mm",
-                        justifyContent: "start",
+                        marginLeft:"-0.5cm"
                     }}
                 >
                     {/* Directly access and display each RoyaltyData point */}

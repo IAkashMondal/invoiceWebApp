@@ -74,7 +74,7 @@ const RoyaltyPreview = ({ qrCode }) => {
                             />
 
                             {/* Buyer & Seller Details */}
-                            <div className="relative z-10 flex justify-between w-full">
+                            <div className="relative z-10 grid grid-flow-col gap-[0.2cm] w-full">
                                 <SellerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                                 <BuyerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                             </div>
