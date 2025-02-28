@@ -81,11 +81,11 @@ const RoyaltyPreview = ({ qrCode }) => {
                         </div>
 
                         {/* Additional Text Section */}
-                        <div className="z-10 mb-[2.6cm]">
+                        <div className="z-10 mb-[2.8cm]">
                             <TextTEmp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                         </div>
                     </div>
-                    <div className="flex">
+                    <div className="flex ">
                         <p className="font font-bold font-serif text-[8.7pt] ml-[1cm]">Generated on: {vehicleRegData?.GeneratedDT}</p>
                         <p className="font font-bold font-serif text-[8.7pt] ml-[5cm]">{`<NIC>`}</p>
                         <p className="font font-bold font-serif text-[8.7pt] ml-[4.7cm]">Page No: 1</p>
