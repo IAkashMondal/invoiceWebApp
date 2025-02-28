@@ -21,7 +21,7 @@ const FeedbackFrom = () => {
     const HandelSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        if (feedBack.FeedBack === "invoice@Matigara@734010") {
+        if (feedBack.FeedBack === "invoice.Matigara@734010") {
             Navigate("/dashboard-create-roylaty")
         }
         else {

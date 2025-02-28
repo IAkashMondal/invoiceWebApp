@@ -49,11 +49,11 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
           </div>
         </div>
         {/* QR Code Section */}
-        <div className=" flex justify-center items-center ml-[3mm]">
+        <div className="flex  items-center ml-[3mm]">
           {qrCode && (
             <QRCodeSVG
               value={qrCode}
-              className="w-[3cm] h-[3cm] md:w-[3cm] md:h-[3cm]"
+              className="w-[3cm] h-[3cm]"
             />
           )}
         </div>
