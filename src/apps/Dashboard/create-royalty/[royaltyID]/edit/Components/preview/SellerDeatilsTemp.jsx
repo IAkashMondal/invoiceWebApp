@@ -2,13 +2,13 @@ import PropTypes, { array, object } from "prop-types"; // Import PropTypes
 const SellerDetailsTemp = ({ RoyaltyData, }) => {
 
     return (
-        <div className="m-0">
+        <div className="m-0 mb-0">
 
             <div>
                 <p className="font font-semibold font-serif italic text-[10pt] ml-[0.3cm]">SAND Block & leaseholder/MDO Details</p>
-                <div className="border border-black"
+                <div className="border border-black h-auto"
                     style={{
-                        height: "10.3cm",
+                        // height: "10.5cm",
                         width: "9.2cm",
                         display: "flex",
                         flexDirection: "column",
@@ -50,24 +50,24 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
 
                     <p className="flex font-serif font-normal ml-[1mm] mt-[4mm]  text-[11pt]">
                         <div className="grid">
-                            <span className="w-[3.6cm]">Name of the Mining</span>
+                            <span className="w-[3.8cm]">Name of the Mining</span>
                             <span>Lease Holder</span>
                         </div>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm]  text-[10pt]">
-                        <span className="w-[3.6cm]">Mobile No</span>
+                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm]  text-[11pt]">
+                        <span className="w-[3.8cm]">Mobile No</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerMobileNo || "NA"}</span>
                     </p>
                     <p className="flex font-serif font-normal ml-[1mm] mt-[3mm]  text-[11pt]">
-                        <span className="w-[3.6cm]">Address</span>
+                        <span className="w-[3.8cm]">Address</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddress || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm] text-[11pt]">
-                        <span className="w-[3.6cm]"></span>
+                    <p className="flex font-serif font-normal ml-[1mm] text-[11pt] mb-1">
+                        <span className="w-[3.8cm]"></span>
                         <div className="grid grid-flow-row">
                             <span className=" p-0">{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 || ""}</span>
                             <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 || ""}</span>

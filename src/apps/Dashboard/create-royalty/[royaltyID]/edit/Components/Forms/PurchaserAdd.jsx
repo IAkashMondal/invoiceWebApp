@@ -151,6 +151,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
             setLoading(false);
         }
     };
+
     return (
         <div className="flex justify-center w-full p-4">
             <div className="max-w-lg w-full bg-white shadow-lg rounded-lg p-6">
@@ -211,7 +212,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                                 onChange={handleInputChangeAdd}
                             >
                                 <option value="">Select District</option>
-                                {["Malda", "Jalpaiguri", "Alipurduar", "Dakshin Dinajpur", "Uttar Dinajpur", "Murshidabad", "Darjeeling"].map(
+                                {["MALDA", "JALPAIGURI", "ALIPURSUARli", "DAKSHIN DINAJPUR", "UTTAR DINAJPUR", "MURSHIDABAD", "DARJEELING"].map(
                                     (type) => (
                                         <option key={type} value={type}>
                                             {type}

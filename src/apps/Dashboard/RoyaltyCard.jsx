@@ -3,7 +3,6 @@ import { Truck } from "lucide-react";
 import PropTypes from "prop-types"; // To handle prop validation
 
 const RoyaltyCard = ({ data }) => {
-    console.log(data.documentId,"documentId")
     return (
         <Link to={`/dashboard/create-royalty/${data.documentId}/edit`} className="block">
             <div

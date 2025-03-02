@@ -122,7 +122,7 @@ export const addTimeToGeneratedTime = (generatedTime, additionalTime) => {
   // Extract updated date and time
   const newDay = String(newDate.getDate()).padStart(2, "0");
   const newMonth = String(newDate.getMonth() + 1).padStart(2, "0");
-  const newYear = String(newDate.getFullYear()).slice(-2); // Last two digits of the year
+  const newYear = String(newDate.getFullYear());
   const newHours = String(newDate.getHours()).padStart(2, "0"); // 24-hour format
   const newMinutes = String(newDate.getMinutes()).padStart(2, "0");
   const newSeconds = String(newDate.getSeconds()).padStart(2, "0");
@@ -132,11 +132,20 @@ export const addTimeToGeneratedTime = (generatedTime, additionalTime) => {
   const formattedHours = String(newDate.getHours() % 12 || 12).padStart(2, "0");
 
   // Final formatted outputs
-  const validityTime = `${newDay}/${newMonth}/20${newYear} ${formattedHours}:${newMinutes} ${ampm}`;
-  const VerefyChallanNum = Number(
-    `${newDay}${newMonth}${newYear}${newHours}${newMinutes}${newSeconds}`
-  );
+  const validityTime = `${newDay}/${newMonth}/${newYear} ${formattedHours}:${newMinutes} ${ampm}`;
+  // const VerefyChallanNum = Number(
+  //   `${newDay}${newMonth}${newYear}${newHours}${newMinutes}${newSeconds}`
+  // );
 
+  // ✅ Corrected: Generate accurate timestamp in milliseconds
+  const VerefyChallanNum = Date.UTC(
+    newYear,
+    newMonth - 1,
+    newDay,
+    newHours,
+    newMinutes,
+    newSeconds
+  );
   return { validityTime, VerefyChallanNum };
 };
 

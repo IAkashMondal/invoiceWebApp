@@ -3,47 +3,47 @@ import { QRCodeSVG } from "qrcode.react";
 
 const ChallanTemp = ({ qrCode, RoyaltyData }) => {
   return (
-    <div className="mb-4 w-full max-w-[20cm] mx-auto" id="pdf-container">
+    <div className="mb-4 w-full max-w-[20cm] mx-auto" id="pdf-container ">
       {/* Title */}
       <p className="font-bold text-[22px] text-center m-2">
         ROAD E-Challan for sand / riverbed materials Transport
       </p>
 
       {/* Container for Details & QR Code */}
-      <div className="grid grid-flow-col">
+      <div className="grid grid-flow-col font-serif">
         {/* Challan Details Section */}
         <div className="border border-black p-2 min-w-[15cm]">
           <div className="mb-1">
             <p className="flex font-bold text-base ">
-              <span className="min-w-[4cm]">E-Challan No.</span>
+              <span className="min-w-[3.8cm]">E-Challan No.</span>
               <span className="mr-1">:</span>
               <span>{`${RoyaltyData?.EchallanId}/S/24-25/${RoyaltyData?.EChallanDT}/PS`}</span>
             </p>
           </div>
           <div className="mb-1">
             <p className="flex font-bold text-base ">
-              <span className=" min-w-[4cm]">Issue Date</span>
+              <span className=" min-w-[3.8cm]">Issue Date</span>
               <span className="mr-1">:</span>
               <span>{RoyaltyData?.IssueDate}</span>
             </p>
           </div>
           <div className="mb-1">
             <p className="flex font-bold text-base ">
-              <span className=" min-w-[4cm]">Validity Till</span>
+              <span className=" min-w-[3.8cm]">Validity Till</span>
               <span className="mr-1">:</span>
               <span>{RoyaltyData?.ValidityDate}</span>
             </p>
           </div>
           <div className="mb-1">
             <p className="flex font-bold text-base ">
-              <span className=" min-w-[4cm]">Quantity</span>
+              <span className=" min-w-[3.8cm]">Quantity</span>
               <span className="mr-1">:</span>
               <span>{`${RoyaltyData.quantity}.00 ctf`}<span className="text-sm"> ({RoyaltyData.VehicleQunText} ctf)</span></span>
             </p>
           </div>
           <div className="mb-1">
             <p className="flex font-bold text-base ">
-              <span className=" min-w-[4cm]">Vehicle No.</span>
+              <span className=" min-w-[3.8cm]">Vehicle No.</span>
               <span className="mr-1">:</span>
               <span>{`${RoyaltyData.Registration_No} (${RoyaltyData?.VehicleType})`}</span>
             </p>

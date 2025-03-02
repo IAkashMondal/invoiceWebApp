@@ -10,22 +10,15 @@ import PropTypes from "prop-types";
 import { useReactToPrint } from "react-to-print";
 const RoyaltyPreview = ({ qrCode }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
-    const royaltyRef = useRef(null); // Reference for capturing the component
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoadind] = useState(false);
     const contentRef = useRef(null);
     const reactToPrintFn = useReactToPrint({
-        content: () => contentRef.current,
-        onBeforePrint: () => {
-            document.title = `WBMD_TP_${RoyaltyData.EchallanId}_S_24-25_RPS`;
-        },
-        onAfterPrint: () => {
-            setTimeout(() => {
-                document.title = "Your Original Title"; // Reset the title after printing
-            }, 1000);
-        }
+        contentRef,
+        documentTitle: `WBMD_TP_${RoyaltyData?.EchallanId}_S_24-25_RPS`
     });
 
+    // const reactToPrintFn = useReactToPrint({ contentRef });
     // Get formatted date & time
     // Get params from URL
     const params = useParams();
@@ -50,42 +43,41 @@ const RoyaltyPreview = ({ qrCode }) => {
         };
         fetchVehicleDetails();
     }, [params?.royaltyID]); // Run effect when `royaltyID` changes
-    const handleDownloadPDF = async () => {
-        document.title = `WBMD_TP_${RoyaltyData.EchallanId}_S_24-25_RPS`; // Set the desired PDF title
-        window.print();
-    };
+    // const handleDownloadPDF = async () => {
+    //     document.title = `WBMD_TP_${RoyaltyData.EchallanId}_S_24-25_RPS`; // Set the desired PDF title
+    //     window.print();
+    // };
     return (
-        <div id="" className="flex flex-col items-center">
+        <div id="" className="flex flex-col items-center ">
             {/* The entire Royalty Preview component wrapped inside a reference */}
             <div className="">
-                <div id="print" ref={contentRef} className="m-0 relative w-[21.1cm] h-[29.9cm] p-[0.5cm]">
+                <div id="print" ref={contentRef} className="m-0 relative w-[21.1cm] h-[29.7cm] p-[0.5cm]">
                     {/* A4 Sized Container */}
-                    <div className="border-[1px] border-indigo-700 p-[0.5cm] pb-[1.7cm] m-0 pt-[0mm] bg-white flex flex-col">
+                    <div className="border-[1px] border-indigo-700 p-[0.5cm] pb-[1.7cm] h-[28.7cm] m-0 pt-[0mm] bg-white flex flex-col">
 
                         {/* Challan Section */}
                         <ChallanTemp qrCode={qrCode} RoyaltyData={RoyaltyData} vehicleRegData={vehicleRegData} />
 
                         {/* Image Behind Content */}
-                        <div className="relative flex justify-center items-center ">
+                        <div className="flex justify-center items-center ">
                             <img
-                                className="absolute w-[8.5cm] h-[8.5cm] object-contain opacity-40 mt-[8.9cm]"
+                                className="absolute w-[8.5cm] h-[8.5cm] object-contain opacity-25 mt-[8.9cm]"
                                 src="/mid_imga.png"
                                 alt="background"
                             />
-
                             {/* Buyer & Seller Details */}
-                            <div className="relative z-10 grid grid-flow-col gap-[0.2cm] w-full">
+                            <div className=" z-10 grid grid-flow-col gap-[0.2cm]">
                                 <SellerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                                 <BuyerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                             </div>
                         </div>
 
                         {/* Additional Text Section */}
-                        <div className="z-10 mb-[2.8cm]">
+                        <div className="z-10 m-0 p-0">
                             <TextTEmp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                         </div>
                     </div>
-                    <div className="flex ">
+                    <div className=" relative flex mt-0">
                         <p className="font font-bold font-serif text-[8.7pt] ml-[1cm]">Generated on: {vehicleRegData?.GeneratedDT}</p>
                         <p className="font font-bold font-serif text-[8.7pt] ml-[5cm]">{`<NIC>`}</p>
                         <p className="font font-bold font-serif text-[8.7pt] ml-[4.7cm]">Page No: 1</p>
@@ -95,7 +87,7 @@ const RoyaltyPreview = ({ qrCode }) => {
 
             {/* Button to Download as PDF */}
             <button id="no-print" disabled={!isLoading}
-                onClick={handleDownloadPDF}
+                onClick={reactToPrintFn}
                 className="mt-32 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-[100px]"
             >
                 Download as PDF
