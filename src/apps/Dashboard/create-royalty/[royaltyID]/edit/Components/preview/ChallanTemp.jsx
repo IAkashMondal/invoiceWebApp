@@ -38,7 +38,7 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
             <p className="flex font-bold text-base ">
               <span className=" min-w-[3.8cm]">Quantity</span>
               <span className="mr-1">:</span>
-              <span>{`${RoyaltyData.quantity}.00 ctf`}<span className="text-sm"> ({RoyaltyData.VehicleQunText} ctf)</span></span>
+              <span>{`${RoyaltyData.quantity}.00 ctf`}<span className="text-[8.7pt]"> ({RoyaltyData.VehicleQunText} ctf)</span></span>
             </p>
           </div>
           <div className="mb-1">

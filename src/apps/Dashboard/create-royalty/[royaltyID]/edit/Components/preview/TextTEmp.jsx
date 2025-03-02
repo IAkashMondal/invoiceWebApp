@@ -5,11 +5,11 @@ const TextTEmp = ({ RoyaltyData }) => {
     return (
         <div className="mt-0 h-[6.6cm] m-0 p-0">
             <div className="mt-[5mm]">
-                <p className="font-serif text-[10.7pt]">Note :</p>
-                <p className="font-serif text-[10.7pt]">{"1) Prior approval for excarvation permission was accorded by : "}
+                <p className="font-serif text-[10pt]">Note :</p>
+                <p className="font-serif text-[10pt]">{"1) Prior approval for excarvation permission was accorded by : "}
                     <span className="font font-bold">{`ADM and DL & LRO, DARJEELING `}</span>
                     <span>vide permit</span>
-                    <p className="font-serif text-[10.7pt]"><span >{`no. `}</span ><span className="font font-bold">{`${RoyaltyData?.RoyaltyData?.RoyaltyOwners?.VidePermitNo || "N/A"}`}</span></p>
+                    <p className="font-serif text-[10pt]"><span >{`no. `}</span ><span className="font font-bold">{`${RoyaltyData?.RoyaltyData?.RoyaltyOwners?.VidePermitNo || "N/A"}`}</span></p>
                 </p>
                 <p className="font-serif text-[10.7pt]">{"2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify authenticity of the E-challan, please scan above  QR Code using smart phone."}</p>
                 <p className="font-serif text-[10.7pt]">{"3) This is a system generated document and does not requried any signature."}</p>
