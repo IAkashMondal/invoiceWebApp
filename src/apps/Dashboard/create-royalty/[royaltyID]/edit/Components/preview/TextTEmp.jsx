@@ -11,8 +11,8 @@ const TextTEmp = ({ RoyaltyData }) => {
                     <span>vide permit</span>
                     <p className="font-serif text-[10pt]"><span >{`no. `}</span ><span className="font font-bold">{`${RoyaltyData?.RoyaltyData?.RoyaltyOwners?.VidePermitNo || "N/A"}`}</span></p>
                 </p>
-                <p className="font-serif text-[10.7pt]">{"2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify authenticity of the E-challan, please scan above  QR Code using smart phone."}</p>
-                <p className="font-serif text-[10.7pt]">{"3) This is a system generated document and does not requried any signature."}</p>
+                <p className="font-serif text-[10pt]">{"2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify authenticity of the E-challan, please scan above  QR Code using smart phone."}</p>
+                <p className="font-serif text-[10pt]">{"3) This is a system generated document and does not requried any signature."}</p>
                 <div className="font-serif text-[11.3pt] mt-[5mm]">
                     <p>{"4) Self Certitication by Lessee/MDO : I/WE(Lessee/MDO/Q.P.) hereby declare that the above statements are correct and complete to be best of my knowledge and belied. "}
                         <span className="font font-bold">{`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName}`}</span></p>
