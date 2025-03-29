@@ -125,7 +125,9 @@ export const GetChallanValidationPreview = async (EchallanId) => {
  * ✅ Fetches the last saved E-Challan ID.
  * @returns {Promise} - Axios response.
  */
-const GetPrevChallanID = () => axiosClient.get(`/echallanids?sort=id:asc`);
+const GetPrevChallanID = () =>
+  axiosClient.get(`/echallanids?sort=id:desc&limit=1`);
+
 
 /**
  * ✅ Updates the last saved E-Challan ID.

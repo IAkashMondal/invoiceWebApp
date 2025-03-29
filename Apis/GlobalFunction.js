@@ -149,6 +149,27 @@ export const addTimeToGeneratedTime = (generatedTime, additionalTime) => {
   return { validityTime, VerefyChallanNum };
 };
 
+export const getFinancialYear =()=> {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; // Months are 0-based in JavaScript
+
+    let startYear, endYear;
+    
+    if (month < 4) { // Before April, belongs to previous FY
+        startYear = year - 1;
+        endYear = year;
+    } else { // From April onwards, new FY starts
+        startYear = year;
+        endYear = year + 1;
+    }
+
+    return `${startYear.toString().slice(-2)}-${endYear.toString().slice(-2)}`;
+}
+
+console.log(getFinancialYear()); // Example output: "24-25"
+
+
 export function numberToWords(num) {
   if (num === null || num === undefined || isNaN(num)) return "Invalid number";
 

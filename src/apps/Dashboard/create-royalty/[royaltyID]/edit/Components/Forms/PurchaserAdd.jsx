@@ -212,7 +212,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                                 onChange={handleInputChangeAdd}
                             >
                                 <option value="">Select District</option>
-                                {["MALDA", "JALPAIGURI", "ALIPURSUARli", "DAKSHIN DINAJPUR", "UTTAR DINAJPUR", "MURSHIDABAD", "DARJEELING"].map(
+                                {["MALDA", "JALPAIGURI", "ALIPURDUAR", "DAKSHIN DINAJPUR", "UTTAR DINAJPUR", "MURSHIDABAD", "DARJEELING"].map(
                                     (type) => (
                                         <option key={type} value={type}>
                                             {type}
@@ -242,7 +242,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                             className="border p-2 rounded w-full"
                             name="OwnerName"
                             required
-                            value={selectedOwner}
+                            value={selectedOwner} // Default to "Prasanta Kumar Hait"
                             onChange={handleOwnerChange}
                         >
                             <option value="">Select Royalty owner</option>
@@ -253,7 +253,6 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                             ))}
                         </select>
                     </div>
-
                     <div className="mt-5 flex justify-center w-full">
                         <Button type="submit" className="bg-pink-500 text-white p-2 rounded-md w-full" disabled={loading}>
                             {loading ? "Saving..." : "Save and Continue"}

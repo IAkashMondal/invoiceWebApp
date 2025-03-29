@@ -106,6 +106,12 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+    screens: {
+      sm: "320px", // Small screens (default Tailwind size)
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+    },
   },
   plugins: [tailwindcssAnimate],
 };

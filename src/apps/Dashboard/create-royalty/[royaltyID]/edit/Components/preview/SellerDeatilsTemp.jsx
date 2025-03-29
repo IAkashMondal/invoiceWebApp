@@ -2,14 +2,14 @@ import PropTypes, { array, object } from "prop-types"; // Import PropTypes
 const SellerDetailsTemp = ({ RoyaltyData, }) => {
 
     return (
-        <div className="m-0 mb-0">
+        <div id="sellerboxs" className="m-0 mb-0  lg:mr-0 sm:m-0 sm:mb-0 sm:mr-[0.3cm]">
 
             <div>
-                <p className="font font-semibold font-serif italic text-[10pt] ml-[0.3cm]">SAND Block & leaseholder/MDO Details</p>
-                <div className="border border-black h-auto"
+                <p id="large-screen-styles" className="font font-semibold font-serif italic lg:mt-[4mm] lg:text-[10pt] ml-[0.3cm] sm:text-[7pt] sm:ml-[0.3cm]">PERMISSION HOLDER DETAILS</p>
+                <div id="sellerBox" className="border border-black h-auto sm:w-full"
                     style={{
                         // height: "10.5cm",
-                        width: "9.2cm",
+                        width: "8.8cm",
                         display: "flex",
                         flexDirection: "column",
                         marginTop: "1mm",
@@ -17,60 +17,65 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
                     }}
                 >
                     {/* Directly access and display each RoyaltyData point */}
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm]  text-[11pt]">
-                        <span className="w-[3.8cm]">Sand Block Id</span>
+                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm]  sm:mb-[2mm]  lg:text-[11pt] sm:text-[7pt]">
+                        <span className="lg:w-[3.7cm] sm:w-[2cm]">
+                            <p>PERMISSION</p>
+                            <p>HOLDER Id</p>
+                        </span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData.RoyaltyOwners.SandID || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal  ml-[1mm] mt-[4mm]  text-[11pt]">
-                        <span className="w-[3.8cm]">River</span>
-                        <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.River || "NA"}</span>
-                    </p>
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[4mm]  text-[11pt]">
-                        <span className="w-[3.8cm]">Mouza</span>
+
+                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                        <span className="lg:w-[3.7cm] sm:w-[2cm]">Mouza</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerMouza || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[4mm]  text-[11pt]">
-                        <span className="w-[3.8cm]">GP / Ward</span>
+                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
+                        <span className="lg:w-[3.7cm] sm:w-[2cm]">GP / Ward</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerGpWard || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[4mm]  text-[11pt]">
-                        <span className="w-[3.8cm]">Police Station</span>
+                    <p className="flex font-serif font-normal ml-[1mm] lg:mb-[6mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                        <span className="lg:w-[3.7cm] sm:w-[2cm]">Sub-Division</span>
+                        <span className="mr-[2mm]">:</span>
+                        <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerSubDivision || "NA"}</span>
+                    </p>
+                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
+                        <span className="lg:w-[3.7cm] sm:w-[2cm]">Police Station</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerPoliceStation || "West bengal"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[4mm]  text-[11pt]">
-                        <span className="w-[3.8cm]">District</span>
+                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
+                        <span className="lg:w-[3.7cm] sm:w-[2cm]">District</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerDistrict || "NA"}</span>
                     </p>
 
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[4mm]  text-[11pt]">
+                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[6.5pt]">
                         <div className="grid">
-                            <span className="w-[3.8cm]">Name of the Mining</span>
-                            <span>Lease Holder</span>
+                            <span className="lg:w-[3.7cm] sm:w-[2cm]">Name of the </span>
+                            <span>Permission Holder</span>
                         </div>
-                        <span className="mr-[2mm]">:</span>
+                        <span className="mr-[2mm] ">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm]  text-[11pt]">
-                        <span className="w-[3.8cm]">Mobile No</span>
+                    <p id="sellergap" className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]   lg:text-[11pt] sm:text-[7pt]">
+                        <span className="lg:w-[3.7cm] sm:w-[2cm]">Mobile No</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerMobileNo || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm]  text-[11pt]">
-                        <span className="w-[3.8cm]">Address</span>
+
+                    <p className="flex font-serif font-normal ml-[1mm] lg:mb-[6mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                        <span className="lg:w-[3.7cm] sm:w-[2cm]">Address</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddress || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm] text-[11pt] mb-1">
-                        <span className="w-[3.8cm]"></span>
+                    <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm]">
+                        <span className="lg:w-[3.7cm] sm:w-[2cm]"></span>
                         <div className="grid grid-flow-row">
-                            <span className=" p-0">{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 || ""}</span>
-                            <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 || ""}</span>
+                            <p className=" p-0">{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 || ""}</p>
+                            <span >{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 || ""}</span>
                         </div>
                     </p>
                 </div>

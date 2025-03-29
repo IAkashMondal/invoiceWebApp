@@ -12,6 +12,7 @@ const RoyaltyPreview = ({ qrCode }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoadind] = useState(false);
+
     const contentRef = useRef(null);
     const reactToPrintFn = useReactToPrint({
         contentRef,
@@ -48,25 +49,26 @@ const RoyaltyPreview = ({ qrCode }) => {
     //     window.print();
     // };
     return (
-        <div id="" className="flex flex-col items-center ">
+        <div id="Maindiv" className="flex flex-col items-center ">
             {/* The entire Royalty Preview component wrapped inside a reference */}
             <div className="">
-                <div id="print" ref={contentRef} className="m-0 relative w-[21.1cm] h-[29.7cm] p-[0.5cm]">
+                <div id="print" ref={contentRef} className="m-0 relative lg:p-[7mm]  sm:p-[0.3cm]">
                     {/* A4 Sized Container */}
-                    <div className="border-[1px] border-indigo-700 p-[0.5cm] pb-[1.7cm] h-[28.7cm] m-0 pt-[0mm] bg-white flex flex-col">
+                    <div id="indigoborder" className="border-[1px] border-indigo-700 lg:w-[19.1cm] lg:h-[29.7cm] lg:pl-[5mm]  sm:h-auto sm:w-[100%] sm:p-[0.3cm] m-0 pt-[0mm] bg-white flex flex-col">
 
                         {/* Challan Section */}
-                        <ChallanTemp qrCode={qrCode} RoyaltyData={RoyaltyData} vehicleRegData={vehicleRegData} />
+                        <ChallanTemp className="" qrCode={qrCode} RoyaltyData={RoyaltyData} vehicleRegData={vehicleRegData} />
 
                         {/* Image Behind Content */}
-                        <div className="flex justify-center items-center ">
+                        <div id="ImageBehindContent" className="flex justify-center  ">
                             <img
-                                className="absolute w-[8.5cm] h-[8.5cm] object-contain opacity-25 mt-[8.9cm]"
+                                id="imgdiv"
+                                className="absolute lg:w-[7.4cm] lg:h-[7.6cm]  object-contain opacity-25 lg:mt-[7.3cm] sm:w-[4.2cm] sm:h-[4.2cm] sm:mt-36"
                                 src="/mid_imga.png"
                                 alt="background"
                             />
                             {/* Buyer & Seller Details */}
-                            <div className=" z-10 grid grid-flow-col gap-[0.2cm]">
+                            <div className=" z-10 grid grid-flow-col">
                                 <SellerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                                 <BuyerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                             </div>
@@ -77,10 +79,10 @@ const RoyaltyPreview = ({ qrCode }) => {
                             <TextTEmp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                         </div>
                     </div>
-                    <div className=" relative flex mt-0">
-                        <p className="font font-bold font-serif text-[8.7pt] ml-[1cm]">Generated on: {vehicleRegData?.GeneratedDT}</p>
-                        <p className="font font-bold font-serif text-[8.7pt] ml-[5cm]">{`<NIC>`}</p>
-                        <p className="font font-bold font-serif text-[8.7pt] ml-[4.7cm]">Page No: 1</p>
+                    <div id="genaratedtex" className=" relative flex mt-0 ">
+                        <p className="font font-bold font-serif lg:text-[8pt] lg:ml-[1cm] sm:text-[5pt] sm:ml-[0.3cm]">Generated on: {vehicleRegData?.GeneratedDT}</p>
+                        <p className="font font-bold font-serif lg:text-[8pt] lg:ml-[5.1cm] sm:ml-[3cm] sm:text-[5pt]">{`<NIC>`}</p>
+                        <p className="font font-bold font-serif lg:text-[8pt] lg:ml-[4.7cm]  sm:text-[5pt] sm:ml-[3cm]">Page No: 1</p>
                     </div>
                 </div>
             </div>
@@ -88,7 +90,7 @@ const RoyaltyPreview = ({ qrCode }) => {
             {/* Button to Download as PDF */}
             <button id="no-print" disabled={!isLoading}
                 onClick={reactToPrintFn}
-                className="mt-32 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-[100px]"
+                className="mt-32 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-[100px] sm:mt-10 sm:mb-[60px]"
             >
                 Download as PDF
             </button>
