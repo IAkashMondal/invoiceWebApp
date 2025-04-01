@@ -3,7 +3,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { getDynamicYearRange } from "../../../../../../../../Apis/GlobalFunction";
 
 const ChallanTemp = ({ qrCode, RoyaltyData }) => {
-  const EChallanNumber = `${RoyaltyData?.EchallanId}/T/${getDynamicYearRange()}/${RoyaltyData?.EChallanDT}/PS`
+  const EChallanNumber = `${RoyaltyData?.EchallanId}/S/${getDynamicYearRange()}/${RoyaltyData?.EChallanDT}/PS`
   return (
     <div className="lg:mb-0 w-full max-w-[20.1cm] sm:mb-1" id="pdf-container ">
       {/* Title */}

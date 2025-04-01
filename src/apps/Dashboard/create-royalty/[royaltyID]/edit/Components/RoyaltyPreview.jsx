@@ -8,17 +8,21 @@ import { GetParticularVehicle } from "../../../../../../../Apis/GlobalApi";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useReactToPrint } from "react-to-print";
-import {  getDynamicYearRange } from "../../../../../../../Apis/GlobalFunction";
+import { getDynamicYearRange } from "../../../../../../../Apis/GlobalFunction";
 const RoyaltyPreview = ({ qrCode }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoadind] = useState(false);
 
     const contentRef = useRef(null);
-    const reactToPrintFn = useReactToPrint({
-        contentRef,
-        documentTitle: `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`
-    });
+    // const reactToPrintFn = useReactToPrint({
+    //     contentRef,
+    //     documentTitle: `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`
+    // });
+    const reactToPrintFn = () => {
+        document.title = `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`;
+        window.print();
+    };
 
     // const reactToPrintFn = useReactToPrint({ contentRef });
     // Get formatted date & time
