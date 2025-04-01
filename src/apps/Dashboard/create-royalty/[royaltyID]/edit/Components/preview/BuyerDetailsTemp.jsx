@@ -29,25 +29,25 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
         fetchVehicleDetails();
     }, [params?.royaltyID, setvehicleNoQnt]);
     return (
-        <div id="buyerbox" className="m-0 lg:ml-[0.3cm] mb-0 sm:ml-[0.3cm] sm:mr-[0.3cm] sm:w-full">
+        <div id="buyerbox " className="m-0 lg:ml-[0.3cm] mb-0  sm:mr-[0.3cm] sm:p-0 sm:m-0">
 
             <div>
-                <p id="large-screen-styles" className="font font-semibold font-serif italic lg:mt-[4mm] lg:text-[10pt]  sm:text-[7pt] sm:ml-[0.3cm]">VEHICLE & DESTINATION DETAILS</p>
+                <p id="large-screen-styles" className="font font-semibold font-serif italic lg:mt-[4mm] lg:text-[10pt]  sm:text-[5pt] sm:ml-[0.3cm]">VEHICLE & DESTINATION DETAILS</p>
 
-                <div id="sellerBox" className="border border-black h-auto sm:w-[50%]"
+                <div id="sellerBox" className="border-[1px]  border-black h-auto  sm:max-w-[100%]"
                     style={{
                         // height: "10.5cm",
-                        width: "8.8cm",
+                        width: "9cm",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "start",
                         marginTop: "1mm"
                     }}
                 >
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm]  sm:mb-[2mm]  lg:text-[11pt] sm:text-[7pt]">
+                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm] sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">
                             <p>Name of Purchaser </p>
-                            <p className="text-transparent text-white">H</p>
+                            <p className="text-transparent sm:text-transparent">.</p>
                         </span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.NameofPurchaser || "NA"}</span>
@@ -58,7 +58,7 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.PurchaserMobileNo || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
+                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm] sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Address</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.PurchaserAdd || "NA"}</span>
@@ -68,10 +68,10 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.PoliceStation || "NA"}</span>
                     </p>
-                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
+                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm] sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">District</span>
                         <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.PurchaserDristic }</span>
+                        <span>{RoyaltyData?.RoyaltyData?.PurchaserDristic}</span>
                     </p>
                     <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">State </span>
@@ -93,18 +93,20 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                         <span>{RoyaltyData?.RoyaltyData?.Registration_No || "NA"}</span>
                     </p>
 
-                    <p className="flex font-serif font-normal ml-[1mm] lg:mb-[6mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                    <p className="flex font-serif font-normal ml-[1mm] lg:mb-[2mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Capacity (in Kg) </span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.VehicleCapacity || "NA"}</span>
                     </p>
-                    <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm]">
-                        <span className="lg:w-[3.7cm] sm:w-[2cm]"></span>
-                        <div className="grid grid-flow-row">
-                            <p className=" p-0">{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 || ""}</p>
-                            <span >{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 || ""}</span>
-                        </div>
-                    </p>
+                    {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 &&
+                        <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm]">
+                            <span className="lg:w-[3.7cm] sm:w-[2cm]"></span>
+                            <div className="grid grid-flow-row">
+                                <p className="text-transparent sm:text-transparent p-0">{"."}</p>
+                                <p className="text-transparent sm:text-transparent" >{"."}</p>
+                            </div>
+                        </p>
+                    }
                 </div>
             </div>
         </div>

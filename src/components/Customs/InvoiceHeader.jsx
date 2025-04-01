@@ -27,7 +27,9 @@ const InvoiceHeader = () => {
                         </div>
                         <div className="flex flex-col gap-3">
                             <p className="text-sm font-semibold">Max CFT</p>
-                            <Button className="w-full">Recharge</Button>
+                            <Link to={"/recharge"}>
+                                <Button className="w-full">Recharge</Button>
+                            </Link>
                             <Link to="/dashboard">
                                 <Button variant="outline" className="w-full">Dashboard</Button>
                             </Link >
@@ -56,7 +58,7 @@ const InvoiceHeader = () => {
                         <>
                             {/* Show Dashboard link only on md+ screens */}
                             <Link to="/dashboard-create-roylaty" className="hidden md:block">
-                                <Button variant="outline">Dashboard</Button>
+                                {/* <Button variant="outline">Dashboard</Button> */}
                             </Link>
                             <UserButton />
                         </>
@@ -73,7 +75,10 @@ const InvoiceHeader = () => {
                 id="no-print"
                 className="fixed bottom-6 right-6 md:right-10 z-50 sm:hidden"
             >
-                <Button className="rounded-full p-4 shadow-lg">Recharge</Button>
+                <Link to={"/recharge"}>
+                    <Button className="rounded-full p-4 shadow-lg">Recharge</Button>
+                </Link>
+
             </div>
         </>
     );

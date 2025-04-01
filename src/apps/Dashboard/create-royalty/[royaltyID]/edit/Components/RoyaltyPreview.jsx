@@ -8,6 +8,7 @@ import { GetParticularVehicle } from "../../../../../../../Apis/GlobalApi";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useReactToPrint } from "react-to-print";
+import {  getDynamicYearRange } from "../../../../../../../Apis/GlobalFunction";
 const RoyaltyPreview = ({ qrCode }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
     const [vehicleRegData, setvehicleRegData] = useState({});
@@ -16,7 +17,8 @@ const RoyaltyPreview = ({ qrCode }) => {
     const contentRef = useRef(null);
     const reactToPrintFn = useReactToPrint({
         contentRef,
-        documentTitle: `WBMD_TP_${RoyaltyData?.EchallanId}_S_24-25_RPS`
+        
+        documentTitle: `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`
     });
 
     // const reactToPrintFn = useReactToPrint({ contentRef });
@@ -60,18 +62,19 @@ const RoyaltyPreview = ({ qrCode }) => {
                         <ChallanTemp className="" qrCode={qrCode} RoyaltyData={RoyaltyData} vehicleRegData={vehicleRegData} />
 
                         {/* Image Behind Content */}
-                        <div id="ImageBehindContent" className="flex justify-center  ">
+                        <div id="ImageBehindContent" className="flex justify-center   sm:p-0 sm:w-[100%] ">
                             <img
                                 id="imgdiv"
-                                className="absolute lg:w-[7.4cm] lg:h-[7.6cm]  object-contain opacity-25 lg:mt-[7.3cm] sm:w-[4.2cm] sm:h-[4.2cm] sm:mt-36"
+                                className="absolute sm:absolute lg:w-[7.4cm] lg:h-[7.6cm]  object-contain opacity-25 lg:mt-[7.3cm] sm:w-[4.2cm] sm:h-[4.2cm] sm:mt-36"
                                 src="/mid_imga.png"
                                 alt="background"
                             />
                             {/* Buyer & Seller Details */}
-                            <div className=" z-10 grid grid-flow-col">
+                            <div className="z-10 grid grid-cols-1 sm:grid-cols-2 w-full sm:w-full gap-0 sm:gap-0 m-0 sm:m-0 sm:mr-0 sm:ml-0  p-0">
                                 <SellerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                                 <BuyerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
                             </div>
+
                         </div>
 
                         {/* Additional Text Section */}

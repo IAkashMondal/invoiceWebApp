@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import { QRCodeSVG } from "qrcode.react";
+import { getDynamicYearRange } from "../../../../../../../../Apis/GlobalFunction";
 
 const ChallanTemp = ({ qrCode, RoyaltyData }) => {
+  const EChallanNumber = `${RoyaltyData?.EchallanId}/T/${getDynamicYearRange()}/${RoyaltyData?.EChallanDT}/PS`
   return (
     <div className="lg:mb-0 w-full max-w-[20.1cm] sm:mb-1" id="pdf-container ">
       {/* Title */}
@@ -12,12 +14,12 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
       {/* Container for Details & QR Code */}
       <div id="challnabox" className="grid grid-flow-col font-serif sm:mb-0 sm:p-0 ">
         {/* Challan Details Section */}
-        <div id="detalsDiv" className="border border-black sm:w-full lg:w-[14.5cm] lg:h-[3.6cm] sm:p-[1mm] sm:py-0 lg:px-[2mm]">
+        <div id="detalsDiv" className="border-[1px] border-black sm:w-full lg:w-[14.5cm] lg:h-[3.6cm] sm:p-[1mm] sm:py-0 lg:px-[2mm]">
           <div id="detalsDiv-1" className="lg:mb-[0mm] sm:mb-[0mm] sm:m-0 sm:p-0  lg:mt-[7mm]">
             <p id="boxtext" className="flex font-bold lg:text-[13pt] sm:text-[7pt] lg:p-0 lg:m-0">
               <span id="boxgap" className="lg:w-[3.7cm] sm:w-[2.7cm]">E-Challan No.</span>
               <span className="mr-1">:</span>
-              <span >{`${RoyaltyData?.EchallanId}/S/24-25/${RoyaltyData?.EChallanDT}/PS`}</span>
+              <span >{EChallanNumber}</span>
             </p>
           </div>
           <div className="mb-0  sm:mb-[0mm] leading-[2.5mm]">
@@ -43,7 +45,7 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
           </div>
           <div className="mb-[3mm] sm:mb-[0mm] leading-[8mm]">
             <p id="boxtext" className="flex font-bold lg:text-[13pt] sm:text-[7pt] ">
-              <span  id="boxgap" className=" lg:min-w-[3.7cm] sm:min-w-[2.7cm]">Vehicle No.</span>
+              <span id="boxgap" className=" lg:min-w-[3.7cm] sm:min-w-[2.7cm]">Vehicle No.</span>
               <span className="mr-1">:</span>
               <span>{`${RoyaltyData.Registration_No} (${RoyaltyData?.VehicleType})`}</span>
             </p>

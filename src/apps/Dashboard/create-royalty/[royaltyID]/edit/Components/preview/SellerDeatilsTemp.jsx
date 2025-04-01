@@ -2,25 +2,25 @@ import PropTypes, { array, object } from "prop-types"; // Import PropTypes
 const SellerDetailsTemp = ({ RoyaltyData, }) => {
 
     return (
-        <div id="sellerboxs" className="m-0 mb-0  lg:mr-0 sm:m-0 sm:mb-0 sm:mr-[0.3cm]">
+        <div id="sellerboxs " className="m-0 mb-0  lg:mr-0 sm:m-0 sm:mb-0 sm:mr-[0.3cm] ">
 
             <div>
-                <p id="large-screen-styles" className="font font-semibold font-serif italic lg:mt-[4mm] lg:text-[10pt] ml-[0.3cm] sm:text-[7pt] sm:ml-[0.3cm]">PERMISSION HOLDER DETAILS</p>
-                <div id="sellerBox" className="border border-black h-auto sm:w-full"
+                <p id="large-screen-styles" className="font font-semibold font-serif italic lg:mt-[4mm] lg:text-[10pt] ml-[0.3cm] sm:text-[5pt] sm:ml-[0.3cm]">PERMISSION HOLDER DETAILS</p>
+                <div id="sellerBox" className="border-[1px] border-black h-auto sm:max-w-[100%] sm:p-0"
                     style={{
-                        // height: "10.5cm",
-                        width: "8.8cm",
+                        // height: "10.5cm", sm
+                        width: "9cm",
                         display: "flex",
                         flexDirection: "column",
                         marginTop: "1mm",
-                        justifyContent: "start",
+                        justifyContent: "start"
                     }}
                 >
                     {/* Directly access and display each RoyaltyData point */}
                     <p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm]  sm:mb-[2mm]  lg:text-[11pt] sm:text-[7pt]">
-                        <span className="lg:w-[3.7cm] sm:w-[2cm]">
-                            <p>PERMISSION</p>
-                            <p>HOLDER Id</p>
+                        <span className="lg:w-[3.7cm] ml-[-1px] sm:ml-[-1px] sm:w-[2cm]">
+                            <p className="ml-[-1px] sm:ml-[-1px]">PERMISSION</p>
+                            <p className="ml-[-1px] sm:ml-[-1px]">HOLDER Id</p>
                         </span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData.RoyaltyOwners.SandID || "NA"}</span>
@@ -66,18 +66,20 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerMobileNo || "NA"}</span>
                     </p>
 
-                    <p className="flex font-serif font-normal ml-[1mm] lg:mb-[6mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                    <p className="flex font-serif font-normal ml-[1mm] lg:mb-[2mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Address</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddress || "NA"}</span>
                     </p>
-                    <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm]">
-                        <span className="lg:w-[3.7cm] sm:w-[2cm]"></span>
-                        <div className="grid grid-flow-row">
-                            <p className=" p-0">{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 || ""}</p>
-                            <span >{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 || ""}</span>
-                        </div>
-                    </p>
+                    {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 &&
+                        <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm]">
+                            <span className="lg:w-[3.7cm] sm:w-[2cm]"></span>
+                            <div className="grid grid-flow-row">
+                                <p className=" p-0">{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 || ""}</p>
+                                <span >{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 || ""}</span>
+                            </div>
+                        </p>
+                        }
                 </div>
             </div>
         </div>

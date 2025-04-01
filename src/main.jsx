@@ -7,8 +7,13 @@ import Home from './apps/Landing/Home.jsx';
 import { ClerkProvider } from '@clerk/clerk-react';
 import Dashboard from './apps/Dashboard/Dashboard.jsx';
 import EditRoyalty from './apps/Dashboard/create-royalty/[royaltyID]/edit/index.jsx';
-import RoyaltyPreview from './apps/Dashboard/create-royalty/[royaltyID]/edit/Components/RoyaltyPreview.jsx';
 import FeedbackFrom from './apps/FedBack/FeedbackFrom.jsx';
+import InvoiceDashboard from './apps/Invoice/Dashboard/InvoiceDashboard.jsx';
+import RechargePage from './apps/Dashboard/Recharge/Recharge.jsx';
+import Career from './apps/Others/Carreer.jsx';
+import TermsAndConditions from './apps/Others/T&C.jsx';
+import About from './apps/Others/About.jsx';
+import ContactPage from './apps/Others/Contact.jsx';
 
 // ✅ Fetch Clerk Publishable Key Correctly
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -24,12 +29,17 @@ const router = createBrowserRouter([
       { path: "/dashboard-create-roylaty", element: <Dashboard /> },
       { path: "/dashboard/feedback", element: <FeedbackFrom /> },
       { path: "/dashboard/create-royalty/:royaltyID/edit", element: <EditRoyalty /> },
-      { path: "/recharge", element: "recharge" },
-      { path: "/Royalty-Download", element: <RoyaltyPreview /> },
+      { path: "/recharge", element: <RechargePage /> },
+      { path: "/Royalty-Download", element: <RechargePage /> },
     ]
   },
   { path: "/", element: <Home /> },
   { path: "/auth/sign-in", element: <SignInPage /> },
+  { path: "/dashboard", element: <InvoiceDashboard /> },
+  { path: "/career", element: <Career /> },
+  { path: "terms-and-condition", element: <TermsAndConditions /> },
+  { path: "/about", element: <About /> },
+  { path: "/contact", element: <ContactPage /> }
 ]);
 createRoot(document.getElementById('root')).render(
   <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">

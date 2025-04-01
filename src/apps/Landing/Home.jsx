@@ -1,5 +1,6 @@
 
 import InvoiceHeader from "../../components/Customs/InvoiceHeader"
+import Footer from "../Others/Footer"
 import Landing from "./Landing"
 
 
@@ -9,7 +10,7 @@ const Home = () => {
     <div>
       <InvoiceHeader />
       <Landing />
-
+      <Footer />
     </div>
   )
 }
