@@ -17,7 +17,6 @@ const RoyaltyPreview = ({ qrCode }) => {
     const contentRef = useRef(null);
     const reactToPrintFn = useReactToPrint({
         contentRef,
-        
         documentTitle: `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`
     });
 
