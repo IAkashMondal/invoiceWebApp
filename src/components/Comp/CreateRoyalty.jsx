@@ -21,6 +21,7 @@ const RegisterTruck = () => {
     const [PrevEChallanId, setPrevChallanID] = useState("");
     const [newEChallanId, setNewChallanID] = useState("");
     const [documentID, setdocumentID] = useState(null)
+    const ViteUrl = import.meta.env.VITE_REDIRECT;
     const navigate = useNavigate(); // To handle navigation after certain conditions
     const { user } = useUser(); // Get user data from Clerk
     const [VehicleQunText, setVehicleQunText] = useState("");
@@ -157,7 +158,7 @@ const RegisterTruck = () => {
                 return;
             }
             // Navigate using the correct documentId
-            navigate(`/dashboard/create-royalty/${documentId}/edit`);
+            navigate(`${ViteUrl}/${documentId}/edit`);
         } catch (error) {
             console.error("API Error:", error.response?.data || error.message);
         } finally {
