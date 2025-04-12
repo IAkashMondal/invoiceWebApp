@@ -137,9 +137,9 @@ const RechargePage = () => {
                 <CardContent>
                     <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">Recharge</h2>
                     <p className="text-gray-600 mb-4 text-center">Fill details to recharge your account</p>
-                    <p>Name: {user.fullName}</p>
+                    {/* <p>Name: {user.fullName}</p>
                     <p>Email: {user.primaryEmailAddress?.emailAddress}</p>
-                    <p>Phone: {user.primaryPhoneNumber?.phoneNumber}</p>
+                    <p>Phone: {user.primaryPhoneNumber?.phoneNumber}</p> */}
                     <Input
                         type="text"
                         placeholder="Name"
