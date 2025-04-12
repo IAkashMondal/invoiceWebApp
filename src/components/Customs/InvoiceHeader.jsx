@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/clerk-react";
@@ -6,8 +6,22 @@ import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet";
 
 const InvoiceHeader = () => {
+    const VITE_ADMIN = import.meta.env.VITE_ADMIN_TOKEN;
+    const ViteUrl = import.meta.env.VITE_REDIRECT;
     const { isSignedIn } = useUser();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [loginEnable, setLoginEnable] = useState(false);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem("OnlineID");
+
+        if (storedToken === VITE_ADMIN) {
+            setLoginEnable(true);
+        }
+    }, []); // Runs once when the component mounts
+
+
+
 
     return (
         <>
@@ -30,13 +44,19 @@ const InvoiceHeader = () => {
                             <Link to={"/recharge"}>
                                 <Button className="w-full">Recharge</Button>
                             </Link>
-                            <Link to="/dashboard">
-                                <Button variant="outline" className="w-full">Dashboard</Button>
-                            </Link >
+                            {
+                                loginEnable ?
+                                    <Link to={ViteUrl}>
+                                        <Button variant="outline" className="w-full">Dashboard</Button>
+                                    </Link >
+                                    :
+                                    <Link to="/dashboard">
+                                        <Button variant="outline" className="w-full">Dashboard</Button>
+                                    </Link >
+                            }
                             <Link to="/dashboard/feedback">
                                 <Button variant="outline" className="w-full">FeedBack</Button>
                             </Link>
-
                         </div>
                     </SheetContent>
                 </Sheet>

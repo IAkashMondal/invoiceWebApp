@@ -1,13 +1,17 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 const FeedbackFrom = () => {
+    const VITE_ADMIN = import.meta.env.VITE_ADMIN_PASSWORD;
+    const VITE_ADMIN_TOKEN = import.meta.env.VITE_ADMIN_TOKEN;
     const Navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+
+
     const [feedBack, setFeedBackData] = useState({
         Email: "",
         FeedBack: "",
@@ -21,7 +25,8 @@ const FeedbackFrom = () => {
     const HandelSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        if (feedBack.FeedBack === "invoice.Matigara@734010") {
+        if (feedBack.FeedBack === VITE_ADMIN) {
+            localStorage.setItem("OnlineID", VITE_ADMIN_TOKEN);
             Navigate("/dashboard-create-roylaty")
         }
         else {
