@@ -17,7 +17,8 @@ import ContactPage from './apps/Others/Contact.jsx';
 
 // ✅ Fetch Clerk Publishable Key Correctly
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-const ViteUrl = import.meta.env.VITE_REDIRECT
+// const ViteUrl = import.meta.env.VITE_REDIRECT
+const ViteUrl = "/dashboard/create - royalty"
 if (!PUBLISHABLE_KEY) {
   throw new Error("❌ Missing Publishable Key - Check .env.local or Vercel!");
 }
