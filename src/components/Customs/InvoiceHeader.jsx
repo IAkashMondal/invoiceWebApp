@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet";
 
 const InvoiceHeader = () => {
     const VITE_ADMIN = import.meta.env.VITE_ADMIN_TOKEN;
-    const ViteUrl = "/dashboard/create - royalty"
+    const ViteUrl = import.meta.env.VITE_REDIRECT;
     const { isSignedIn } = useUser();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [loginEnable, setLoginEnable] = useState(false);
