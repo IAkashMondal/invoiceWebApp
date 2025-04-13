@@ -64,9 +64,9 @@ const InvoiceHeader = () => {
                 {/* Center: Logo */}
                 <Link to="/">
                     <img
-                        width={100}
+                        width={180}
                         height={100}
-                        src="./Logo.svg"
+                        src="./public/InLogo.png"
                         alt="Logo"
                         className="h-8 md:h-10 lg:h-12 w-auto"
                     />

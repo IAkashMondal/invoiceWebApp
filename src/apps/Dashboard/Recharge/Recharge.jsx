@@ -12,7 +12,7 @@ import {
     MenubarSeparator,
     MenubarTrigger,
 } from "@/components/ui/menubar";
-import { useUser } from "@clerk/clerk-react";
+// import { useUser } from "@clerk/clerk-react";
 
 const RechargePage = () => {
     const [amount, setAmount] = useState("");
@@ -20,7 +20,7 @@ const RechargePage = () => {
     const [email, setEmail] = useState("johndoe@example.com");
     const [phone, setPhone] = useState("8637838646");
     const [loading, setLoading] = useState(false);
-    const { user } = useUser();
+    // const { user } = useUser();
     const handlePayment = async () => {
         if (!amount) return alert("Please enter an amount");
 
@@ -80,9 +80,9 @@ const RechargePage = () => {
                             paymentId: response.razorpay_payment_id,
                             signature: response.razorpay_signature,
                             amount: order.amount,
-                            userName: user.name,
-                            userEmail: user.emailAddresses,
-                            userMobileNo: user.phoneNumbers,
+                            // userName: user.name,
+                            // userEmail: user.emailAddresses,
+                            // userMobileNo: user.phoneNumbers,
                             LastValidQnt: "0", // You can update this logic later
                             CurrentValidQnt: "0", // You can update this logic later
                         }),

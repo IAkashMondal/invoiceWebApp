@@ -173,7 +173,7 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
               value={formData.VehicleType}
             >
               <option value="">Select Vehicle Type</option>
-              {["6 Wheels", "10 Wheels", "12 Wheels", "14 Wheels", "16 Wheels", "18 Wheels", "22 Wheels"].map((type) => (
+              {["3 Wheels", "4 Wheels", "6 Wheels", "10 Wheels", "12 Wheels", "14 Wheels", "16 Wheels", "18 Wheels", "22 Wheels"].map((type) => (
                 <option key={type} value={type}>{type}</option>
               ))}
             </select>
