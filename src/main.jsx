@@ -14,6 +14,8 @@ import Career from './apps/Others/Carreer.jsx';
 import TermsAndConditions from './apps/Others/T&C.jsx';
 import About from './apps/Others/About.jsx';
 import ContactPage from './apps/Others/Contact.jsx';
+import PurchaserFormEdit from './apps/Dashboard/Edit/From/PurchaersFormEdit.jsx';
+import EditIndex from './apps/Dashboard/Edit/From/EditIndex.jsx';
 
 // ✅ Fetch Clerk Publishable Key Correctly
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -29,7 +31,8 @@ const router = createBrowserRouter([
     children: [
       { path: `${ViteUrl}`, element: <Dashboard /> },
       { path: "/dashboard/feedback", element: <FeedbackFrom /> },
-      { path: `${ViteUrl}/:royaltyID/edit`, element: <EditRoyalty /> },
+      { path: `${ViteUrl}/:royaltyID`, element: <EditRoyalty /> },
+      { path: `${ViteUrl}/:royaltyID/edit`, element: <EditIndex/> },
 
       { path: "/recharge", element: <RechargePage /> },
       // { path: "/Royalty-Download", element: <RechargePage /> },

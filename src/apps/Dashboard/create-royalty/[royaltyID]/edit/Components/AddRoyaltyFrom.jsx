@@ -5,6 +5,7 @@ import { useState } from "react";
 import PurchaserAdd from "./Forms/PurchaserAdd";
 // import PreData from "./Forms/PreData";
 import PropTypes from "prop-types"; // ✅ Fix import (lowercase "prop-types")
+import PurchaserFormEdit from "../../../../Edit/From/PurchaersFormEdit";
 
 const AddRoyaltyForm = ({ generateQrCode }) => {
 
@@ -36,12 +37,26 @@ const AddRoyaltyForm = ({ generateQrCode }) => {
             Next <MoveRight />
           </Button>
         )}
-      </div>
+
+      {/* {activeFormIndex ===3 &&(
+        <Button
+       
+          onClick={() => setActiveFormIndex((prev) => Math.min(prev + 1, 4))}
+          size="sm"
+          className="bg-green-500 hover:bg-green-700 flex items-center gap-2"
+        >
+          Next <MoveRight />
+        </Button>
+      )} */}
+    </div>
 
       {/* Form Component */}
       {activeFormIndex === 1 && <PurchaserForm enableNext={SetEnableNext} setActiveFormIndex={setActiveFormIndex} generateQrCode={generateQrCode} />}
+      
       {activeFormIndex === 2 && <PurchaserAdd enableNext={SetEnableNext} setActiveFormIndex={setActiveFormIndex} />}
       {/* {activeFormIndex === 3 && <PreData enableNext={SetEnableNext} setActiveFormIndex={setActiveFormIndex} qrCode={qrCode} RoyaltyData={RoyaltyData} />} */}
+      {activeFormIndex !=1 ||activeFormIndex != 2 !=<PurchaserFormEdit  setActiveFormIndex={setActiveFormIndex} generateQrCode={generateQrCode} />}
+
     </div>
   );
 };

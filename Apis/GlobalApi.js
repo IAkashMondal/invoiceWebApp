@@ -26,7 +26,9 @@ const addNewVehicle = (data) => axiosClient.post("/vehicle-numbers", data);
  * @returns {Promise} - Axios response.
  */
 const GetUserRoyalties = (userEmail) =>
-  axiosClient.get(`/vehicle-numbers?filters[userEmail][$eq]=${userEmail}`);
+  axiosClient.get(
+    `/vehicle-numbers?filters[userEmail][$containsi]=${userEmail}`
+  );
 
 /**
  * ✅ Fetches details of a specific vehicle by ID.
@@ -75,14 +77,18 @@ const updatePurchaserDetails = async (royaltyID, data) => {
  */
 const validateFeedback = async (feedback) => {
   try {
-    const response = await axiosClient.post("/api/validate-feedback", { feedback });
+    const response = await axiosClient.post("/api/validate-feedback", {
+      feedback,
+    });
     return response.data; // Return only the data
   } catch (error) {
-    console.error("❌ Error validating feedback:", error.response?.data || error.message);
+    console.error(
+      "❌ Error validating feedback:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
-
 
 /**
  * ✅ Fetches data for a specific E-Challan ID.
@@ -128,7 +134,6 @@ export const GetChallanValidationPreview = async (EchallanId) => {
 const GetPrevChallanID = () =>
   axiosClient.get(`/echallanids?sort=id:desc&limit=1`);
 
-
 /**
  * ✅ Updates the last saved E-Challan ID.
  * @param {string} documentID - ID of the document to update.
@@ -149,6 +154,16 @@ const addPerChallaID = async (documentID, data) => {
     throw error;
   }
 };
+/**
+ * ✅ Searches vehicle numbers based on NameofPurchaser or Registration_No.
+ * @param {string} query - Search input from user.
+ * @returns {Promise} - Axios response.
+ */
+const SearchUserRoyalties = (query) => {
+  return axiosClient.get(
+    `/vehicle-numbers?filters[$or][0][NameofPurchaser][$containsi]=${query}&filters[$or][1][Registration_No][$containsi]=${query}`
+  );
+};
 
 // ✅ Export all API functions
 export {
@@ -162,4 +177,5 @@ export {
   GetEchallanData,
   Getvehicles,
   validateFeedback,
+  SearchUserRoyalties,
 };

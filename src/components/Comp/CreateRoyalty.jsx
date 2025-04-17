@@ -1,13 +1,13 @@
-import { Loader2, ShieldEllipsis } from 'lucide-react';
+import { Loader2, ShieldEllipsis, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input.jsx";
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from "uuid";
-import { addNewVehicle, addPerChallaID, GetPrevChallanID } from '../../../Apis/GlobalApi';
+import { addNewVehicle, addPerChallaID, GetPrevChallanID, SearchUserRoyalties } from '../../../Apis/GlobalApi';
 import { useUser } from '@clerk/clerk-react';
-import { generateNewChallanID, generateTimeObject, numberToWords } from '../../../Apis/GlobalFunction';
+import { generateNewChallanID, generateTimeObject, numberToWords, debounce } from '../../../Apis/GlobalFunction';
 
 const RegisterTruck = () => {
     // State variables for managing dialog states, form inputs, and loading states
@@ -29,6 +29,41 @@ const RegisterTruck = () => {
         EChallanDT: "",
         GeneratedDT: "",
     });
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+
+    // Create debounced search function
+    const performSearch = async (value) => {
+        if (!value.trim()) {
+            setSearchResults([]);
+            return;
+        }
+
+        setIsSearching(true);
+        try {
+            const res = await SearchUserRoyalties(value);
+            const data = res.data?.data || [];
+            console.log("Search results:", data);
+            setSearchResults(data);
+        } catch (err) {
+            console.error("Search failed:", err);
+            setSearchResults([]);
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
+    // Create debounced version of search
+    const debouncedSearch = debounce(performSearch, 300);
+
+    // Handle search input
+    const handleSearchInput = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+        debouncedSearch(value);
+    };
+
     // EChallanDT: String(issueDate)
     // Handle Enter Key in CTF Input
     const handleCTFKeyPress = (e) => {
@@ -73,7 +108,7 @@ const RegisterTruck = () => {
             try {
                 const response = await GetPrevChallanID();
                 if (response.data?.data?.length > 0) {
-                    setdocumentID(response?.data.data[0].documentId);
+                    setdocumentID(response?.data);
                     setPrevChallanID(response?.data.data[0].PrevChallanID);
                     setIsLoadingID(true);
                 } else {
@@ -115,16 +150,29 @@ const RegisterTruck = () => {
             navigate('/recharge'); // Redirect to recharge page if CTF is invalid
         }
     };
-    const onCreate = async () => {
 
+    // Update the addPerChallaID call to properly handle the response
+    const updateChallanId = async (documentID, ChalldIdData) => {
+        try {
+            await addPerChallaID(documentID, ChalldIdData);
+            return true;
+        } catch (error) {
+            console.error("API Error:", error.response?.data || error.message);
+            return false;
+        }
+    };
+
+    // Update onCreate to use the new updateChallanId function
+    const onCreate = async () => {
         if (!Registration_No || !user?.primaryEmailAddress?.emailAddress || !user?.fullName) {
             console.error("Missing required fields: Registration_No, userEmail, or userName.");
             return;
         }
-        setIsLoading(true); // Set loading state before API call
-        const uuid = uuidv4(); // Generate a unique identifier
+        setIsLoading(true);
+        const uuid = uuidv4();
         const { generatedTime, generatedOn, ChallandT } = generateTimeObject();
-        setGeneratedon({ generatedTime, generatedOn, ChallandT })
+        setGeneratedon({ generatedTime, generatedOn, ChallandT });
+
         const data = {
             data: {
                 royaltyID: uuid,
@@ -139,26 +187,25 @@ const RegisterTruck = () => {
                 EChallanDT: String(ChallandT)
             }
         };
+
         const ChalldIdData = {
             PrevChallanID: newEChallanId
-        }
-        try {
-            const response = await addPerChallaID(documentID, ChalldIdData);
-        } catch (error) {
-            console.error("API Error:", error.response?.data || error.message);
-        } finally {
+        };
+
+        const challanUpdated = await updateChallanId(documentID, ChalldIdData);
+        if (!challanUpdated) {
             setIsLoading(false);
-            setVehicleDialogOpen(false);
+            return;
         }
+
         try {
             const response = await addNewVehicle(data);
-            const documentId = response?.data?.data?.documentId; // Correct key name
+            const documentId = response?.data?.data?.documentId;
             if (!documentId) {
                 console.error("Error: documentId is undefined in API response");
                 return;
             }
-            // Navigate using the correct documentId
-            navigate(`${ViteUrl}/${documentId}/edit`);
+            navigate(`${ViteUrl}/${documentId}`);
         } catch (error) {
             console.error("API Error:", error.response?.data || error.message);
         } finally {
@@ -166,10 +213,108 @@ const RegisterTruck = () => {
             setVehicleDialogOpen(false);
         }
     };
-
+     console.log(documentID, "dockid") 
     return (
-        <div className='sm:translate-y-100px'>
-            <h1 className="text-xl font-semibold">Create Royalty</h1>
+        <div className='sm:translate-y-100px sm:w-96'>
+            {/* Search Bar */}
+            <div className="mb-4">
+                <div className="relative w-full">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <Input
+                        type="text"
+                        name="search"
+                        placeholder="Search Name or Reg. No"
+                        className="pl-10 p-2 w-full"
+                        value={searchTerm}
+                        onChange={handleSearchInput}
+                    />
+                    {isSearching && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                            <Loader2 className="animate-spin h-4 w-4 text-gray-400" />
+                        </div>
+                    )}
+                </div>
+
+                {/* Search Results with Loading State */}
+                <div className="relative">
+                    {searchResults && searchResults.length > 0 && (
+                        <div className="mt-2 max-h-60 overflow-y-auto border rounded-md bg-white shadow-lg">
+                            {searchResults.map((result) => {
+                                const {
+                                    id = Math.random(),
+                                    NameofPurchaser = 'N/A',
+                                    Registration_No = 'N/A',
+                                    quantity = '',
+                                    VehicleType = '',
+                                    PurchaserMobileNo = '',
+                                    PurchaserDristic = '',
+                                } = result || {};
+
+                                return (
+                                    <div
+                                        key={id}
+                                        className="p-3 hover:bg-gray-100 border-b last:border-b-0"
+                                    >
+                                        <div className="flex justify-between items-center">
+                                            <div
+                                                className="cursor-pointer"
+                                                onClick={() => {
+                                                    if (Registration_No && Registration_No !== 'N/A') {
+                                                        setRegistration_No(Registration_No);
+                                                        setSearchTerm("");
+                                                        setSearchResults([]);
+                                                    }
+                                                }}
+                                            >
+                                                <div>
+                                                    <p className="font-semibold">{NameofPurchaser}</p>
+                                                    <p className="text-sm text-gray-600">Reg No: {Registration_No}</p>
+                                                    <p className="text-sm text-gray-600">District: {PurchaserDristic} • Mobile: {PurchaserMobileNo}</p>
+                                                    <p className="text-sm text-gray-600">Quantity: {quantity} {VehicleType}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setSearchTerm("");
+                                                        setSearchResults([]);
+                                                    }}
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <Button
+                                                    variant="default"
+                                                    size="sm"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        navigate(`/dashboard/create-royalty/${documentID}/edit`);
+                                                        {console.log(documentID,"dockid")}
+                                                    }}
+                                                >
+                                                    Edit
+                                                </Button>
+                                                <Button
+                                                    variant="default"
+                                                    size="sm"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        console.log('Renew clicked for:', Registration_No);
+                                                    }}
+                                                >
+                                                    Renew
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            </div>
 
             {/* Button to trigger the main dialog */}
             <div
@@ -178,7 +323,7 @@ const RegisterTruck = () => {
                 onClick={() => setDialogOpen(true)} // Open the main dialog on click
             >
                 <ShieldEllipsis size={48} />
-                <span className="mt-4 text-lg font-medium text-primary">Create Royalty</span>
+                <span className="mt-4 text-lg font-medium text-primary">Create</span>
             </div>
 
             {/* Main Dialog for CTF Verification */}

@@ -7,8 +7,9 @@ const Input = ({ name, onKeyDown, type, value, defaultValue, onChange, placehold
             defaultValue={defaultValue}
             onKeyDown={onKeyDown}
             onChange={onChange}
-            required
+            required={required}
             placeholder={placeholder}
+            
             className={`p-2 border rounded-md ${className}`}
         />
     );

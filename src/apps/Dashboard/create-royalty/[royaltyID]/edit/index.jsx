@@ -34,7 +34,7 @@ const EditRoyalty = () => {
                 <div className="flex justify-center items-center">
                     <AddRoyaltyFrom generateQrCode={generateQrCode} qrCode={qrCode} RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData} />
                 </div>
-
+                
                 {/* Right Section - Preview */}
 
             </div>

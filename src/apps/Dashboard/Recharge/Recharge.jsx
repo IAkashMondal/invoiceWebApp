@@ -116,6 +116,10 @@ const RechargePage = () => {
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 p-4">
+            {/* <div>
+                <p>Count:</p>
+                <p>Others:</p>
+            </div> */}
             <Menubar className="w-full max-w-md mb-6">
                 <MenubarMenu>
                     <MenubarTrigger>Recharge</MenubarTrigger>
