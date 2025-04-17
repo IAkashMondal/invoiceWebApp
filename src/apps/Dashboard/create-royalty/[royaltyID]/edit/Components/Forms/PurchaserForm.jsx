@@ -1,201 +1,170 @@
 import { useContext, useEffect, useState } from "react";
 import { RoyaltyInfoContext } from "../../../../../../../Context/RoyaltyInfoContext";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { updatePurchaserDetails } from "../../../../../../../../Apis/GlobalApi";
 import { useParams } from "react-router-dom";
-import { GetParticularVehicle, updatePurchaserDetails } from "../../../../../../../../Apis/GlobalApi";
-import { toast } from "sonner";
-import { LoaderCircle } from "lucide-react";
 import PropTypes from "prop-types";
 
 const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
+  const { royaltyID } = useParams();
   const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
-  const [EChallanId, setChallanID] = useState("Error");
-  const [vehicleNoQnt, setVehicleNoQnt] = useState("");
-  const [loading, setLoading] = useState(false);
-  const params = useParams();
   const [formData, setFormData] = useState({
     NameofPurchaser: "",
+    MobileNo: "",
     VehicleCapacity: "",
     VehicleType: "",
-    PurchaserMobileNo: ""
   });
   const [errors, setErrors] = useState({});
-  const fetchVehicles = async () => {
-
-    try {
-      const response = await GetParticularVehicle(params.royaltyID);
-      setChallanID(response?.data?.data.EchallanId)
-    } catch (error) {
-      console.error("Error fetching vehicles:", error);
-    }
-  };
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchVehicles();
-  }, [params?.royaltyID]);
-  useEffect(() => {
-    const fetchVehicleDetails = async () => {
+    const fetchVehicles = async () => {
       try {
-        if (!params?.royaltyID) {
-          console.warn("Royalty ID is missing");
-          return;
-        }
-        const response = await GetParticularVehicle(params.royaltyID);
-        if (response.data?.data) {
-          setVehicleNoQnt(response.data.data);
-        } else {
-          console.warn("No vehicle data found for this Royalty ID.");
+        const response = await updatePurchaserDetails(royaltyID);
+        if (response?.data?.data) {
+          setFormData(response.data.data);
+          setRoyaltyData(response.data.data);
         }
       } catch (error) {
-        console.error("Error fetching vehicle details:", error.response?.data || error.message);
+        console.error("Error fetching vehicle data:", error);
       }
     };
-
-    fetchVehicleDetails();
-  }, [params?.royaltyID]);
+    fetchVehicles();
+  }, [royaltyID, setRoyaltyData]);
 
   const handleInputChange = (e) => {
-    enableNext(false);
     const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setRoyaltyData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    if (!name) {
-      console.error("Missing name attribute in input field:", e.target);
-      return;
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.NameofPurchaser) {
+      newErrors.NameofPurchaser = "Name is required";
     }
-    setFormData({ ...formData, [name]: value, });
-    setRoyaltyData(
-      {
-        ...RoyaltyData, [name]: value,
-        EchallanId: EChallanId,
-        GeneratedDT: vehicleNoQnt?.GeneratedDT,
-        VehicleQunText: vehicleNoQnt.VehicleQunText,
-        EChallanDT: vehicleNoQnt.EChallanDT,
-        quantity: vehicleNoQnt.quantity,
-        Registration_No: vehicleNoQnt.Registration_No
-      });
-    setErrors((prev) => ({ ...prev, [name]: "" }));
-
+    if (!formData.MobileNo) {
+      newErrors.MobileNo = "Mobile number is required";
+    }
+    if (!formData.VehicleCapacity) {
+      newErrors.VehicleCapacity = "Vehicle capacity is required";
+    }
+    if (!formData.VehicleType) {
+      newErrors.VehicleType = "Vehicle type is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     setLoading(true);
-    const QRBASEURL = import.meta.env.VITE_QR_CODE_BASE_URL;
     try {
-      await updatePurchaserDetails(params?.royaltyID, formData);
-      generateQrCode(QRBASEURL, EChallanId)
-      enableNext(true);
-      toast.success("Purchaser vehicle added.");
-      setActiveFormIndex((prev) => Math.min(prev + 1, 3));
+      const response = await updatePurchaserDetails(royaltyID, formData);
+      if (response?.data) {
+        generateQrCode(response.data);
+        enableNext(true);
+        setActiveFormIndex(2);
+      }
     } catch (error) {
       console.error("Error updating purchaser details:", error);
-      setErrors({ api: "Error saving data. Please try again." });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center w-full p-4">
-      <div className="max-w-lg w-full bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-lg font-semibold text-center text-teal-500 mb-4">
-          Add Vehicle Details
-        </h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Vehicle Info */}
-          <div className="border border-red-300 p-3 shadow-sm rounded-md bg-gray-100">
-            <div className="flex justify-between items-center ">
-              <div>
-                <h4 className="text-sm text-gray-500 font-bold">Vehicle Number</h4>
-                <h3 className="font-semibold">{vehicleNoQnt.Registration_No || "N/A"}</h3>
-              </div>
-              <div>
-                <h4 className="text-sm text-gray-500 font-bold">Quantity</h4>
-                <h3 className="font-semibold">
-                  {vehicleNoQnt?.quantity ? `${vehicleNoQnt.quantity}.00 CFT` : "NA"}
-                </h3>
-
-              </div>
-            </div>
-          </div>
-
-          {/* Name of Purchaser */}
-          <div>
-            <label className="block text-sm text-gray-700 font-bold">Name of Purchaser</label>
-            <Input
-              className="w-full p-2"
-              name="NameofPurchaser"
-              placeholder="Ram Chandra"
-              value={formData.NameofPurchaser}
-              required
-              autoFocus
-              type="text"
-              onChange={handleInputChange}
-            />
-          </div>
-
-          {/* Mobile Number */}
-          <div>
-            <label className="block text-sm text-gray-700 font-bold">Mobile No</label>
-            <Input
-              className="w-full p-2"
-              name="PurchaserMobileNo"
-              placeholder="9876543210"
-              value={formData.PurchaserMobileNo}
-              required
-              type="number"
-              onChange={handleInputChange}
-            />
-          </div>
-          {/* Vehicle Capacity */}
-          <div>
-            <label className="block text-sm text-gray-700 font-bold">Vehicle Capacity (kg)</label>
-            <Input
-              className="w-full p-2"
-              name="VehicleCapacity"
-              placeholder="54000"
-              value={formData.VehicleCapacity}
-              required
-              type="number"
-              onChange={handleInputChange}
-            />
-          </div>
-
-          {/* Vehicle Type Dropdown */}
-          <div>
-            <label className="block text-sm text-gray-700 font-bold">Vehicle Type</label>
-            <select
-              className="w-full p-2 border shadow-sm border-gray-300 rounded-md"
-              name="VehicleType"
-              required
-              onChange={handleInputChange}
-              value={formData.VehicleType}
-            >
-              <option value="">Select Vehicle Type</option>
-              {["3 Wheels", "4 Wheels", "6 Wheels", "10 Wheels", "12 Wheels", "14 Wheels", "16 Wheels", "18 Wheels", "22 Wheels"].map((type) => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Submit Button */}
-          <div className="flex justify-center">
-            <Button type="submit" className="w-full bg-blue-500 text-white p-2 rounded-md" disabled={loading}>
-              {loading ? <LoaderCircle className="animate-spin" /> : "Save and Continue"}
-            </Button>
-          </div>
-        </form>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label htmlFor="NameofPurchaser" className="block text-sm font-medium">
+          Name of Purchaser
+        </label>
+        <input
+          type="text"
+          id="NameofPurchaser"
+          name="NameofPurchaser"
+          value={formData.NameofPurchaser}
+          onChange={handleInputChange}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        />
+        {errors.NameofPurchaser && (
+          <p className="mt-1 text-sm text-red-600">{errors.NameofPurchaser}</p>
+        )}
       </div>
-    </div>
+
+      <div>
+        <label htmlFor="MobileNo" className="block text-sm font-medium">
+          Mobile Number
+        </label>
+        <input
+          type="tel"
+          id="MobileNo"
+          name="MobileNo"
+          value={formData.MobileNo}
+          onChange={handleInputChange}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        />
+        {errors.MobileNo && (
+          <p className="mt-1 text-sm text-red-600">{errors.MobileNo}</p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="VehicleCapacity" className="block text-sm font-medium">
+          Vehicle Capacity
+        </label>
+        <input
+          type="text"
+          id="VehicleCapacity"
+          name="VehicleCapacity"
+          value={formData.VehicleCapacity}
+          onChange={handleInputChange}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        />
+        {errors.VehicleCapacity && (
+          <p className="mt-1 text-sm text-red-600">{errors.VehicleCapacity}</p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="VehicleType" className="block text-sm font-medium">
+          Vehicle Type
+        </label>
+        <input
+          type="text"
+          id="VehicleType"
+          name="VehicleType"
+          value={formData.VehicleType}
+          onChange={handleInputChange}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        />
+        {errors.VehicleType && (
+          <p className="mt-1 text-sm text-red-600">{errors.VehicleType}</p>
+        )}
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        {loading ? "Saving..." : "Save and Continue"}
+      </button>
+    </form>
   );
 };
 
-export default PurchaserForm;
-
-// PropTypes validation
 PurchaserForm.propTypes = {
   enableNext: PropTypes.func.isRequired,
   setActiveFormIndex: PropTypes.func.isRequired,
   generateQrCode: PropTypes.func.isRequired,
 };
+
+export default PurchaserForm;

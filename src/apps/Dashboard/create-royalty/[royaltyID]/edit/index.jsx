@@ -3,55 +3,43 @@ import AddRoyaltyFrom from "./Components/AddRoyaltyFrom";
 import RoyaltyPreview from "./Components/RoyaltyPreview";
 import { RoyaltyInfoContext } from "../../../../../Context/RoyaltyInfoContext";
 import Dummydata from "../../../../../../Apis/DummyData";
-import { Button } from "@/components/ui/button";
-import { Eye, EyeClosed } from "lucide-react";
+
 const EditRoyalty = () => {
     const [RoyaltyData, setRoyaltyData] = useState(Dummydata);
     const [qrCode, setQrCode] = useState(null);
 
-    const [view, setView] = useState(() => {
-        return localStorage.getItem("preview") === "true";
-    });
-
-    useEffect(() => {
-        localStorage.setItem("preview", view);
-    }, [view]);
     const generateQrCode = (QRBASEURL, EChallanId) => {
         if (!QRBASEURL) {
-            console.log("QRBASEURL no found")
+            console.log("QRBASEURL not found");
+            return;
         }
         const url = `${QRBASEURL}/WBMD/Page/each/aspx/id/${EChallanId}/S/24-25/RPS`;
         setQrCode(url);
     };
+
     useEffect(() => {
         setRoyaltyData(Dummydata);
     }, []);
 
     return (
         <RoyaltyInfoContext.Provider value={{ RoyaltyData, setRoyaltyData }}>
-            <div id="no-print" >
+            <div className="grid grid-cols-1 md:grid-cols-2 p-10 gap-5">
                 {/* Left Section - Form */}
-                <div className="flex justify-center items-center">
-                    <AddRoyaltyFrom generateQrCode={generateQrCode} qrCode={qrCode} RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData} />
+                <div>
+                    <AddRoyaltyFrom
+                        generateQrCode={generateQrCode}
+                        qrCode={qrCode}
+                    />
                 </div>
-                
+
                 {/* Right Section - Preview */}
-
-            </div>
-            <div id="no-print" className="flex justify-center items-center w-[90%]">
-                <Button
-                    className={`flex items-center gap-2 px-4 py-2 text-white rounded-md ${view ? "bg-green-500" : "bg-red-500"}`}
-                    onClick={() => setView(prev => !prev)}
-                >
-                    Preview {view ? <>On <Eye /></> : <>Off <EyeClosed /></>}
-                </Button>
-            </div>
-
-            {view ?
-                <div className="flex justify-center items-center sm:h-full w-full">
-                    <RoyaltyPreview RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData} qrCode={qrCode} />
+                <div>
+                    <RoyaltyPreview
+                        qrCode={qrCode}
+                        RoyaltyData={RoyaltyData}
+                    />
                 </div>
-                : ""}
+            </div>
         </RoyaltyInfoContext.Provider>
     );
 };

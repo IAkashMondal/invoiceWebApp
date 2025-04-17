@@ -54,35 +54,18 @@ export default function Dashboard() {
     }, [sortOrder, royaltyData])
 
     const handleSearch = async (value) => {
-        // Convert input to uppercase
-        const uppercaseValue = value.toUpperCase()
-        setSearchTerm(uppercaseValue)
-
-        if (!uppercaseValue.trim()) {
-            // If search is empty, show all user's data
-            const response = await GetUserRoyalties(user.primaryEmailAddress.emailAddress)
-            console.log('Empty search response:', response?.data)
-            const data = response?.data?.data || []
-            setFilteredData(data)
-            return
-        }
-
+        setSearchTerm(value)
         setIsSearching(true)
         try {
-            console.log('Searching for:', uppercaseValue)
-            const response = await SearchUserRoyalties(uppercaseValue)
-            console.log('Search response:', response?.data)
-
-            // Filter the search results to only include user's data
-            const userData = response?.data?.data?.filter(
-                item => item.userEmail?.toLowerCase() === user.primaryEmailAddress.emailAddress.toLowerCase()
-            ) || []
-
-            console.log('Filtered user data:', userData)
-            setFilteredData(userData)
+            const response = await SearchUserRoyalties(value)
+            const searchResults = response?.data?.data || []
+            const filteredResults = searchResults.filter(
+                (item) => item.userEmail === user?.email
+            )
+            setFilteredData(filteredResults)
         } catch (error) {
-            console.error('Error searching royalty data:', error)
-            setError(error.message)
+            console.error("Search error:", error)
+            setError("Failed to search royalties")
         } finally {
             setIsSearching(false)
         }
@@ -98,10 +81,9 @@ export default function Dashboard() {
                         <Input
                             type="text"
                             placeholder="Search by name or registration"
-                            className="pl-10 w-[250px] uppercase"
+                            className="pl-10 w-[250px]"
                             value={searchTerm}
                             onChange={(e) => handleSearch(e.target.value)}
-                            style={{ textTransform: 'uppercase' }}
                         />
                     </div>
                     <Select value={sortOrder} onValueChange={setSortOrder}>

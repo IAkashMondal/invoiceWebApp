@@ -26,9 +26,7 @@ const addNewVehicle = (data) => axiosClient.post("/vehicle-numbers", data);
  * @returns {Promise} - Axios response.
  */
 const GetUserRoyalties = (userEmail) =>
-  axiosClient.get(
-    `/vehicle-numbers?filters[userEmail][$containsi]=${userEmail}`
-  );
+  axiosClient.get(`/vehicle-numbers?filters[userEmail][$eq]=${userEmail}`);
 
 /**
  * ✅ Fetches details of a specific vehicle by ID.
@@ -70,6 +68,7 @@ const updatePurchaserDetails = async (royaltyID, data) => {
     throw error;
   }
 };
+
 /**
  * ✅ Sends feedback for validation to Strapi backend.
  * @param {string} feedback - User's feedback input.
@@ -154,6 +153,7 @@ const addPerChallaID = async (documentID, data) => {
     throw error;
   }
 };
+
 /**
  * ✅ Searches vehicle numbers based on NameofPurchaser or Registration_No.
  * @param {string} query - Search input from user.
@@ -161,7 +161,7 @@ const addPerChallaID = async (documentID, data) => {
  */
 const SearchUserRoyalties = (query) => {
   return axiosClient.get(
-    `/vehicle-numbers?filters[$or][0][NameofPurchaser][$containsi]=${query}&filters[$or][1][Registration_No][$containsi]=${query}`
+    `/vehicle-numbers?filters[$or][0][NameofPurchaser][$eq]=${query}&filters[$or][1][Registration_No][$eq]=${query}`
   );
 };
 
