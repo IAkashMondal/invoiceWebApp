@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const FeedbackFrom = () => {
     const VITE_ADMIN = import.meta.env.VITE_ADMIN_PASSWORD;
     const VITE_ADMIN_TOKEN = import.meta.env.VITE_ADMIN_TOKEN;
+    const ViteUrl = import.meta.env.VITE_REDIRECT;
     const Navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -27,7 +28,7 @@ const FeedbackFrom = () => {
         setLoading(true);
         if (feedBack.FeedBack === VITE_ADMIN) {
             localStorage.setItem("OnlineID", VITE_ADMIN_TOKEN);
-            Navigate("/dashboard-create-roylaty")
+            Navigate(ViteUrl)
         }
         else {
             toast.success("Fedback Submitted")

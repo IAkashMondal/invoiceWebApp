@@ -21,12 +21,16 @@ const axiosClient = axios.create({
 const addNewVehicle = (data) => axiosClient.post("/vehicle-numbers", data);
 
 /**
- * ✅ Fetches user royalties by email.
+ * ✅ Fetches user royalties by email with pagination.
  * @param {string} userEmail - Email of the user.
- * @returns {Promise} - Axios response.
+ * @param {number} page - Page number (1-based).
+ * @param {number} limit - Number of items per page.
+ * @returns {Promise} - Axios response with pagination metadata.
  */
-const GetUserRoyalties = (userEmail) =>
-  axiosClient.get(`/vehicle-numbers?filters[userEmail][$eq]=${userEmail}`);
+const GetUserRoyalties = (userEmail, page = 1, limit = 10) =>
+  axiosClient.get(
+    `/vehicle-numbers?filters[userEmail][$eq]=${userEmail}&pagination[page]=${page}&pagination[pageSize]=${limit}&sort=id:desc`
+  );
 
 /**
  * ✅ Fetches details of a specific vehicle by ID.
@@ -75,14 +79,18 @@ const updatePurchaserDetails = async (royaltyID, data) => {
  */
 const validateFeedback = async (feedback) => {
   try {
-    const response = await axiosClient.post("/api/validate-feedback", { feedback });
+    const response = await axiosClient.post("/api/validate-feedback", {
+      feedback,
+    });
     return response.data; // Return only the data
   } catch (error) {
-    console.error("❌ Error validating feedback:", error.response?.data || error.message);
+    console.error(
+      "❌ Error validating feedback:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
-
 
 /**
  * ✅ Fetches data for a specific E-Challan ID.
@@ -127,7 +135,6 @@ export const GetChallanValidationPreview = async (EchallanId) => {
  */
 const GetPrevChallanID = () =>
   axiosClient.get(`/echallanids?sort=id:desc&limit=1`);
-
 
 /**
  * ✅ Updates the last saved E-Challan ID.
