@@ -157,6 +157,20 @@ const addPerChallaID = async (documentID, data) => {
   }
 };
 
+/**
+ * ✅ Searches vehicle numbers based on NameofPurchaser or Registration_No.
+ * @param {string} query - Search input from user.
+ * @param {string} userEmail - Email of the user to filter results.
+ * @param {number} page - Page number (1-based).
+ * @param {number} limit - Number of items per page.
+ * @returns {Promise} - Axios response.
+ */
+const SearchUserRoyalties = (query, userEmail, page = 1, limit = 10) => {
+  return axiosClient.get(
+    `/vehicle-numbers?filters[$or][0][NameofPurchaser][$containsi]=${query}&filters[$or][1][Registration_No][$containsi]=${query}&filters[userEmail][$eq]=${userEmail}&pagination[page]=${page}&pagination[pageSize]=${limit}&sort=id:desc`
+  );
+};
+
 // ✅ Export all API functions
 export {
   addNewVehicle,
@@ -169,4 +183,5 @@ export {
   GetEchallanData,
   Getvehicles,
   validateFeedback,
+  SearchUserRoyalties,
 };
