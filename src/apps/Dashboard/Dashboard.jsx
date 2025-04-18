@@ -115,10 +115,6 @@ const Dashboard = () => {
 
   return (
     <div className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12">
-      {/* Title Section */}
-      <h2 className="font-bold text-2xl sm:text-3xl text-center sm:text-left mb-6">
-        Generate Royalty with QR Code
-      </h2>
 
       {/* Search Section */}
       <div className="w-full px-2 sm:px-0 mb-6 sm:mb-8 mx-auto sm:max-w-xl md:max-w-2xl">
