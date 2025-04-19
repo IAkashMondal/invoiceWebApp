@@ -5,15 +5,16 @@ import ChallanTemp from "./preview/ChallanTemp";
 import SellerDetailsTemp from "./preview/SellerDeatilsTemp";
 import TextTEmp from "./preview/TextTEmp";
 import { GetParticularVehicle } from "../../../../../../../Apis/GlobalApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useReactToPrint } from "react-to-print";
+// import { useReactToPrint } from "react-to-print";
+const ViteUrl = import.meta.env.VITE_REDIRECT;
 import { getDynamicYearRange } from "../../../../../../../Apis/GlobalFunction";
 const RoyaltyPreview = ({ qrCode }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoadind] = useState(false);
-
+    const navigate = useNavigate();
     const contentRef = useRef(null);
     // const reactToPrintFn = useReactToPrint({
     //     contentRef,
@@ -22,7 +23,9 @@ const RoyaltyPreview = ({ qrCode }) => {
     const reactToPrintFn = () => {
         document.title = `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`;
         window.print();
+        navigate(ViteUrl)
     };
+
 
     // const reactToPrintFn = useReactToPrint({ contentRef });
     // Get formatted date & time

@@ -18,7 +18,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange, totalItems }) => {
     // Generate page numbers to display
     const getPageNumbers = () => {
         const pageNumbers = []
-        const maxPagesToShow = 5 // Show max 5 page numbers at a time
+        // Show fewer page numbers on mobile
+        const maxPagesToShow = window.innerWidth < 640 ? 3 : 5
 
         if (totalPages <= maxPagesToShow) {
             // If there are 5 or fewer pages, show all pages
@@ -35,12 +36,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange, totalItems }) => {
 
             // If we're at the start, show more pages after
             if (currentPage <= 2) {
-                end = Math.min(totalPages - 1, 4)
+                end = Math.min(totalPages - 1, window.innerWidth < 640 ? 2 : 4)
             }
 
             // If we're at the end, show more pages before
             if (currentPage >= totalPages - 1) {
-                start = Math.max(2, totalPages - 3)
+                start = Math.max(2, totalPages - (window.innerWidth < 640 ? 1 : 3))
             }
 
             // Add ellipsis if there's a gap after first page
@@ -68,30 +69,30 @@ const Pagination = ({ currentPage, totalPages, onPageChange, totalItems }) => {
     }
 
     return (
-        <div className="flex flex-col items-center space-y-2 md:space-y-0">
-            <div className="flex items-center space-x-2">
+        <div className="flex flex-col items-center space-y-2 w-full max-w-full">
+            <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 w-full">
                 <Button
                     variant="outline"
                     size="sm"
                     onClick={handlePrevious}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-1"
+                    className="flex items-center h-8 px-2 sm:gap-1 text-xs sm:text-sm"
                 >
-                    <ChevronLeft className="h-4 w-4" />
-                    Previous
+                    <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden xs:inline">Prev</span>
                 </Button>
 
-                <div className="flex items-center space-x-1">
+                <div className="flex flex-wrap items-center justify-center gap-1">
                     {getPageNumbers().map((page, index) => (
                         page === '...' ? (
-                            <span key={`ellipsis-${index}`} className="px-2">...</span>
+                            <span key={`ellipsis-${index}`} className="px-1 sm:px-2 text-xs sm:text-sm">...</span>
                         ) : (
                             <Button
                                 key={`page-${page}`}
                                 variant={currentPage === page ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => onPageChange(page)}
-                                className="min-w-[32px] h-8"
+                                className="min-w-[28px] sm:min-w-[32px] h-8 px-1 sm:px-2 text-xs sm:text-sm"
                             >
                                 {page}
                             </Button>
@@ -104,14 +105,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange, totalItems }) => {
                     size="sm"
                     onClick={handleNext}
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-1"
+                    className="flex items-center h-8 px-2 sm:gap-1 text-xs sm:text-sm"
                 >
-                    Next
-                    <ChevronRight className="h-4 w-4" />
+                    <span className="hidden xs:inline">Next</span>
+                    <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
             </div>
 
-            <div className="text-sm text-gray-500 mt-2">
+            <div className="text-xs sm:text-sm text-gray-500 mt-1">
                 {totalItems} total items
             </div>
         </div>
