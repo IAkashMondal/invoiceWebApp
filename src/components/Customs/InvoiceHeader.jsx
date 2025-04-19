@@ -7,7 +7,9 @@ import {
     BarChart4,
     CreditCard,
     MessageSquare,
-    LayoutDashboard
+    LayoutDashboard,
+    UserCog,
+  
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet";
 
@@ -85,6 +87,13 @@ const InvoiceHeader = () => {
                                     <span>FeedBack</span>
                                 </Button>
                             </Link>
+                            <Link to="/dashboard/admin" onClick={handleNavClick}>
+                                <Button variant="outline" className="w-full flex items-center gap-2">
+                                    <UserCog className="h-4 w-4" />
+                                    <span>Admin</span>
+                                </Button>
+                            </Link>
+                            
                         </div>
                     </SheetContent>
                 </Sheet>
