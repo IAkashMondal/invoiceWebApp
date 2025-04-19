@@ -143,7 +143,7 @@ const RegisterTruck = () => {
             PrevChallanID: newEChallanId
         }
         try {
-            const response = await addPerChallaID(documentID, ChalldIdData);
+            await addPerChallaID(documentID, ChalldIdData);
         } catch (error) {
             console.error("API Error:", error.response?.data || error.message);
         } finally {
@@ -171,33 +171,44 @@ const RegisterTruck = () => {
         <div className='sm:translate-y-[-40px] '>
             {/* Button to trigger the main dialog */}
             <div
-                className="relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-indigo-100 
+                className="relative overflow-hidden rounded-xl animate-gradient border border-indigo-100 
                 shadow-sm p-6 md:p-8 w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto sm:min-w-72
                 hover:shadow-lg hover:border-indigo-200 group cursor-pointer
                 transition-all duration-300 ease-in-out flex flex-col items-center justify-center"
                 onClick={() => setDialogOpen(true)}
+                style={{
+                    backgroundSize: "200% 200%",
+                    backgroundImage: "linear-gradient(90deg, #e0f2fe 0%, #fee2e2 25%, #dbeafe 50%, #fecaca 75%, #e0f2fe 100%)",
+                    animation: "gradient 6s linear infinite"
+                }}
             >
+                {/* Add keyframes style */}
+                <style>{`
+                    @keyframes gradient {
+                        0% { background-position: 0% 50%; }
+                        50% { background-position: 100% 50%; }
+                        100% { background-position: 0% 50%; }
+                    }
+                `}</style>
+
                 {/* Animated background element */}
-                <div className="absolute -top-32 -right-32 w-64 h-64 bg-indigo-100 rounded-full opacity-20 
-                      group-hover:bg-indigo-200 transition-all duration-500 group-hover:scale-110"></div>
+                <div className="absolute -top-32 -right-32 w-64 h-64 bg-blue-100 rounded-full opacity-20 
+                    group-hover:bg-red-200 transition-all duration-500 group-hover:scale-110"></div>
 
                 {/* Icon with glow effect */}
                 <div className="relative z-10 bg-white/90 p-4 rounded-full shadow-sm 
-                      group-hover:shadow-md group-hover:scale-105 transition-all">
-                    <ShieldEllipsis size={40} className="text-indigo-500 group-hover:text-indigo-600 transition-colors" />
+                    group-hover:shadow-md group-hover:scale-105 transition-all">
+                    <ShieldEllipsis size={40} className="text-blue-500 group-hover:text-red-600 transition-colors" />
                 </div>
 
                 {/* Label */}
-                <span className="relative z-10 mt-5 text-lg font-medium text-gray-800 group-hover:text-indigo-700 transition-colors">
+                <span className="relative z-10 mt-5 text-lg font-medium text-gray-800 group-hover:text-red-700 transition-colors">
                     Create
                 </span>
 
-                {/* Additional hint text - only visible on larger screens */}
-        
-
                 {/* Corner flourish */}
-                <div className="absolute bottom-0 right-0 w-20 h-20 bg-indigo-100 rounded-tl-full opacity-30 
-                      group-hover:bg-indigo-200 transition-all duration-500"></div>
+                <div className="absolute bottom-0 right-0 w-20 h-20 bg-blue-100 rounded-tl-full opacity-30 
+                    group-hover:bg-red-200 transition-all duration-500"></div>
             </div>
 
             {/* Main Dialog for CTF Verification */}
