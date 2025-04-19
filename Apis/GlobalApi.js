@@ -171,6 +171,26 @@ const SearchUserRoyalties = (query, userEmail, page = 1, limit = 10) => {
   );
 };
 
+/**
+ * ✅ Fetches ALL user royalties by email without any pagination limits.
+ * @param {string} userEmail - Email of the user.
+ * @returns {Promise} - Axios response with all user data.
+ */
+const GetAllUserRoyalties = (userEmail) =>
+  axiosClient.get(
+    `/vehicle-numbers?filters[userEmail][$eq]=${userEmail}&pagination[limit]=-1&sort=id:desc`
+  );
+
+/**
+ * ✅ Fetches ALL vehicle data for a specific user without any pagination limits.
+ * @param {string} userEmail - Email of the user.
+ * @returns {Promise} - Axios response with all vehicle data.
+ */
+const GetAllVehiclesForUser = (userEmail) =>
+  axiosClient.get(
+    `/vehicle-numbers?filters[userEmail][$eq]=${userEmail}&sort=id:desc&populate=*`
+  );
+
 // ✅ Export all API functions
 export {
   addNewVehicle,
@@ -184,4 +204,6 @@ export {
   Getvehicles,
   validateFeedback,
   SearchUserRoyalties,
+  GetAllUserRoyalties,
+  GetAllVehiclesForUser,
 };
