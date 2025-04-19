@@ -87,7 +87,7 @@ export default function Dashboard() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                         <Input
                             type="text"
-                            placeholder="Search by name or registration"
+                            placeholder="Search by name, registration, or challan ID"
                             className="pl-10 w-[250px]"
                             value={searchTerm}
                             onChange={(e) => handleSearch(e.target.value)}
