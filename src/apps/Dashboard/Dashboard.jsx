@@ -120,7 +120,7 @@ const Dashboard = () => {
       <div className="w-full px-2 sm:px-0 mb-6 sm:mb-8 mx-auto sm:max-w-xl md:max-w-2xl">
         <SearchBar
           onSearch={handleSearch}
-          placeholder="Search by registration number or purchaser name..."
+          placeholder="Search by registration number, purchaser name, or challan ID..."
           className="w-full"
           debounceTime={300}
         />

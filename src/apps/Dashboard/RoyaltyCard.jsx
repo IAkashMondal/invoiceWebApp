@@ -88,7 +88,7 @@ const RoyaltyCard = ({ data }) => {
                     <div className="flex-shrink-0 mr-2 transition-transform duration-300 group-hover:scale-110">
                         <Truck size={12} className={`sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-blue-500 group-hover:text-blue-600`} />
                     </div>
-                    <h3 className="text-sm sm:text-sm md:text-lg font-semibold text-gray-800 tracking-wide group-hover:text-blue-800">
+                    <h3 className="lg:text-sm sm:text-sm md:text-base font-semibold text-gray-800 tracking-wide group-hover:text-blue-800">
                         {data?.Registration_No || "No Registration"}
                     </h3>
                 </div>
@@ -96,7 +96,7 @@ const RoyaltyCard = ({ data }) => {
                 {/* E-challan ID with file icon */}
                 <div className="flex items-center gap-1 sm:gap-2 mb-1.5 sm:mb-2">
                     <FileText size={12} className="text-amber-500 flex-shrink-0 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 transition-transform duration-300 group-hover:text-amber-600" />
-                    <p className="lg:text-xs md:text-xs sm:text-[7px] text-gray-700 truncate font-medium group-hover:text-gray-900">
+                    <p className="lg:text-xs md:text-xs sm:text-[6px] text-gray-700 truncate font-medium group-hover:text-gray-900">
                         {data?.EchallanId ? `${data.EchallanId}/T/25-26/${data.TimeStamp}/PS` : "No Challan ID"}
                     </p>
                 </div>
@@ -112,7 +112,7 @@ const RoyaltyCard = ({ data }) => {
                 {/* Owner Name */}
                 <div className="flex items-center gap-1 sm:gap-2 mb-1.5 sm:mb-2">
                     <User size={12} className="text-indigo-500 flex-shrink-0 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 transition-transform duration-300 group-hover:text-indigo-600" />
-                    <p className="lg:text-xs md:text-xs sm:text-[12px] text-gray-700 truncate font-medium group-hover:text-gray-900">
+                    <p className="lg:text-xs md:text-xs sm:text-[10px] text-gray-700 truncate font-medium group-hover:text-gray-900">
                         {data?.OwnerName ? `${data.OwnerName}` : "No Owner Data"}
                     </p>
                 </div>
@@ -129,7 +129,7 @@ const RoyaltyCard = ({ data }) => {
                 {/* Issue Date */}
                 <div className="flex items-center gap-1 sm:gap-2 mb-1.5 sm:mb-2">
                     <Clock size={12} className="text-cyan-500 flex-shrink-0 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 transition-transform duration-300 group-hover:text-cyan-600" />
-                    <p className="text-xs text-gray-600 group-hover:text-gray-800">
+                    <p className="lg:text-xs md:text-xs sm:text-[10px] text-gray-600 group-hover:text-gray-800">
                         {data?.IssueDate ? `${data.IssueDate}` : "No Issue Date"}
                     </p>
                 </div>
@@ -137,7 +137,7 @@ const RoyaltyCard = ({ data }) => {
                 {/* Validity Date */}
                 <div className="flex items-center gap-1 sm:gap-2 mb-2 sm:mb-3">
                     <Calendar size={12} className="text-red-500 flex-shrink-0 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 transition-transform duration-300 group-hover:text-red-600" />
-                    <p className="text-xs text-gray-600 group-hover:text-gray-800">
+                    <p className="lg:text-xs md:text-xs sm:text-[10px] text-gray-600 group-hover:text-gray-800">
                         {data?.ValidityDate || "No Validity Date"}
                     </p>
                 </div>

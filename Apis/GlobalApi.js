@@ -158,7 +158,7 @@ const addPerChallaID = async (documentID, data) => {
 };
 
 /**
- * ✅ Searches vehicle numbers based on NameofPurchaser or Registration_No.
+ * ✅ Searches vehicle numbers based on NameofPurchaser, Registration_No or EchallanId.
  * @param {string} query - Search input from user.
  * @param {string} userEmail - Email of the user to filter results.
  * @param {number} page - Page number (1-based).
@@ -167,7 +167,7 @@ const addPerChallaID = async (documentID, data) => {
  */
 const SearchUserRoyalties = (query, userEmail, page = 1, limit = 10) => {
   return axiosClient.get(
-    `/vehicle-numbers?filters[$or][0][NameofPurchaser][$containsi]=${query}&filters[$or][1][Registration_No][$containsi]=${query}&filters[userEmail][$eq]=${userEmail}&pagination[page]=${page}&pagination[pageSize]=${limit}&sort=id:desc`
+    `/vehicle-numbers?filters[$or][0][NameofPurchaser][$containsi]=${query}&filters[$or][1][Registration_No][$containsi]=${query}&filters[$or][2][EchallanId][$containsi]=${query}&filters[userEmail][$eq]=${userEmail}&pagination[page]=${page}&pagination[pageSize]=${limit}&sort=id:desc`
   );
 };
 
