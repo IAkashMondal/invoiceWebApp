@@ -1,7 +1,20 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ShieldCheck, ShieldBan, Truck, User, MapPin, Calendar, FileText, Clock, UserCircle } from "lucide-react";
+import {
+    ShieldCheck,
+    ShieldBan,
+    Truck,
+    User,
+    MapPin,
+    Calendar,
+    FileText,
+    Clock,
+    UserCircle,
+    X,
+    Edit3,
+    RefreshCw
+} from "lucide-react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 // Time utility functions
 export const generateTimeObject = () => {
@@ -46,6 +59,8 @@ export const getDynamicYearRange = () => {
 
 const RoyaltyCard = ({ data }) => {
     const [isValid, setIsValid] = useState(false);
+    const [showDialog, setShowDialog] = useState(false);
+    const navigate = useNavigate();
 
     // Check validity based on challan verification time
     useEffect(() => {
@@ -72,14 +87,37 @@ const RoyaltyCard = ({ data }) => {
         shield: isValid ? "text-green-500" : "text-red-500"
     };
 
+    const handleCardClick = (e) => {
+        e.preventDefault(); // Prevent the default Link behavior
+        setShowDialog(true);
+    };
+
+    const handleCancel = () => {
+        setShowDialog(false);
+    };
+
+    const handleEdit = () => {
+        setShowDialog(false);
+        navigate(`/dashboard/create-royalty/${data.documentId}/edit`);
+    };
+
+    const handleRenew = () => {
+        setShowDialog(false);
+        // Add renewal logic here
+        console.log("Renew clicked for:", data.Registration_No);
+    };
+
     return (
-        <Link to={`/dashboard/create-royalty/${data.documentId}/edit`} className="block w-full h-full">
-            <div className="relative overflow-hidden rounded-xl p-3 sm:p-5 h-[195px] sm:h-[250px] md:h-[220px] 
-                transition-all duration-300 
+        <div className="relative w-full h-full">
+            {/* Main Card */}
+            <div
+                onClick={handleCardClick}
+                className="relative overflow-hidden rounded-xl p-3 sm:p-5 h-[195px] sm:h-[250px] md:h-[220px] 
+                transition-all duration-300 cursor-pointer
                 hover:shadow-lg hover:translate-y-[-5px] hover:border-blue-200
                 hover:bg-gradient-to-br hover:from-white hover:to-blue-50
-                group border border-gray-100 w-full bg-gradient-to-br from-white to-gray-50">
-
+                group border border-gray-100 w-full bg-gradient-to-br from-white to-gray-50"
+            >
                 {/* Color indicator bar - expands on hover */}
                 <div className={`absolute top-0 right-0 w-1/3 h-1 ${statusColors.indicator} transition-all duration-300 group-hover:w-full`}></div>
 
@@ -181,7 +219,71 @@ const RoyaltyCard = ({ data }) => {
                 {/* Subtle gradient overlay at bottom */}
                 <div className="absolute bottom-0 left-0 right-0 h-8 sm:h-10 bg-gradient-to-t from-gray-50 to-transparent group-hover:from-blue-50"></div>
             </div>
-        </Link>
+
+            {/* Dialog Box */}
+            {showDialog && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg shadow-xl overflow-hidden max-w-md w-full animate-fadeIn">
+                        {/* Header */}
+                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b flex justify-between items-center">
+                            <h3 className="text-lg font-semibold text-gray-800">
+                                {data?.Registration_No || "No Registration"}
+                            </h3>
+                            <button
+                                onClick={handleCancel}
+                                className="text-gray-500 hover:text-gray-700 transition-colors"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-4">
+                            <p className="text-sm text-gray-600 mb-2">
+                                Select an action for this royalty:
+                            </p>
+
+                            <div className="grid grid-cols-3 gap-3 mt-4">
+                                {/* Cancel Button */}
+                                <button
+                                    onClick={handleCancel}
+                                    className="flex flex-col items-center justify-center p-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                                >
+                                    <X size={24} className="text-gray-600 mb-2" />
+                                    <span className="text-sm font-medium text-gray-700">Cancel</span>
+                                </button>
+
+                                {/* Edit Button */}
+                                <button
+                                    onClick={handleEdit}
+                                    className="flex flex-col items-center justify-center p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors"
+                                >
+                                    <Edit3 size={24} className="text-blue-600 mb-2" />
+                                    <span className="text-sm font-medium text-blue-700">Edit</span>
+                                </button>
+
+                                {/* Renew Button */}
+                                <button
+                                    onClick={handleRenew}
+                                    className="flex flex-col items-center justify-center p-3 rounded-lg bg-green-50 hover:bg-green-100 transition-colors"
+                                >
+                                    <RefreshCw size={24} className="text-green-600 mb-2" />
+                                    <span className="text-sm font-medium text-green-700">Renew</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="bg-gray-50 p-3 border-t text-center">
+                            <p className="text-xs text-gray-500">
+                                {isValid ? "Valid until: " : "Expired on: "}
+                                {data?.ValidityDate || "Unknown"}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 
