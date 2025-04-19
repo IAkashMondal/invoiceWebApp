@@ -23,7 +23,7 @@ const RoyaltyPreview = ({ qrCode }) => {
     const reactToPrintFn = () => {
         document.title = `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`;
         window.print();
-        navigate(ViteUrl)
+        // navigate(ViteUrl)
     };
 
 
