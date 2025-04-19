@@ -62,15 +62,27 @@ const InvoiceHeader = () => {
                 </Sheet>
 
                 {/* Center: Logo */}
-                <Link to="/">
-                    <img
-                        width={180}
-                        height={100}
-                        src="./public/InLogo.png"
-                        alt="Logo"
-                        className="h-8 md:h-10 lg:h-12 w-auto"
-                    />
-                </Link>
+                {
+                    loginEnable ? <Link to={ViteUrl}>
+                        <img
+                            width={180}
+                            height={100}
+                            src="./public/InLogo.png"
+                            alt="Logo"
+                            className="h-8 md:h-10 lg:h-12 w-auto"
+                        />
+                    </Link> :
+                        <Link to="/">
+                            <img
+                                width={180}
+                                height={100}
+                                src="./public/InLogo.png"
+                                alt="Logo"
+                                className="h-8 md:h-10 lg:h-12 w-auto"
+                            />
+                        </Link>
+                }
+
 
                 {/* Right: User Actions (Responsive) */}
                 <div className="flex items-center gap-4">
