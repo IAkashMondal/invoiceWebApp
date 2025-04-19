@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/clerk-react";
-import { Menu } from "lucide-react";
+import {
+    Menu,
+    BarChart4,
+    CreditCard,
+    MessageSquare,
+    LayoutDashboard
+} from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet";
 
 const InvoiceHeader = () => {
@@ -20,8 +26,10 @@ const InvoiceHeader = () => {
         }
     }, []); // Runs once when the component mounts
 
-
-
+    // Function to close drawer when clicking a navigation link
+    const handleNavClick = () => {
+        setIsDrawerOpen(false);
+    };
 
     return (
         <>
@@ -41,21 +49,41 @@ const InvoiceHeader = () => {
                         </div>
                         <div className="flex flex-col gap-3">
                             <p className="text-sm font-semibold">Max CFT</p>
-                            <Link to={"/recharge"}>
-                                <Button className="w-full">Recharge</Button>
+                            <Link to={"/recharge"} onClick={handleNavClick}>
+                                <Button className="w-full flex items-center gap-2">
+                                    <CreditCard className="h-4 w-4" />
+                                    <span>Recharge</span>
+                                </Button>
                             </Link>
                             {
                                 loginEnable ?
-                                    <Link to={ViteUrl}>
-                                        <Button variant="outline" className="w-full">Dashboard</Button>
+                                    <Link to={ViteUrl} onClick={handleNavClick}>
+                                        <Button variant="outline" className="w-full flex items-center gap-2">
+                                            <LayoutDashboard className="h-4 w-4" />
+                                            <span>Dashboard</span>
+                                        </Button>
                                     </Link >
                                     :
-                                    <Link to="/dashboard">
-                                        <Button variant="outline" className="w-full">Dashboard</Button>
+                                    <Link to="/dashboard" onClick={handleNavClick}>
+                                        <Button variant="outline" className="w-full flex items-center gap-2">
+                                            <LayoutDashboard className="h-4 w-4" />
+                                            <span>Dashboard</span>
+                                        </Button>
                                     </Link >
+
                             }
-                            <Link to="/dashboard/feedback">
-                                <Button variant="outline" className="w-full">FeedBack</Button>
+
+                            <Link to="/dashboard/graph" onClick={handleNavClick}>
+                                <Button variant="outline" className="w-full flex items-center gap-2">
+                                    <BarChart4 className="h-4 w-4" />
+                                    <span>Graph</span>
+                                </Button>
+                            </Link>
+                            <Link to="/dashboard/feedback" onClick={handleNavClick}>
+                                <Button variant="outline" className="w-full flex items-center gap-2">
+                                    <MessageSquare className="h-4 w-4" />
+                                    <span>FeedBack</span>
+                                </Button>
                             </Link>
                         </div>
                     </SheetContent>
@@ -108,9 +136,11 @@ const InvoiceHeader = () => {
                 className="fixed bottom-6 right-6 md:right-10 z-50 sm:hidden"
             >
                 <Link to={"/recharge"}>
-                    <Button className="rounded-full p-4 shadow-lg">Recharge</Button>
+                    <Button className="rounded-full p-4 shadow-lg flex items-center gap-2">
+                        <CreditCard className="h-4 w-4" />
+                        <span>Recharge</span>
+                    </Button>
                 </Link>
-
             </div>
         </>
     );
