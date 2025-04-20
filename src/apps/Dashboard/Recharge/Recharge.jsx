@@ -12,6 +12,7 @@ import {
     MenubarSeparator,
     MenubarTrigger,
 } from "@/components/ui/menubar";
+import { createPaymentOrder, verifyPayment } from "../../../../Apis/GlobalApi";
 // import { useUser } from "@clerk/clerk-react";
 
 const RechargePage = () => {
@@ -27,13 +28,7 @@ const RechargePage = () => {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:1337/api/create-order", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ amount: parseInt(amount) }),
-            });
-
-            const data = await response.json();
+            const data = await createPaymentOrder(amount);
             setLoading(false);
 
             if (!data.orderId || !data.amount || !data.currency) {
@@ -72,23 +67,19 @@ const RechargePage = () => {
             order_id: order.id,
             handler: async function (response) {
                 try {
-                    const res = await fetch("http://localhost:1337/api/verify-payment", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            orderId: order.id,
-                            paymentId: response.razorpay_payment_id,
-                            signature: response.razorpay_signature,
-                            amount: order.amount,
-                            // userName: user.name,
-                            // userEmail: user.emailAddresses,
-                            // userMobileNo: user.phoneNumbers,
-                            LastValidQnt: "0", // You can update this logic later
-                            CurrentValidQnt: "0", // You can update this logic later
-                        }),
-                    });
+                    const paymentData = {
+                        orderId: order.id,
+                        paymentId: response.razorpay_payment_id,
+                        signature: response.razorpay_signature,
+                        amount: order.amount,
+                        // userName: user.name,
+                        // userEmail: user.emailAddresses,
+                        // userMobileNo: user.phoneNumbers,
+                        LastValidQnt: "0", // You can update this logic later
+                        CurrentValidQnt: "0", // You can update this logic later
+                    };
 
-                    const result = await res.json();
+                    const result = await verifyPayment(paymentData);
                     if (result.success) {
                         alert(`✅ Payment Successful!\n\nPayment ID:\n${response.razorpay_payment_id}`);
                     } else {

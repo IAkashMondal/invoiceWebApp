@@ -191,6 +191,104 @@ const GetAllVehiclesForUser = (userEmail) =>
     `/vehicle-numbers?filters[userEmail][$eq]=${userEmail}&sort=id:desc&populate=*`
   );
 
+/**
+ * ✅ Creates or updates user data in the backend when a user signs in with Clerk.
+ * @param {Object} userData - User data from Clerk (id, email, name, etc).
+ * @returns {Promise} - Axios response with the created/updated user.
+ */
+const syncClerkUser = async (userData) => {
+  try {
+    // Check if user already exists by email
+    const checkResponse = await axiosClient.get(
+      `/clerk-users?filters[email][$eq]=${userData.email}`
+    );
+
+    // If user exists, update it
+    if (checkResponse.data.data && checkResponse.data.data.length > 0) {
+      const existingUserId = checkResponse.data.data[0].id;
+      const updateResponse = await axiosClient.put(
+        `/clerk-users/${existingUserId}`,
+        {
+          data: {
+            clerkId: userData.id,
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            imageUrl: userData.imageUrl,
+            lastSignIn: new Date().toISOString(),
+          },
+        }
+      );
+      return updateResponse;
+    }
+    // If user doesn't exist, create new user
+    else {
+      const createResponse = await axiosClient.post("/clerk-users", {
+        data: {
+          clerkId: userData.id,
+          email: userData.email,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          imageUrl: userData.imageUrl,
+          lastSignIn: new Date().toISOString(),
+          dateJoined: new Date().toISOString(),
+        },
+      });
+      return createResponse;
+    }
+  } catch (error) {
+    console.error(
+      "❌ Error syncing Clerk user:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+/**
+ * ✅ Creates an order for payment processing
+ * @param {number} amount - Amount to be paid in lowest denomination (paise)
+ * @returns {Promise} - Axios response with order details
+ */
+const createPaymentOrder = async (amount) => {
+  try {
+    const response = await axiosClient.post("/create-order", {
+      amount: parseInt(amount),
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error creating payment order:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+/**
+ * ✅ Verifies payment after successful Razorpay transaction
+ * @param {Object} paymentData - Payment verification data
+ * @param {string} paymentData.orderId - Order ID from Razorpay
+ * @param {string} paymentData.paymentId - Payment ID from Razorpay
+ * @param {string} paymentData.signature - Signature from Razorpay
+ * @param {number} paymentData.amount - Amount paid
+ * @param {string} paymentData.LastValidQnt - Previous valid quantity
+ * @param {string} paymentData.CurrentValidQnt - Current valid quantity
+ * @returns {Promise} - Axios response with verification result
+ */
+const verifyPayment = async (paymentData) => {
+  try {
+    const response = await axiosClient.post("/verify-payment", paymentData);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error verifying payment:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
 // ✅ Export all API functions
 export {
   addNewVehicle,
@@ -206,4 +304,7 @@ export {
   SearchUserRoyalties,
   GetAllUserRoyalties,
   GetAllVehiclesForUser,
+  syncClerkUser,
+  createPaymentOrder,
+  verifyPayment,
 };
