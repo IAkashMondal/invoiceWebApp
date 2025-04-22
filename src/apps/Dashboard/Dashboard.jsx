@@ -1,11 +1,12 @@
 import CreateRoyalty from "../../components/Comp/CreateRoyalty";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
-import { GetUserRoyalties, SearchUserRoyalties } from "../../../Apis/GlobalApi";
+import { GetUserRoyalties, SearchUserRoyalties, findMatchingClerkUser } from "../../../Apis/GlobalApi";
 import RoyaltyCard from "./RoyaltyCard";
 import Pagination from "../../components/ui/pagination";
 import SearchBar from "../../components/ui/searchbar";
 import SearchResults from "../../components/ui/searchresults";
+import { Archive } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -19,9 +20,14 @@ const Dashboard = () => {
   const [searchResults, setSearchResults] = useState(null);
   const itemsPerPage = 10;
 
+  // User stats
+  const [remainingCapacity, setRemainingCapacity] = useState(0);
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   useEffect(() => {
     if (user?.primaryEmailAddress?.emailAddress) {
       fetchUserRoyaltyList();
+      fetchUserCapacity();
     }
   }, [user, currentPage]);
 
@@ -31,6 +37,31 @@ const Dashboard = () => {
       performSearch(searchTerm);
     }
   }, [searchTerm]);
+
+  // Fetch user capacity data
+  const fetchUserCapacity = async () => {
+    if (!user) return;
+
+    try {
+      const match = await findMatchingClerkUser(user);
+      if (match) {
+        // Get remaining capacity from attributes or direct properties
+        let remaining = Number(match.attributes?.RemaningCapacity || match.RemaningCapacity || 0);
+        const total = Number(match.attributes?.userTotalQuantity || match.userTotalQuantity || 0);
+        const limit = Number(match.attributes?.Userlimit || match.Userlimit || 0);
+
+        // If remaining capacity wasn't explicitly set, calculate it
+        if (remaining === 0 && limit > 0) {
+          remaining = limit > total ? limit - total : 0;
+        }
+
+        setRemainingCapacity(remaining);
+        setDataLoaded(true);
+      }
+    } catch (error) {
+      console.error("Error fetching user capacity:", error);
+    }
+  };
 
   const fetchUserRoyaltyList = async () => {
     try {
@@ -116,8 +147,24 @@ const Dashboard = () => {
   return (
     <div className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12">
 
-      {/* Search Section */}
+      {/* Capacity and Search Section */}
       <div className="w-full px-2 sm:px-0 mb-6 sm:mb-8 mx-auto sm:max-w-xl md:max-w-2xl">
+        {/* Header with Capacity Indicator */}
+        <div className="flex justify-end mb-4">
+          {dataLoaded && (
+            <div className="flex items-center bg-gradient-to-r from-green-50 via-green-100 to-green-50 px-3 py-2 rounded-lg border border-green-200 shadow-sm">
+              <div className="bg-white p-1.5 rounded-md mr-2">
+         
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-wide font-medium text-green-800">Remaining {remainingCapacity || "0"}</p>
+               
+                
+              </div>
+            </div>
+          )}
+        </div>
+
         <SearchBar
           onSearch={handleSearch}
           placeholder="Search by registration number, purchaser name, or challan ID..."

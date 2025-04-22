@@ -5,12 +5,12 @@ import RoyaltyCard from "../../apps/Dashboard/RoyaltyCard"
 import Pagination from "./pagination"
 
 const SearchResults = ({
-    results,
-    isLoading,
+    results = [],
+    isLoading = false,
     searchTerm,
-    totalItems,
-    totalPages,
-    currentPage,
+    totalItems = 0,
+    totalPages = 1,
+    currentPage = 1,
     onPageChange
 }) => {
     const [visible, setVisible] = useState(false)
@@ -90,14 +90,6 @@ SearchResults.propTypes = {
     totalPages: PropTypes.number,
     currentPage: PropTypes.number,
     onPageChange: PropTypes.func
-}
-
-SearchResults.defaultProps = {
-    results: [],
-    isLoading: false,
-    totalItems: 0,
-    totalPages: 1,
-    currentPage: 1
 }
 
 export default SearchResults 

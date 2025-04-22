@@ -290,19 +290,19 @@ const RoyaltyCard = ({ data }) => {
 // PropTypes validation for better type safety
 RoyaltyCard.propTypes = {
     data: PropTypes.shape({
-        Registration_No: PropTypes.string,
-        NameofPurchaser: PropTypes.string,
         documentId: PropTypes.string,
-        PurchaserAdd: PropTypes.string,
-        PurchaserDristic: PropTypes.string,
-        quantity: PropTypes.number,
-        VerefyChallanNum: PropTypes.number,
-        ValidityDate: PropTypes.string,
-        GeneratedDT: PropTypes.string,
+        Registration_No: PropTypes.string,
         EchallanId: PropTypes.string,
         TimeStamp: PropTypes.string,
-        IssueDate: PropTypes.string,
+        NameofPurchaser: PropTypes.string,
         OwnerName: PropTypes.string,
+        PurchaserAdd: PropTypes.string,
+        PurchaserDristic: PropTypes.string,
+        IssueDate: PropTypes.string,
+        ValidityDate: PropTypes.string,
+        GeneratedDT: PropTypes.string,
+        VerefyChallanNum: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     }).isRequired,
 };
 

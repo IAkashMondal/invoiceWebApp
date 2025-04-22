@@ -32,7 +32,8 @@ const RechargePage = () => {
             setLoading(false);
 
             if (!data.orderId || !data.amount || !data.currency) {
-                return alert("Failed to initiate payment.");
+                console.error("Invalid order data received:", data);
+                return alert("Failed to initiate payment. Missing order details.");
             }
 
             const orderDetails = {
@@ -44,14 +45,28 @@ const RechargePage = () => {
             if (!window.Razorpay) {
                 const script = document.createElement("script");
                 script.src = "https://checkout.razorpay.com/v1/checkout.js";
+                script.onerror = () => {
+                    console.error("Failed to load Razorpay script");
+                    alert("❌ Failed to load payment gateway. Please try again later.");
+                    setLoading(false);
+                };
                 script.onload = () => openRazorpay(orderDetails);
                 document.body.appendChild(script);
             } else {
                 openRazorpay(orderDetails);
             }
         } catch (err) {
-            console.error("Payment error:", err);
-            alert("❌ Something went wrong!");
+            console.error("Payment initialization error:", err);
+
+            let errorMessage = "❌ Something went wrong!";
+            if (err.response) {
+                errorMessage += ` (Status: ${err.response.status})`;
+                if (err.response.data?.error?.message) {
+                    errorMessage += ` ${err.response.data.error.message}`;
+                }
+            }
+
+            alert(errorMessage);
             setLoading(false);
         }
     };
@@ -67,6 +82,9 @@ const RechargePage = () => {
             order_id: order.id,
             handler: async function (response) {
                 try {
+                    setLoading(true);
+                    console.log("Razorpay payment response:", response);
+
                     const paymentData = {
                         orderId: order.id,
                         paymentId: response.razorpay_payment_id,
@@ -80,17 +98,35 @@ const RechargePage = () => {
                     };
 
                     const result = await verifyPayment(paymentData);
+                    setLoading(false);
+
                     if (result.success) {
                         alert(`✅ Payment Successful!\n\nPayment ID:\n${response.razorpay_payment_id}`);
                     } else {
-                        alert("❌ Payment verification failed.");
+                        console.error("Payment verification failed:", result);
+                        alert(`❌ Payment verification failed. ${result.message || ''}`);
                     }
                 } catch (err) {
-                    console.error("Verification error:", err);
-                    alert("❌ Verification failed.");
+                    console.error("Verification error details:", err);
+
+                    let errorMessage = "❌ Verification failed.";
+                    if (err.response) {
+                        errorMessage += ` (Status: ${err.response.status})`;
+                        if (err.response.data?.error?.message) {
+                            errorMessage += ` ${err.response.data.error.message}`;
+                        }
+                    }
+
+                    alert(errorMessage);
+                    setLoading(false);
                 }
             },
-
+            modal: {
+                ondismiss: function () {
+                    console.log("Payment dismissed by user");
+                    setLoading(false);
+                }
+            },
             prefill: {
                 name,
                 email,
@@ -101,8 +137,12 @@ const RechargePage = () => {
 
 
         const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+            console.error("Razorpay payment failed:", response.error);
+            alert(`❌ Payment failed: ${response.error.description}`);
+            setLoading(false);
+        });
         rzp.open();
-
     };
 
     return (
