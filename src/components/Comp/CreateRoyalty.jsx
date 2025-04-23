@@ -10,7 +10,7 @@ import { useUser } from '@clerk/clerk-react';
 import { generateNewChallanID, generateTimeObject, numberToWords } from '../../../Apis/GlobalFunction';
 import { toast } from "sonner"; // Import toast for better error notifications
 
-const RegisterTruck = () => {
+const CreateRoyalty = () => {
     // State variables for managing dialog states, form inputs, and loading states
     const [dialogOpen, setDialogOpen] = useState(false);
     const [vehicleDialogOpen, setVehicleDialogOpen] = useState(false);
@@ -347,4 +347,4 @@ const RegisterTruck = () => {
     );
 };
 
-export default RegisterTruck;
+export default CreateRoyalty;

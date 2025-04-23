@@ -20,7 +20,7 @@ const axiosClient = axios.create({
  */
 const addNewVehicle = async (data) => {
   try {
-    const response = await axiosClient.post("/vehicle-numbers", { data });
+    const response = await axiosClient.post("/vehicle-numbers",  data );
     return response;
   } catch (error) {
     console.error("❌ Error adding new vehicle:");

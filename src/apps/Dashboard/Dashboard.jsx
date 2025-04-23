@@ -6,7 +6,6 @@ import RoyaltyCard from "./RoyaltyCard";
 import Pagination from "../../components/ui/pagination";
 import SearchBar from "../../components/ui/searchbar";
 import SearchResults from "../../components/ui/searchresults";
-import { Archive } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -154,12 +153,12 @@ const Dashboard = () => {
           {dataLoaded && (
             <div className="flex items-center bg-gradient-to-r from-green-50 via-green-100 to-green-50 px-3 py-2 rounded-lg border border-green-200 shadow-sm">
               <div className="bg-white p-1.5 rounded-md mr-2">
-         
+
               </div>
               <div>
                 <p className="text-xs uppercase tracking-wide font-medium text-green-800">Remaining {remainingCapacity || "0"}</p>
-               
-                
+
+
               </div>
             </div>
           )}
