@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from "uuid";
 import { addNewVehicle, addPerChallaID, GetPrevChallanID } from '../../../Apis/GlobalApi';
 import { useUser } from '@clerk/clerk-react';
-import { generateNewChallanID, generateTimeObject, numberToWords } from '../../../Apis/GlobalFunction';
+import { generateNewChallanID, generateTimeObject, getDynamicYearRange, numberToWords } from '../../../Apis/GlobalFunction';
 import { toast } from "sonner"; // Import toast for better error notifications
 
 const CreateRoyalty = () => {
@@ -80,8 +80,9 @@ const CreateRoyalty = () => {
         const uuid = uuidv4(); // Generate a unique identifier
         const { generatedTime, generatedOn, ChallandT } = generateTimeObject();
         setGeneratedon({ generatedTime, generatedOn, ChallandT });
-
+        const EChallanNumber = `${newEChallanId}/T/${getDynamicYearRange()}/${ChallandT}/PS`
         const data = {
+
             data: {
                 royaltyID: uuid,
                 Registration_No: Registration_No,
@@ -92,7 +93,8 @@ const CreateRoyalty = () => {
                 VehicleQunText: VehicleQunText,
                 GeneratedDT: String(generatedOn),
                 TimeStamp: Number(generatedTime),
-                EChallanDT: String(ChallandT)
+                EChallanDT: String(ChallandT),
+                EChallanNo: String(`${EChallanNumber}`)
             }
         };
 
