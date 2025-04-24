@@ -6,8 +6,10 @@ import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Search, User, CreditCard, Activity, DollarSign, Loader2, Calendar, Phone, Clock } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
 
 const AdminPanel = () => {
+    const { user: clerkUser } = useUser();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -27,41 +29,32 @@ const AdminPanel = () => {
     });
     const [activeTab, setActiveTab] = useState("users");
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+ 
+    // Function to check if a user matches the current Clerk user
+    const isMatchedUser = (user) => {
+        if (!clerkUser || !user?.attributes) return false;
+
+        // Check if emails match
+        const userEmail = user.attributes?.Clerk_Email?.toLowerCase();
+        const clerkEmail = clerkUser.primaryEmailAddress?.emailAddress?.toLowerCase();
+        const emailMatch = userEmail === clerkEmail;
+
+        // Check if IDs match
+        const idMatch = user.attributes?.clerkID === clerkUser.id;
+
+        // Check if phone numbers match (if available)
+        const userPhone = user.attributes?.ClerkPhonenumber?.replace(/\D/g, '');
+        const clerkPhone = clerkUser.primaryPhoneNumber?.phoneNumber?.replace(/\D/g, '');
+        const phoneMatch = userPhone && clerkPhone && userPhone === clerkPhone;
+
+        // Return true if either email or ID matches
+        return emailMatch || idMatch || phoneMatch;
+    };
 
     // Fetch users on component mount and when page changes
     useEffect(() => {
         fetchUsers(page);
-
-        // Check for matched user in localStorage - only run once on mount
-        const matchedUserData = localStorage.getItem("matchedClerkUser");
-        if (matchedUserData) {
-            try {
-                const matchedUser = JSON.parse(matchedUserData);
-                console.log("Found matched user data in localStorage:", matchedUser);
-
-                // Check if this user is already in the users list
-                const existingUserIndex = users.findIndex(user =>
-                    user.id === matchedUser.id ||
-                    (user.attributes?.clerkID && user.attributes.clerkID === matchedUser.attributes?.clerkID)
-                );
-
-                if (existingUserIndex === -1) {
-                    // Add the matched user to the list if not already there
-                    const formattedUser = {
-                        id: matchedUser.id,
-                        attributes: matchedUser.attributes || {}
-                    };
-
-                    console.log("Adding matched user to display:", formattedUser);
-                    setUsers(prevUsers => [formattedUser, ...prevUsers]);
-                } else {
-                    console.log("Matched user already in list at index:", existingUserIndex);
-                }
-            } catch (err) {
-                console.error("Error parsing matched user data:", err);
-            }
-        }
-    }, [page]); // Only depend on page changes
+    }, [page, clerkUser]); // Add clerkUser as dependency
 
     // Function to fetch users from API
     const fetchUsers = async (pageNum) => {
@@ -70,39 +63,37 @@ const AdminPanel = () => {
             setError(null);
             const response = await getAllClerkUsers(pageNum, 10);
 
-            console.log("API Response:", response);
-
             // Ensure we have valid data and map it to expected structure
             const userData = Array.isArray(response?.data?.data) ?
                 response.data.data.map(user => {
-                    // Check what format the data is in
                     const rawData = user.attributes || user;
-
-                    // Create a properly structured user object
                     return {
                         id: user.id,
                         attributes: {
-                            // Map fields from API to expected attributes
+                            ...rawData,
+                            // Ensure these fields are always present
+                            Clerk_Email: rawData.Clerk_Email || rawData.email,
+                            clerkID: rawData.clerkID || user.id?.toString(),
+                            ClerkPhonenumber: rawData.ClerkPhonenumber || rawData.phoneNumber,
                             Clerk_Full_Name: rawData.Clerk_Full_Name ||
                                 rawData.ClerkuserName ||
-                                `${rawData.Clerk_First_name || ''} ${rawData.Clerk_Last_Name || ''}`,
-                            ClerkuserName: rawData.ClerkuserName,
-                            Clerk_First_name: rawData.Clerk_First_name || rawData.Clerk_First_Name,
-                            Clerk_Last_Name: rawData.Clerk_Last_Name,
-                            Clerk_Email: rawData.Clerk_Email || rawData.email,
-                            ClerkPhonenumber: rawData.ClerkPhonenumber,
-                            clerkID: rawData.clerkID || user.id?.toString(),
-                            Userlimit: rawData.Userlimit || rawData.creditLimit,
-                            maxCTF: rawData.maxCTF,
-                            UserCurrentBalance: rawData.UserCurrentBalance || rawData.balance,
-                            UserPreviousBalance: rawData.UserPreviousBalance,
-                            userTotalQuantity: rawData.userTotalQuantity,
-                            userPersonalQuantity: rawData.userPersonalQuantity,
-                            ClerkLastSignIn: rawData.ClerkLastSignIn,
-                            Clear_time: rawData.Clear_time
+                                `${rawData.Clerk_First_name || ''} ${rawData.Clerk_Last_Name || ''}`
                         }
                     };
                 }) : [];
+
+            // Log matched users for debugging
+            userData.forEach(user => {
+                if (isMatchedUser(user)) {
+                    console.log('Found matching user:', {
+                        userId: user.id,
+                        userEmail: user.attributes?.Clerk_Email,
+                        clerkEmail: clerkUser?.primaryEmailAddress?.emailAddress,
+                        userPhone: user.attributes?.ClerkPhonenumber,
+                        clerkPhone: clerkUser?.primaryPhoneNumber?.phoneNumber
+                    });
+                }
+            });
 
             setUsers(userData);
 
@@ -116,11 +107,7 @@ const AdminPanel = () => {
 
         } catch (err) {
             console.error("Failed to fetch users:", err);
-            if (err.message === "User database not available. Please contact support.") {
-                setError("Admin API endpoints are not available. Please ensure the backend services are properly configured.");
-            } else {
-                setError("Failed to load users. Please try again.");
-            }
+            setError(err.message || "Failed to load users. Please try again.");
             setUsers([]);
         } finally {
             setLoading(false);
@@ -265,21 +252,6 @@ const AdminPanel = () => {
         } catch {
             return dateString; // Return as is if it can't be parsed
         }
-    };
-
-    // Check if a user is matched
-    const isMatchedUser = (user) => {
-        const matchedUserData = localStorage.getItem("matchedClerkUser");
-        if (matchedUserData) {
-            try {
-                const matchedUser = JSON.parse(matchedUserData);
-                return user.id === matchedUser.id ||
-                    (user.attributes?.clerkID && user.attributes.clerkID === matchedUser.attributes?.clerkID);
-            } catch {
-                return false;
-            }
-        }
-        return false;
     };
 
     return (
@@ -452,14 +424,21 @@ const AdminPanel = () => {
                                                     <td className="px-4 py-3">
                                                         <div className="font-medium flex items-center">
                                                             {isMatchedUser(user) && (
-                                                                <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2" title="Current logged-in user"></span>
+                                                                <div className="relative p-2">
+                                                                   
+                                                                    <span
+                                                                        className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full border border-white"
+                                                                        title="Currently Active"
+                                                                    />
+                                                                </div>
                                                             )}
-                                                            {user?.attributes?.Clerk_Full_Name ||
-                                                                user?.attributes?.ClerkuserName ||
-                                                                `${user?.attributes?.Clerk_First_name || user?.attributes?.Clerk_First_Name || ''} ${user?.attributes?.Clerk_Last_Name || ''}`}
+                                                            {user?.attributes?.Clerk_Full_Name}
                                                         </div>
-                                                        <div className="text-xs text-gray-500">
-                                                            ID: {user?.id || user?.attributes?.clerkID || 'N/A'}
+                                                        <div className="text-xs text-gray-500 flex items-center gap-1">
+                                                            <span>ID: {user?.attributes?.clerkID || 'N/A'}</span>
+                                                            {isMatchedUser(user) && (
+                                                                <span className="text-green-600 font-medium">(Verified)</span>
+                                                            )}
                                                         </div>
                                                     </td>
                                                     <td className="px-4 py-3">

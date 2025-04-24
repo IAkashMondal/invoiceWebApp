@@ -11,13 +11,15 @@ import {
     UserCircle,
     X,
     Edit3,
-    RefreshCw
+    RefreshCw,
+    RefreshCwOff
 } from "lucide-react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
 // Time utility functions
 export const generateTimeObject = () => {
+
     const now = new Date();
 
     // Extract date components
@@ -58,6 +60,7 @@ export const getDynamicYearRange = () => {
 };
 
 const RoyaltyCard = ({ data }) => {
+    const ViteUrl = import.meta.env.VITE_REDIRECT;
     const [isValid, setIsValid] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
     const navigate = useNavigate();
@@ -98,13 +101,13 @@ const RoyaltyCard = ({ data }) => {
 
     const handleEdit = () => {
         setShowDialog(false);
-        navigate(`/dashboard/create-royalty/${data.documentId}/edit`);
+        navigate(`${ViteUrl}/${data.documentId}/edit`);
     };
 
     const handleRenew = () => {
         setShowDialog(false);
         // Add renewal logic here
-        console.log("Renew clicked for:", data.Registration_No);
+        navigate(`${ViteUrl}/${data.documentId}/renew`);
     };
 
     return (
@@ -240,7 +243,7 @@ const RoyaltyCard = ({ data }) => {
                         {/* Content */}
                         <div className="p-4">
                             <p className="text-sm text-gray-600 mb-2">
-                                Select an action for this royalty:
+                                Select an action :
                             </p>
 
                             <div className="grid grid-cols-3 gap-3 mt-4">
@@ -254,15 +257,27 @@ const RoyaltyCard = ({ data }) => {
                                 </button>
 
                                 {/* Edit Button */}
-                                <button
-                                    onClick={handleEdit}
-                                    className="flex flex-col items-center justify-center p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors"
-                                >
-                                    <Edit3 size={24} className="text-blue-600 mb-2" />
-                                    <span className="text-sm font-medium text-blue-700">Edit</span>
-                                </button>
+                                {isValid ?
+                                    <button
+                                        onClick={handleEdit}
+                                        className="flex flex-col items-center justify-center p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors"
+                                    >
+                                        <Edit3 size={24} className="text-blue-600 mb-2" />
+                                        <span className="text-sm font-medium text-blue-700">Edit</span>
+                                    </button>
+                                    :
+                                    <button
+                                        onClick={handleCancel}
+                                        className="flex flex-col items-center justify-center p-3 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
+                                    >
+                                        <RefreshCwOff size={24} className="text-red-600 mb-2" />
+                                        <span className="text-sm font-medium text-red-700">Expired</span>
+                                    </button>
+                                }
+
 
                                 {/* Renew Button */}
+
                                 <button
                                     onClick={handleRenew}
                                     className="flex flex-col items-center justify-center p-3 rounded-lg bg-green-50 hover:bg-green-100 transition-colors"
