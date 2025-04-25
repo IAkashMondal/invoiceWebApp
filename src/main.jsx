@@ -1,3 +1,5 @@
+
+
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
@@ -32,11 +34,13 @@ const router = createBrowserRouter([
     children: [
       { path: `${ViteUrl}`, element: <Dashboard /> },
       { path: "/dashboard/feedback", element: <FeedbackFrom /> },
-      { path: `${ViteUrl}/:royaltyID/edit`, element: <EditRoyalty /> },
+      { path: `${ViteUrl}/:royaltyID/create`, element: <EditRoyalty /> },
       { path: "/recharge", element: <RechargePage /> },
       { path: "/dashboard/graph", element: <Graph /> },
       { path: "/dashboard/admin", element: <AdminPanel /> },
-      { path: `${ViteUrl}/:royaltyID/renew`, element: <Renew /> },
+      {
+        path: `${ViteUrl}/:royaltyID/renew`, element: <Renew />
+      },
     ]
   },
   { path: "/", element: <Home /> },

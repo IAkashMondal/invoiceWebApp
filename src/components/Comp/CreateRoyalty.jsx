@@ -115,7 +115,7 @@ const CreateRoyalty = () => {
             }
 
             toast.success("Vehicle registered successfully!");
-            navigate(`${ViteUrl}/${documentId}/edit`);
+            navigate(`${ViteUrl}/${documentId}/create`);
         } catch (error) {
             console.error("API Error:", error.response?.data || error.message);
             setError(error.response?.data?.message || error.message || "Failed to register vehicle");
@@ -195,7 +195,7 @@ const CreateRoyalty = () => {
             const newID = generateNewChallanID(PrevEChallanId);
             setNewChallanID(newID);
         }
-    }, [PrevEChallanId]);
+    }, [PrevEChallanId, setNewChallanID]);
 
     // Memoize the button styles to avoid recalculation
     const buttonStyles = useMemo(() => ({
