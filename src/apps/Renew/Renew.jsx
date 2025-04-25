@@ -1,18 +1,34 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { GetParticularVehicle, updatePurchaserDetails } from "../../../Apis/GlobalApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { generateTimeObject } from "../../../Apis/GlobalFunction";
+import { useUser } from "@clerk/clerk-react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid';
+
+// Helper functions
+const getDynamicYearRange = () => {
+    const currentYear = new Date().getFullYear();
+    const nextYear = currentYear + 1;
+    return `${currentYear}-${nextYear}`;
+};
+
+const generateNewChallanID = (previousChallanID) => {
+    if (!previousChallanID) return "1";
+    const numericPart = parseInt(previousChallanID);
+    return isNaN(numericPart) ? "1" : String(numericPart + 1);
+};
 
 const Renew = () => {
+    const { user } = useUser();
     const { royaltyID } = useParams();
     const navigate = useNavigate();
     const [royaltyData, setRoyaltyData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [updating, setUpdating] = useState(false);
     const [error, setError] = useState(null);
+    const [updating, setUpdating] = useState(false);
     const ViteUrl = import.meta.env.VITE_REDIRECT;
 
     // Fetch royalty data based on ID
@@ -44,40 +60,27 @@ const Renew = () => {
 
     const handleRenew = async () => {
         if (!royaltyData) return;
-
         setUpdating(true);
 
         try {
-            // Generate new verification time (3 months from now)
-            const { generatedTimeMili } = await generateTimeObject();
-            const threeMonthsFromNow = new Date();
-            threeMonthsFromNow.setMonth(threeMonthsFromNow.getMonth() + 3);
+            const newRoyaltyID = uuidv4();
+            const previousChallanID = royaltyData.data.EchallanId;
+            const newChallanID = generateNewChallanID(previousChallanID);
+            const { IssueDate, ChallandT } = generateTimeObject();
 
-            // Format date for display (DD/MM/YYYY)
-            const day = String(threeMonthsFromNow.getDate()).padStart(2, "0");
-            const month = String(threeMonthsFromNow.getMonth() + 1).padStart(2, "0");
-            const year = threeMonthsFromNow.getFullYear();
-            const formattedDate = `${day}/${month}/${year}`;
-
-            // Update validity data
-            const updatedData = {
-                VerefyChallanNum: Date.UTC(
-                    year,
-                    threeMonthsFromNow.getMonth(),
-                    day,
-                    threeMonthsFromNow.getHours(),
-                    threeMonthsFromNow.getMinutes(),
-                    threeMonthsFromNow.getSeconds()
-                ),
-                ValidityDate: formattedDate
+            const renewalData = {
+                royaltyID: newRoyaltyID,
+                EchallanId: newChallanID,
+                EChallanNo: `${newChallanID}/T/${getDynamicYearRange()}/${ChallandT}/PS`,
+                IssueDate,
+                EChallanDT: ChallandT,
+                userEmail: user?.primaryEmailAddress?.emailAddress,
+                userName: user?.fullName,
+                ...royaltyData.data
             };
 
-            // Call API to update
-            await updatePurchaserDetails(royaltyID, updatedData);
-
+            await updatePurchaserDetails(royaltyID, renewalData);
             toast.success("Royalty renewed successfully!");
-
-            // Navigate back to dashboard
             navigate(ViteUrl);
         } catch (error) {
             console.error("Error renewing royalty:", error);
@@ -88,22 +91,11 @@ const Renew = () => {
     };
 
     if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700"></div>
-            </div>
-        );
+        return <div className="text-center">Loading...</div>;
     }
 
     if (error) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-screen">
-                <div className="text-red-500 text-xl mb-4">{error}</div>
-                <Button onClick={() => navigate(ViteUrl)}>
-                    Back to Dashboard
-                </Button>
-            </div>
-        );
+        return <div className="text-center text-red-600">{error}</div>;
     }
 
     return (
@@ -139,7 +131,7 @@ const Renew = () => {
                             Current Validity
                         </label>
                         <Input
-                            value={royaltyData.data?.ValidityDate || "Not available"}
+                            value={royaltyData.data?.ValidityDate || ""}
                             disabled
                             className="bg-gray-100"
                         />
@@ -169,7 +161,7 @@ const Renew = () => {
                             onClick={handleRenew}
                             disabled={updating}
                         >
-                            {updating ? "Processing..." : "Renew Royalty"}
+                            {updating ? "Renewing..." : "Renew"}
                         </Button>
                     </div>
                 </div>

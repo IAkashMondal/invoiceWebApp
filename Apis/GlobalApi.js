@@ -774,6 +774,60 @@ const findMatchingClerkUser = async (userData) => {
   }
 };
 
+/**
+ * ✅ Updates user quantities in clerk-webhooks based on vehicle number
+ * @param {string} vehicleNumber - The vehicle number to check
+ * @param {number} quantity - The quantity to add/update
+ * @param {Object} user - Current Clerk user data
+ * @returns {Promise} - Axios response
+ */
+const updateUserQuantitiesForVehicle = async (
+  vehicleNumber,
+  quantity,
+  user
+) => {
+  try {
+    // Special vehicle numbers that affect personal quantity
+    const specialVehicles = ["WB73C5024", "WB73E9469", "WB73E2234"];
+
+    // Find the matching user in clerk-webhooks
+    const matchedUser = await findMatchingClerkUser(user);
+    if (!matchedUser) {
+      throw new Error("User not found in database");
+    }
+
+    const userId = matchedUser.id;
+    const currentData = matchedUser.attributes || {};
+
+    // Initialize update data
+    const updateData = {
+      userTotalQuantity:
+        Number(currentData.userTotalQuantity || 0) + Number(quantity),
+    };
+
+    // If it's a special vehicle, also update personal quantity
+    if (specialVehicles.includes(vehicleNumber)) {
+      updateData.userPersonalQuantity =
+        Number(currentData.userPersonalQuantity || 0) + Number(quantity);
+    }
+
+    // Update remaining capacity
+    const currentLimit = Number(currentData.Userlimit || 0);
+    updateData.RemaningCapacity = Math.max(
+      0,
+      currentLimit - updateData.userTotalQuantity
+    );
+
+    // Update the user data
+    const response = await updateUserLimits(userId, updateData);
+    console.log("Updated user quantities:", updateData);
+    return response;
+  } catch (error) {
+    console.error("❌ Error updating user quantities:", error);
+    throw error;
+  }
+};
+
 // ✅ Export all API functions
 export {
   addNewVehicle,
@@ -797,4 +851,5 @@ export {
   getAllClerkUsers,
   updateUserLimits,
   findMatchingClerkUser,
+  updateUserQuantitiesForVehicle,
 };
