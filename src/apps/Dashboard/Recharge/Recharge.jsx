@@ -1,211 +1,131 @@
-"use client";
+import { useEffect, useState } from "react";
+import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { createOrder, verifyPayment } from "../../../../Apis/Payments/PaymentsApis";
 
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    Menubar,
-    MenubarContent,
-    MenubarItem,
-    MenubarMenu,
-    MenubarSeparator,
-    MenubarTrigger,
-} from "@/components/ui/menubar";
-import { createPaymentOrder, verifyPayment } from "../../../../Apis/GlobalApi";
-// import { useUser } from "@clerk/clerk-react";
-
-const RechargePage = () => {
-    const [amount, setAmount] = useState("");
-    const [name, setName] = useState("John Doe");
-    const [email, setEmail] = useState("johndoe@example.com");
-    const [phone, setPhone] = useState("8637838646");
+function Recharge() {
     const [loading, setLoading] = useState(false);
-    // const { user } = useUser();
-    const handlePayment = async () => {
-        if (!amount) return alert("Please enter an amount");
+    const [amount, setAmount] = useState("");
+    const navigate = useNavigate();
+    const { user } = useUser(); // 👈 Clerk user info
+    const VITE_ADMIN = import.meta.env.VITE_ADMIN_TOKEN;
+    const ViteUrl = import.meta.env.VITE_REDIRECT;
+    const [loginEnable, setLoginEnable] = useState(false);
 
-        setLoading(true);
+    useEffect(() => {
+        const storedToken = localStorage.getItem("OnlineID");
+
+        if (storedToken === VITE_ADMIN) {
+            setLoginEnable(true);
+        }
+    }, []); // Runs once when the component mounts
+
+    const openRazorpay = async () => {
+        if (!amount) {
+            alert("Please enter an amount");
+            return;
+        }
 
         try {
-            const data = await createPaymentOrder(amount);
-            setLoading(false);
+            setLoading(true);
 
-            if (!data.orderId || !data.amount || !data.currency) {
-                console.error("Invalid order data received:", data);
-                return alert("Failed to initiate payment. Missing order details.");
-            }
+            // 1. Create order on server
+            const order = await createOrder({ amount: Number(amount) });
 
-            const orderDetails = {
-                id: data.orderId,
-                amount: data.amount,
-                currency: data.currency,
+            const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+                amount: order.amount,
+                currency: order.currency,
+                name: "WBGAV",
+                description: "Recharge your account",
+                order_id: order.orderId,
+                handler: async function (response) {
+                    try {
+                        setLoading(true);
+
+                        const paymentData = {
+                            orderId: order.orderId,
+                            paymentId: response.razorpay_payment_id,
+                            signature: response.razorpay_signature,
+                            amount: order.amount,
+                            LastValidQnt: "0", // You can customize if you want
+                            CurrentValidQnt: "0",
+
+                            // Fetching real Clerk user data
+                            userId: user?.id || "", // Clerk User ID
+                            userName: user?.fullName || "",
+                            userEmail: user?.primaryEmailAddress?.emailAddress || "",
+                            userMobileNo: user?.primaryPhoneNumber?.phoneNumber || "",
+                        };
+
+                        const result = await verifyPayment(paymentData);
+                        setLoading(false);
+
+                        if (result.success) {
+                            toast(`✅ Payment Successful!\n\n Amount: ${amount}\n Payment ID:\n${response.razorpay_payment_id}`);
+                            if (loginEnable) {
+                                navigate(`${ViteUrl}`);
+                            } else {
+                                navigate("/dashboard"); // redirect or refresh
+                            }
+
+                        } else {
+                            console.error("Payment verification failed:", result);
+                            alert(`❌ Payment verification failed. ${result.message || ''}`);
+                        }
+                    } catch (err) {
+                        console.error("Verification error details:", err);
+                        alert(`❌ Verification failed.`);
+                        setLoading(false);
+                    }
+                },
+                prefill: {
+                    name: user?.fullName || "",
+                    email: user?.primaryEmailAddress?.emailAddress || "",
+                    contact: user?.primaryPhoneNumber?.phoneNumber || "",
+                },
+                theme: {
+                    color: "#3399cc",
+                },
             };
 
-            if (!window.Razorpay) {
-                const script = document.createElement("script");
-                script.src = "https://checkout.razorpay.com/v1/checkout.js";
-                script.onerror = () => {
-                    console.error("Failed to load Razorpay script");
-                    alert("❌ Failed to load payment gateway. Please try again later.");
-                    setLoading(false);
-                };
-                script.onload = () => openRazorpay(orderDetails);
-                document.body.appendChild(script);
-            } else {
-                openRazorpay(orderDetails);
-            }
+            const rzp = new window.Razorpay(options);
+            rzp.open();
         } catch (err) {
-            console.error("Payment initialization error:", err);
-
-            let errorMessage = "❌ Something went wrong!";
-            if (err.response) {
-                errorMessage += ` (Status: ${err.response.status})`;
-                if (err.response.data?.error?.message) {
-                    errorMessage += ` ${err.response.data.error.message}`;
-                }
-            }
-
-            alert(errorMessage);
+            console.error("Error creating order:", err);
+            alert("❌ Error creating order. Please try again.");
             setLoading(false);
         }
     };
 
-
-    const openRazorpay = (order) => {
-        const options = {
-            key: "rzp_test_i1qAz18stlKxzp", // Replace with live key
-            amount: order.amount,
-            currency: "INR",
-            name: "WBGAV",
-            description: "Recharge Wallet",
-            order_id: order.id,
-            handler: async function (response) {
-                try {
-                    setLoading(true);
-                    console.log("Razorpay payment response:", response);
-
-                    const paymentData = {
-                        orderId: order.id,
-                        paymentId: response.razorpay_payment_id,
-                        signature: response.razorpay_signature,
-                        amount: order.amount,
-                        // userName: user.name,
-                        // userEmail: user.emailAddresses,
-                        // userMobileNo: user.phoneNumbers,
-                        LastValidQnt: "0", // You can update this logic later
-                        CurrentValidQnt: "0", // You can update this logic later
-                    };
-
-                    const result = await verifyPayment(paymentData);
-                    setLoading(false);
-
-                    if (result.success) {
-                        alert(`✅ Payment Successful!\n\nPayment ID:\n${response.razorpay_payment_id}`);
-                    } else {
-                        console.error("Payment verification failed:", result);
-                        alert(`❌ Payment verification failed. ${result.message || ''}`);
-                    }
-                } catch (err) {
-                    console.error("Verification error details:", err);
-
-                    let errorMessage = "❌ Verification failed.";
-                    if (err.response) {
-                        errorMessage += ` (Status: ${err.response.status})`;
-                        if (err.response.data?.error?.message) {
-                            errorMessage += ` ${err.response.data.error.message}`;
-                        }
-                    }
-
-                    alert(errorMessage);
-                    setLoading(false);
-                }
-            },
-            modal: {
-                ondismiss: function () {
-                    console.log("Payment dismissed by user");
-                    setLoading(false);
-                }
-            },
-            prefill: {
-                name,
-                email,
-                contact: phone,
-            },
-            theme: { color: "#007bff" },
-        };
-
-
-        const rzp = new window.Razorpay(options);
-        rzp.on('payment.failed', function (response) {
-            console.error("Razorpay payment failed:", response.error);
-            alert(`❌ Payment failed: ${response.error.description}`);
-            setLoading(false);
-        });
-        rzp.open();
-    };
-
     return (
-        <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 p-4">
-            <Menubar className="w-full max-w-md mb-6">
-                <MenubarMenu>
-                    <MenubarTrigger>Recharge</MenubarTrigger>
-                    <MenubarContent>
-                        <MenubarItem disabled>Recharge Update 3.0.0</MenubarItem>
-                        <MenubarSeparator />
-                    </MenubarContent>
-                </MenubarMenu>
-                <MenubarMenu>
-                    <MenubarTrigger>Credit Line</MenubarTrigger>
-                    <MenubarContent>
-                        <MenubarItem>Check Credit Balance</MenubarItem>
-                        <MenubarItem>Apply for Credit</MenubarItem>
-                    </MenubarContent>
-                </MenubarMenu>
-            </Menubar>
+        <div className="flex flex-col items-center justify-center min-h-screen p-4">
+            <h1 className="text-3xl font-bold mb-6">Recharge Wallet</h1>
+            <p>
+                <span className="text-sm text-gray-500">
+                    Note: Recharge amount will be added to your wallet.
+                </span>
+            </p>
 
-            <Card className="p-6 max-w-md w-full shadow-md border bg-white rounded-2xl">
-                <CardContent>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">Recharge</h2>
-                    <p className="text-gray-600 mb-4 text-center">Fill details to recharge your account</p>
-                    {/* <p>Name: {user.fullName}</p>
-                    <p>Email: {user.primaryEmailAddress?.emailAddress}</p>
-                    <p>Phone: {user.primaryPhoneNumber?.phoneNumber}</p> */}
-                    <Input
-                        type="text"
-                        placeholder="Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="mb-3"
-                    />
-                    <Input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="mb-3"
-                    />
-                    <Input
-                        type="tel"
-                        placeholder="Phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="mb-3"
-                    />
-                    <Input
-                        type="number"
-                        placeholder="Enter amount (INR)"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        className="mb-4"
-                    />
-                    <Button className="w-full" onClick={handlePayment} disabled={!amount || loading}>
-                        {loading ? "Processing..." : "Proceed to Pay"}
-                    </Button>
-                </CardContent>
-            </Card>
+            <input
+                type="number"
+                placeholder="Enter amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="border p-3 mb-4 w-64 rounded-lg text-center"
+            />
+
+            <button
+                onClick={openRazorpay}
+                disabled={loading}
+                className={`px-6 py-3 rounded-lg ${loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
+                    } text-white`}
+            >
+                {loading ? "Processing..." : "Recharge"}
+            </button>
         </div>
     );
-};
+}
 
-export default RechargePage;
+export default Recharge;

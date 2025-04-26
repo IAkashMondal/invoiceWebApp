@@ -4,13 +4,13 @@ import { RoyaltyInfoContext } from "../../../../../../Context/RoyaltyInfoContext
 import ChallanTemp from "./preview/ChallanTemp";
 import SellerDetailsTemp from "./preview/SellerDeatilsTemp";
 import TextTEmp from "./preview/TextTEmp";
-import { GetParticularVehicle } from "../../../../../../../Apis/GlobalApi";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import { getDynamicYearRange } from "../../../../../../../Apis/GlobalFunction";
 import { useReactToPrint } from "react-to-print";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { GetParticularVehicle } from "../../../../../../../Apis/R_Apis/VehicleApis";
 
 const RoyaltyPreview = ({ qrCode }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);

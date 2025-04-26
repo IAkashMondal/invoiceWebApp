@@ -3,10 +3,11 @@ import { RoyaltyInfoContext } from "../../../../../../../Context/RoyaltyInfoCont
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
-import { GetOwnersDeatils, GetParticularVehicle, updatePurchaserDetails } from "../../../../../../../../Apis/GlobalApi";
 import PropTypes from "prop-types";
 import { addTimeToGeneratedTime, generateTimeObject } from "../../../../../../../../Apis/GlobalFunction";
 import { policeStationData } from "../../../../../../../../Apis/TimeandPolicestation";
+import { GetOwnersDeatils } from "../../../../../../../../Apis/Minors/MinorsApi";
+import { GetParticularVehicle, updatePurchaserDetails } from "../../../../../../../../Apis/R_Apis/VehicleApis";
 
 const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
     // The component now imports policeStationData from TimeandPolicestation.js

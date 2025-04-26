@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
 import { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { updatePurchaserDetails } from "../../../../Apis/GlobalApi";
+import { updatePurchaserDetails } from "../../../../Apis/R_Apis/VehicleApis";
 
 const InvoiceVehicleDetails = () => {
     const [loading, setLoading] = useState(false);

@@ -1,4 +1,3 @@
-import { GetParticularVehicle, updatePurchaserDetails } from "../../../Apis/GlobalApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -7,6 +6,7 @@ import { useUser } from "@clerk/clerk-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { GetParticularVehicle, updatePurchaserDetails } from "../../../Apis/R_Apis/VehicleApis";
 
 // Helper functions
 const getDynamicYearRange = () => {

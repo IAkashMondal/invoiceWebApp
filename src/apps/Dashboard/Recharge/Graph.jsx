@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import axios from 'axios';
 import { useUser } from "@clerk/clerk-react";
-import { GetAllVehiclesForUser } from '../../../../Apis/GlobalApi';
 import {
     BarChart4,
     FileText,
@@ -14,6 +13,7 @@ import {
     ChevronRight,
     TrendingUp
 } from 'lucide-react';
+import { GetAllVehiclesForUser } from '../../../../Apis/R_Apis/VehicleApis';
 
 const Graph = () => {
     const { user, isLoaded: isUserLoaded } = useUser();

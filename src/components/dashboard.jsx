@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react"
 import RoyaltyCard from "../apps/Dashboard/RoyaltyCard"
 import { useUser } from "@clerk/clerk-react"
-import { GetUserRoyalties, SearchUserRoyalties } from "../../Apis/GlobalApi"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
 import Pagination from "./ui/pagination"
+import { GetUserRoyalties, SearchUserRoyalties } from "../../Apis/R_Apis/VehicleApis"
 
 export default function Dashboard() {
     const { user } = useUser()

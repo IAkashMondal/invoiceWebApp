@@ -5,10 +5,11 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Input } from "@/components/ui/input.jsx";
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from "uuid";
-import { addNewVehicle, addPerChallaID, GetPrevChallanID } from '../../../Apis/GlobalApi';
 import { useUser } from '@clerk/clerk-react';
 import { generateNewChallanID, generateTimeObject, getDynamicYearRange, numberToWords } from '../../../Apis/GlobalFunction';
 import { toast } from "sonner"; // Import toast for better error notifications
+import { addPerChallaID, GetPrevChallanID } from '../../../Apis/GlobalApi';
+import { addNewVehicle } from '../../../Apis/R_Apis/VehicleApis';
 
 const CreateRoyalty = () => {
     // State variables for managing dialog states, form inputs, and loading states
