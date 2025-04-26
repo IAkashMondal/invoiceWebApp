@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
-import { syncClerkUser } from '../../Apis/GlobalApi';
 import { useToast } from '@/components/ui/use-toast';
+import { syncClerkUser } from '../../Apis/Clerk/ClerkApis';
 
 /**
  * This component handles syncing Clerk user data with our backend.

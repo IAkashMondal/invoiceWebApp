@@ -15,7 +15,7 @@ import {
     Boxes
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet";
-import { findMatchingClerkUser } from "../../../Apis/GlobalApi";
+import { findMatchingClerkUser } from "../../../Apis/Clerk/ClerkApis";
 
 const InvoiceHeader = () => {
     const VITE_ADMIN = import.meta.env.VITE_ADMIN_TOKEN;
@@ -34,16 +34,7 @@ const InvoiceHeader = () => {
     // Log Clerk user data for debugging
     useEffect(() => {
         if (isSignedIn && user) {
-            console.log("=== CLERK USER DATA ===");
-            console.log("ID:", user.id);
-            console.log("Username:", user.username);
-            console.log("Full name:", `${user.firstName || ""} ${user.lastName || ""}`);
-            console.log("Email:", user.primaryEmailAddress?.emailAddress);
-            console.log("Phone:", user.primaryPhoneNumber?.phoneNumber);
-            console.log("Profile Image:", user.imageUrl);
-            console.log("Last sign in:", user.lastSignInAt);
-            console.log("All email addresses:", user.emailAddresses);
-            console.log("All phone numbers:", user.phoneNumbers);
+          
             console.log("Full user object:", user);
             console.log("======================");
 
@@ -119,6 +110,7 @@ const InvoiceHeader = () => {
         }
     }, [isSignedIn, user]);
 
+    
     useEffect(() => {
         const storedToken = localStorage.getItem("OnlineID");
 

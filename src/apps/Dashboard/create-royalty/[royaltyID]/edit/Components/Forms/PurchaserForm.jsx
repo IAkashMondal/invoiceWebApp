@@ -3,10 +3,10 @@ import { RoyaltyInfoContext } from "../../../../../../../Context/RoyaltyInfoCont
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
-import { GetParticularVehicle, updatePurchaserDetails } from "../../../../../../../../Apis/GlobalApi";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import PropTypes from "prop-types";
+import { GetParticularVehicle, updatePurchaserDetails } from "../../../../../../../../Apis/R_Apis/VehicleApis";
 
 const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
   const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);

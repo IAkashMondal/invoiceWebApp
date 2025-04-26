@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTruckPickup } from "@fortawesome/free-solid-svg-icons";
-import { GetEchallanData } from "../../../Apis/GlobalApi";
 import { generateTimeObject } from "../../../Apis/GlobalFunction";
+import { GetEchallanData } from "../../../Apis/GlobalApi";
 
 const VehicleDetailPage = () => {
     const params = useParams(); // Extract parameter from URL

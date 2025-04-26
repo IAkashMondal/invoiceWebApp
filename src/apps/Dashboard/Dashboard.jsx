@@ -1,11 +1,12 @@
 import CreateRoyalty from "../../components/Comp/CreateRoyalty";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
-import { GetUserRoyalties, SearchUserRoyalties, findMatchingClerkUser } from "../../../Apis/GlobalApi";
 import RoyaltyCard from "./RoyaltyCard";
 import Pagination from "../../components/ui/pagination";
 import SearchBar from "../../components/ui/searchbar";
 import SearchResults from "../../components/ui/searchresults";
+import { findMatchingClerkUser } from "../../../Apis/Clerk/ClerkApis";
+import { GetUserRoyalties, SearchUserRoyalties } from "../../../Apis/R_Apis/VehicleApis";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -43,6 +44,7 @@ const Dashboard = () => {
 
     try {
       const match = await findMatchingClerkUser(user);
+      console.log("Match:", match);
       if (match) {
         // Get remaining capacity from attributes or direct properties
         let remaining = Number(match.attributes?.RemaningCapacity || match.RemaningCapacity || 0);

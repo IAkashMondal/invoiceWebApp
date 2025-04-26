@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllClerkUsers, updateUserLimits } from "../../../Apis/GlobalApi";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogT
 import { toast } from "sonner";
 import { Search, User, CreditCard, Activity, DollarSign, Loader2, Calendar, Phone, Clock } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";
+import { getAllClerkUsers, updateUserLimits } from "../../../Apis/Clerk/ClerkApis";
 
 const AdminPanel = () => {
     const { user: clerkUser } = useUser();

@@ -13,12 +13,12 @@ const TermsAndConditions = () => {
                 <div className="bg-white rounded-lg shadow-xl p-8 text-gray-800">
                     <h2 className="text-2xl font-semibold mb-4">Introduction</h2>
                     <p className="text-lg leading-relaxed mb-4">
-                        These Terms and Conditions govern your use of one royalty's services. By accessing or using our services, including our website, web applications, and mobile apps, you agree to comply with and be bound by these terms. If you do not agree with these terms, please refrain from using our services.
+                        These Terms and Conditions govern your use of WBGAV's services. By accessing or using our services, including our website, web applications, and mobile apps, you agree to comply with and be bound by these terms. If you do not agree with these terms, please refrain from using our services.
                     </p>
 
                     <h3 className="text-xl font-semibold mb-4">1. Acceptance of Terms</h3>
                     <p className="text-lg leading-relaxed mb-4">
-                        By using one royalty's website and services, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree with these terms, please refrain from using our services.
+                        By using WBGAV's website and services, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree with these terms, please refrain from using our services.
                     </p>
 
                     <h3 className="text-xl font-semibold mb-4">2. Services Provided</h3>
@@ -49,7 +49,7 @@ const TermsAndConditions = () => {
 
                     <h3 className="text-xl font-semibold mb-4">5. Intellectual Property</h3>
                     <p className="text-lg leading-relaxed mb-4">
-                        All content on one royalty’s website, including text, graphics, logos, images, and software, is the property of one royalty or its licensors and is protected by intellectual property laws. You are granted a limited, non-exclusive license to use the services for personal or business purposes in accordance with these terms.
+                        All content on one royalty’s website, including text, graphics, logos, images, and software, is the property of WBGAV or its licensors and is protected by intellectual property laws. You are granted a limited, non-exclusive license to use the services for personal or business purposes in accordance with these terms.
                     </p>
 
                     <h3 className="text-xl font-semibold mb-4">6. Privacy and Data Protection</h3>
@@ -82,7 +82,7 @@ const TermsAndConditions = () => {
 
                     <h3 className="text-xl font-semibold mb-4">11. Indemnity</h3>
                     <p className="text-lg leading-relaxed mb-4">
-                        You agree to indemnify and hold harmless one royalty, its affiliates, employees, and partners from any claims, losses, liabilities, or damages, including legal fees, arising from your use of the services or violation of these Terms and Conditions.
+                        You agree to indemnify and hold harmless WBGAV, its affiliates, employees, and partners from any claims, losses, liabilities, or damages, including legal fees, arising from your use of the services or violation of these Terms and Conditions.
                     </p>
 
                     <h3 className="text-xl font-semibold mb-4">12. Amendments</h3>

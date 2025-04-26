@@ -1,7 +1,7 @@
 import PropTypes from "prop-types"; // Import PropTypes
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GetParticularVehicle } from "../../../../../../../../Apis/GlobalApi";
+import { GetParticularVehicle } from "../../../../../../../../Apis/R_Apis/VehicleApis";
 
 const BuyerDetailsTemp = ({ RoyaltyData }) => {
     const [vehicleNoQnt, setvehicleNoQnt] = useState("");

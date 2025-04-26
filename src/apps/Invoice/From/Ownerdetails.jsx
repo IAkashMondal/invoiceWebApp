@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { GetParticularVehicle, updatePurchaserDetails } from "../../../../Apis/GlobalApi";
+import { GetParticularVehicle, updatePurchaserDetails } from "../../../../Apis/R_Apis/VehicleApis";
 
 const Ownerdetails = () => {
     const [EChallanId, setChallanID] = useState("Error");
