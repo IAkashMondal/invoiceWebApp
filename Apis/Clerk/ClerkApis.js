@@ -275,155 +275,39 @@ const syncClerkUser = async (userData) => {
  * @returns {Promise<Object>} - Matching user data from clerck-webhooks or null if no match
  */
 const findMatchingClerkUser = async (userData) => {
+  console.log("userdata ", userData);
   try {
-    if (!userData || !userData.primaryEmailAddress?.emailAddress) {
-      console.error("Missing email in user data");
+    if (!userData || !userData.id) {
+      console.error("Missing id in user data");
       return null;
     }
 
-    const email = userData.primaryEmailAddress?.emailAddress;
-    console.log(`Searching for matching user with email: ${email}`);
+    const { id } = userData;
+    console.log(`Searching for matching user with ID: ${id}`);
 
-    // First try to find by clerkID (most precise match)
+    // Fetch user data by Clerk ID (the most precise match)
     try {
       const idResponse = await axiosClient.get(
-        `/clerck-webhooks?filters[clerkID][$eq]=${encodeURIComponent(
-          userData.id
-        )}`
+        `/clerck-webhooks?filters[clerkID][$eq]=${encodeURIComponent(id)}`
       );
 
       if (idResponse.data.data && idResponse.data.data.length > 0) {
-        console.log("Found exact match by Clerk ID:", idResponse.data.data[0]);
-        return idResponse.data.data[0];
+        console.log("Found match by Clerk ID:", idResponse.data.data[0]);
+        return idResponse.data.data[0]; // Return the first match
+      } else {
+        console.log("No user found with the provided Clerk ID.");
+        return null;
       }
     } catch (error) {
-      console.warn("Error searching by ID:", error.message);
+      console.error("Error searching by ID:", error.message);
+      return null;
     }
-
-    // Then try to find by email
-    try {
-      const emailResponse = await axiosClient.get(
-        `/clerck-webhooks?filters[Clerk_Email][$containsi]=${encodeURIComponent(
-          email
-        )}`
-      );
-
-      if (emailResponse.data.data && emailResponse.data.data.length > 0) {
-        // Found users with matching email, now check for additional criteria
-        const potentialMatches = emailResponse.data.data;
-        console.log(
-          `Found ${potentialMatches.length} potential matches by email`
-        );
-
-        // Count matching criteria for each potential match
-        const scoredMatches = potentialMatches.map((match) => {
-          let score = 0;
-          const attrs = match.attributes || {};
-
-          // Check email (exact match is stronger)
-          if (attrs.Clerk_Email?.toLowerCase() === email.toLowerCase()) {
-            score += 2;
-          } else if (
-            attrs.Clerk_Email?.toLowerCase()?.includes(email.toLowerCase())
-          ) {
-            score += 1;
-          }
-
-          // Check first name
-          if (userData.firstName && attrs.Clerk_First_name) {
-            if (
-              attrs.Clerk_First_name.toLowerCase() ===
-              userData.firstName.toLowerCase()
-            ) {
-              score += 1;
-            }
-          }
-
-          // Check last name
-          if (userData.lastName && attrs.Clerk_Last_Name) {
-            if (
-              attrs.Clerk_Last_Name.toLowerCase() ===
-              userData.lastName.toLowerCase()
-            ) {
-              score += 1;
-            }
-          }
-
-          // Check username
-          if (userData.username && attrs.ClerkuserName) {
-            if (
-              attrs.ClerkuserName.toLowerCase() ===
-              userData.username.toLowerCase()
-            ) {
-              score += 1;
-            }
-          }
-
-          return { match, score };
-        });
-
-        // Sort by score descending
-        scoredMatches.sort((a, b) => b.score - a.score);
-
-        // Consider a match if score is at least 3
-        if (scoredMatches.length > 0 && scoredMatches[0].score >= 3) {
-          const bestMatch = scoredMatches[0].match;
-          console.log(
-            `Found strong match (score ${scoredMatches[0].score})`,
-            bestMatch
-          );
-          return bestMatch;
-        } else if (scoredMatches.length > 0) {
-          console.log(
-            `Found potential match but score too low (${scoredMatches[0].score})`,
-            scoredMatches[0].match
-          );
-        }
-      }
-    } catch (error) {
-      console.warn("Error searching by email:", error.message);
-    }
-
-    // Fallback - try to search by name + username
-    if (userData.firstName || userData.lastName || userData.username) {
-      try {
-        const searchTerms = [];
-        if (userData.firstName) searchTerms.push(userData.firstName);
-        if (userData.lastName) searchTerms.push(userData.lastName);
-        if (userData.username) searchTerms.push(userData.username);
-
-        const searchTerm = searchTerms.join(" ");
-        if (searchTerm) {
-          const nameResponse = await axiosClient.get(
-            `/clerck-webhooks?filters[$or][0][Clerk_First_name][$containsi]=${encodeURIComponent(
-              searchTerm
-            )}&filters[$or][1][Clerk_Last_Name][$containsi]=${encodeURIComponent(
-              searchTerm
-            )}&filters[$or][2][ClerkuserName][$containsi]=${encodeURIComponent(
-              searchTerm
-            )}`
-          );
-
-          if (nameResponse.data.data && nameResponse.data.data.length > 0) {
-            console.log(
-              "Found match by name/username:",
-              nameResponse.data.data[0]
-            );
-            return nameResponse.data.data[0];
-          }
-        }
-      } catch (error) {
-        console.warn("Error searching by name/username:", error.message);
-      }
-    }
-
-    console.log("No matching user found");
-    return null;
   } catch (error) {
     console.error("❌ Error finding matching user:", error);
     return null;
   }
 };
+
 export {
   updateUserLimits,
   syncClerkUser,
