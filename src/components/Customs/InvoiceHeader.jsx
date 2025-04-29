@@ -61,7 +61,7 @@ const InvoiceHeader = () => {
                         console.log("===========================================");
 
                         // Store user data in localStorage for admin panel access
-                        localStorage.setItem("matchedClerkUser", JSON.stringify(match));
+                        
 
                         // Update state with user data
                         setUserData(match);
@@ -96,7 +96,7 @@ const InvoiceHeader = () => {
                         setDataLoaded(true); // Mark data as loaded after all state updates
                     } else {
                         console.log("No matching user found in clerck-webhooks database");
-                        localStorage.removeItem("matchedClerkUser");
+                       
                         setUserData(null);
                         setDataLoaded(false);
                     }

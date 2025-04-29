@@ -11,6 +11,7 @@ import { GetUserRoyalties, SearchUserRoyalties } from "../../../Apis/R_Apis/Vehi
 const Dashboard = () => {
   const { user } = useUser();
   const [userRoyaltyData, setUserRoyaltyData] = useState([]);
+  const [userClerk, setClerkData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -21,13 +22,36 @@ const Dashboard = () => {
   const itemsPerPage = 10;
 
   // User stats
-  const [remainingCapacity, setRemainingCapacity] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
+    // Fetch user capacity data
+    const fetchUserCapacity = async () => {
+      if (!user) {
+        console.log("No user object found.");
+        return;
+      }
+
+      console.log("User Object:", user); // Check if user is valid
+
+      try {
+        const ClerkData = await findMatchingClerkUser(user);
+        console.log("Clerk Data:", ClerkData); // Should print data here
+        if (ClerkData) {
+          setClerkData(ClerkData);
+          setDataLoaded(true);
+        }
+      } catch (error) {
+        console.error("Error fetching user capacity:", error);
+      }
+    };
+
+    fetchUserCapacity();
+  }, [user])
+  useEffect(() => {
     if (user?.primaryEmailAddress?.emailAddress) {
       fetchUserRoyaltyList();
-      fetchUserCapacity();
+
     }
   }, [user, currentPage]);
 
@@ -38,31 +62,7 @@ const Dashboard = () => {
     }
   }, [searchTerm]);
 
-  // Fetch user capacity data
-  const fetchUserCapacity = async () => {
-    if (!user) return;
 
-    try {
-      const match = await findMatchingClerkUser(user);
-      console.log("Match:", match);
-      if (match) {
-        // Get remaining capacity from attributes or direct properties
-        let remaining = Number(match.attributes?.RemaningCapacity || match.RemaningCapacity || 0);
-        const total = Number(match.attributes?.userTotalQuantity || match.userTotalQuantity || 0);
-        const limit = Number(match.attributes?.Userlimit || match.Userlimit || 0);
-
-        // If remaining capacity wasn't explicitly set, calculate it
-        if (remaining === 0 && limit > 0) {
-          remaining = limit > total ? limit - total : 0;
-        }
-
-        setRemainingCapacity(remaining);
-        setDataLoaded(true);
-      }
-    } catch (error) {
-      console.error("Error fetching user capacity:", error);
-    }
-  };
 
   const fetchUserRoyaltyList = async () => {
     try {
@@ -158,9 +158,7 @@ const Dashboard = () => {
 
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wide font-medium text-green-800">Remaining {remainingCapacity || "0"}</p>
-
-
+                <p className="text-xs uppercase tracking-wide font-medium text-green-800">Remaining {userClerk.RemaningCapacity || "Error"}</p>
               </div>
             </div>
           )}

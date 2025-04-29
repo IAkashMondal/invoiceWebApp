@@ -57,7 +57,7 @@ const RoyaltyPreview = ({ qrCode }) => {
 
             // Optimize canvas capture settings
             const canvas = await html2canvas(content, {
-                scale: 0.5, // Reduced scale for better performance
+                scale: 3, // Reduced scale for better performance
                 useCORS: true,
                 logging: false,
                 allowTaint: true,
