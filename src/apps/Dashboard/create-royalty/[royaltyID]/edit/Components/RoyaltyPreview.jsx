@@ -7,7 +7,6 @@ import TextTEmp from "./preview/TextTEmp";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import { getDynamicYearRange } from "../../../../../../../Apis/GlobalFunction";
-import { useReactToPrint } from "react-to-print";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { GetParticularVehicle } from "../../../../../../../Apis/R_Apis/VehicleApis";
@@ -18,10 +17,10 @@ const RoyaltyPreview = ({ qrCode }) => {
     const [isLoading, setIsLoadind] = useState(false);
     const contentRef = useRef(null);
 
-    const reactToPrintFn = useReactToPrint({
-        contentRef,
-        documentTitle: `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`,
-    });
+    const reactToPrintFn = ()=>{
+        document.title = `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`,
+        window.print()
+    };
 
     // Fetch params from URL
     const params = useParams();
