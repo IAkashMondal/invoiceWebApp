@@ -8,6 +8,7 @@ import { addTimeToGeneratedTime, generateTimeObject } from "../../../../../../..
 import { policeStationData } from "../../../../../../../../Apis/TimeandPolicestation";
 import { GetOwnersDeatils } from "../../../../../../../../Apis/Minors/MinorsApi";
 import { GetParticularVehicle, updatePurchaserDetails } from "../../../../../../../../Apis/R_Apis/VehicleApis";
+import { updateUserLimits } from "../../../../../../../../Apis/Clerk/ClerkApis";
 
 const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
     // The component now imports policeStationData from TimeandPolicestation.js
@@ -294,6 +295,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
             }));
 
             console.log("Submitting data with district:", formDataAdd.PurchaserDristic);
+            // const respond = await updateUserLimits()
 
             await updatePurchaserDetails(params?.royaltyID, formDataAdd);
             enableNext(true);

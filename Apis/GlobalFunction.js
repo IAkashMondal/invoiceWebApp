@@ -234,7 +234,7 @@ export const generateNewChallanID = (prevChallanID) => {
   if (!prevChallanID) return null;
 
   // Generate a single random number between 1 and 999
-  const randomNum = Math.floor(Math.random() * 999) + 1;
+  const randomNum = Math.floor(Math.random() * 150) + 1;
 
   // Compute the new Challan ID
   const newChallanNumber = `${Number(prevChallanID) + randomNum}`;
