@@ -307,10 +307,33 @@ const findMatchingClerkUser = async (userData) => {
     return null;
   }
 };
+/**
+ * ✅ Updates the last saved E-Challan ID.
+ * @param {string} documentID - ID of the document to update.
+ * @param {Object} data - Updated E-Challan details.
+ * @returns {Promise} - Axios response.
+ */
+const addUserQuantity = async (documentId, data) => {
+  try {
+    const response = await axiosClient.put(
+      `/clerck-webhooks/${documentId}`,
+      { data } // ✅ Wrap payload inside { data: ... }
+    );
+    console.log("✅ Response:", response, "--- Sent data:", data);
+    return response;
+  } catch (error) {
+    console.error(
+      "❌ Error updating Prev Challan Id details:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
 
 export {
   updateUserLimits,
   syncClerkUser,
   findMatchingClerkUser,
   getAllClerkUsers,
+  addUserQuantity,
 };

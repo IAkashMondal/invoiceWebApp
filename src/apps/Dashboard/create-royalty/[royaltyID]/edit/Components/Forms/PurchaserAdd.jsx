@@ -8,19 +8,22 @@ import { addTimeToGeneratedTime, generateTimeObject } from "../../../../../../..
 import { policeStationData } from "../../../../../../../../Apis/TimeandPolicestation";
 import { GetOwnersDeatils } from "../../../../../../../../Apis/Minors/MinorsApi";
 import { GetParticularVehicle, updatePurchaserDetails } from "../../../../../../../../Apis/R_Apis/VehicleApis";
-import { updateUserLimits } from "../../../../../../../../Apis/Clerk/ClerkApis";
+import { addUserQuantity, findMatchingClerkUser } from "../../../../../../../../Apis/Clerk/ClerkApis";
+import { useUser } from "@clerk/clerk-react";
 
 const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
     // The component now imports policeStationData from TimeandPolicestation.js
     // This reference should be used everywhere in the component instead of a local definition
-
     const { setRoyaltyData } = useContext(RoyaltyInfoContext);
+    const { user } = useUser();
     const [ownersData, setOwnersData] = useState([]);
     const [selectedOwner, setSelectedOwner] = useState("Prasanta Kumar Hait");
     const [Validitypreview, setValidypreview] = useState("");
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [validityInputValue, setValidityInputValue] = useState("");
+    const [documentID, setDocumentID] = useState(null);
+    const [quantity, setQuantity] = useState(null);
     const params = useParams();
     const [IssueDates, setIssueDates] = useState({
         generatedTime: 0,
@@ -33,6 +36,16 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         ValidityDate: "",
         OwnerName: "Prasanta Kumar Hait"
     });
+
+    useEffect(() => {
+        const fetchuser = async () => {
+            if (user) {
+                const match = await findMatchingClerkUser(user);
+                setDocumentID(match);
+            }
+        }
+        fetchuser();
+    }, [user]);
 
     // Function to auto-fill data based on police station
     const handlePoliceStationChange = (e) => {
@@ -114,6 +127,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         setValidityInputValue(value);
         handleValidityCalculation(value);
     };
+    console.log("documentID", documentID);
 
     // Separate useEffect for fetching owner data
     useEffect(() => {
@@ -240,7 +254,8 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                 // Fetch vehicle details
                 const response = await GetParticularVehicle(params.royaltyID);
                 if (response.data?.data) {
-                    console.log("Fetched Vehicle Data:", response.data.data);
+                    setQuantity(response.data.data.quantity);
+                    console.log("Fetched Vehicle Data:", response.data.data.quantity);
                 } else {
                     console.warn("No vehicle data found for this Royalty ID.");
                 }
@@ -284,6 +299,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
     const handleSubmitAdd = async (e) => {
         e.preventDefault();
         setLoading(true);
+
         try {
             // Make sure district is explicitly included in the context
             setRoyaltyData(prev => ({
@@ -295,7 +311,28 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
             }));
 
             console.log("Submitting data with district:", formDataAdd.PurchaserDristic);
-            // const respond = await updateUserLimits()
+
+            // Get vehicle details to determine the quantity
+            // const vehicleResponse = await GetParticularVehicle(params?.royaltyID);
+            // const quantity = Number(vehicleResponse?.data?.data?.VehicleCapacity || 0);
+
+            if (documentID && documentID.id) {
+                // Calculate new quantity by adding vehicle capacity to current total
+                const newQuantity = Number(documentID.userTotalQuantity );
+                console.log("newQuantity", newQuantity);
+
+                // Update user data with new quantity - wrap it in data object as required by API
+                const updateData = {
+                    
+                        userTotalQuantity: newQuantity + Number(quantity),
+                        RemaningCapacity: Number(documentID.RemaningCapacity) - Number(quantity),
+                    
+                };
+
+                // Call addUserQuantity with user ID and update data
+                await addUserQuantity(documentID.documentId, updateData);
+                console.log("Updated user total quantity to:", updateData);
+            }
 
             await updatePurchaserDetails(params?.royaltyID, formDataAdd);
             enableNext(true);

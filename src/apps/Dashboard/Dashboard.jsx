@@ -40,6 +40,7 @@ const Dashboard = () => {
         if (ClerkData) {
           setClerkData(ClerkData);
           setDataLoaded(true);
+          console.log("new data",ClerkData)
         }
       } catch (error) {
         console.error("Error fetching user capacity:", error);
@@ -158,7 +159,7 @@ const Dashboard = () => {
 
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wide font-medium text-green-800">Remaining {userClerk.RemaningCapacity || "Error"}</p>
+                <p className="text-xs uppercase tracking-wide font-medium text-green-800">Remaining {userClerk.RemaningCapacity}</p>
               </div>
             </div>
           )}
