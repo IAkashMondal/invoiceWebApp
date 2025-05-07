@@ -32,10 +32,11 @@ const InvoiceHeader = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
 
     // Log Clerk user data for debugging
+    console.log("user new object================>:::::::", user);
     useEffect(() => {
         if (isSignedIn && user) {
           
-            console.log("Full user object:", user);
+            // console.log("Full user object:", user);
             console.log("======================");
 
             // Find matching user in clerck-webhooks
@@ -106,7 +107,7 @@ const InvoiceHeader = () => {
                 }
             };
 
-            // fetchMatchingUser();
+            fetchMatchingUser();
         }
     }, [isSignedIn, user]);
 
