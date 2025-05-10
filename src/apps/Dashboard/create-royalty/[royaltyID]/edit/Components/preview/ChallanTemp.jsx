@@ -9,7 +9,7 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
       {/* Title */}
       <p id="nameText" className="font-bold lg:text-[15pt] font-helvetica sm:text-[11px]
        text-center sm:w-full lg:mt-0 lg:p-0 sm:text-red-600 sm:m-[1mm] sm:mt-0">
-        ROAD E-Challan for sand / riverbed materials Transport
+        Road E-Challan for sand / riverbed materials Transport
       </p>
       {/* Container for Details & QR Code */}
       <div id="challnabox" className="grid grid-flow-col font-serif sm:mb-0 sm:p-0 ">
@@ -38,7 +38,7 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
           </div>
           <div className="mb-[-5mm] sm:mb-[0mm] leading-[2.5mm]">
             <p id="boxtext" className="flex font-bold lg:text-[13pt] sm:text-[7pt] ">
-              <span id="boxgap" className="lg:min-w-[3.7cm] sm:min-w-[2.7cm]">Quantity</span>
+              <span id="boxgap" className="lg:min-w-[3.7cm] sm:min-w-[2.7cm]">Quantity of Sand</span>
               <span className="mr-1">:</span>
               <span>{`${RoyaltyData.quantity}.00 ctf`}<span id="qntText" className="lg:text-[9pt] font-light sm:text-[5pt]"> ({RoyaltyData.VehicleQunText} ctf)</span></span>
             </p>

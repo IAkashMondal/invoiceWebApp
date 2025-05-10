@@ -24,6 +24,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
     const [validityInputValue, setValidityInputValue] = useState("");
     const [documentID, setDocumentID] = useState(null);
     const [quantity, setQuantity] = useState(null);
+    const [vehicleNumber, setVehicleNumber] = useState(null);
     const params = useParams();
     const [IssueDates, setIssueDates] = useState({
         generatedTime: 0,
@@ -46,9 +47,10 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         }
         fetchuser();
     }, [user]);
-
+    console.log(vehicleNumber, "ooc")
     // Function to auto-fill data based on police station
     const handlePoliceStationChange = (e) => {
+
         const inputPoliceStation = e.target.value;
         setFormDataAdd(prev => ({
             ...prev,
@@ -254,6 +256,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                 // Fetch vehicle details
                 const response = await GetParticularVehicle(params.royaltyID);
                 if (response.data?.data) {
+                    setVehicleNumber(response.data.data.Registration_No);
                     setQuantity(response.data.data.quantity);
                     console.log("Fetched Vehicle Data:", response.data.data.quantity);
                 } else {
@@ -318,20 +321,32 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
 
             if (documentID && documentID.id) {
                 // Calculate new quantity by adding vehicle capacity to current total
-                const newQuantity = Number(documentID.userTotalQuantity );
-                console.log("newQuantity", newQuantity);
+                const newQuantity = Number(documentID.userTotalQuantity);
+                const newPersonalQuantity = Number(documentID.userPersonalQuantity);
+                console.log("newQuantity", newQuantity, newPersonalQuantity);
 
                 // Update user data with new quantity - wrap it in data object as required by API
-                const updateData = {
-                    
+
+                if (vehicleNumber === 'WB73E2234' || vehicleNumber === 'WB73E9469' || vehicleNumber === 'WB73C5024') {
+                    const updateData = {
+                        userPersonalQuantity: newPersonalQuantity + Number(quantity),
+                    };
+                    // Call addUserQuantity with user ID and update data
+                    await addUserQuantity(documentID.documentId, updateData);
+                    console.log("Updated user total quantity to:", updateData);
+
+                } else {
+                    const updateDatas = {
+
                         userTotalQuantity: newQuantity + Number(quantity),
                         RemaningCapacity: Number(documentID.RemaningCapacity) - Number(quantity),
-                    
-                };
 
-                // Call addUserQuantity with user ID and update data
-                await addUserQuantity(documentID.documentId, updateData);
-                console.log("Updated user total quantity to:", updateData);
+                    };
+                    // Call addUserQuantity with user ID and update data
+                    await addUserQuantity(documentID.documentId, updateDatas);
+                    console.log("Updated user total quantity to:", updateDatas);
+                }
+
             }
 
             await updatePurchaserDetails(params?.royaltyID, formDataAdd);
@@ -408,7 +423,9 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                                     )
                                         ? `Auto-filled district (${policeStationData.find(item =>
                                             item.policeStation.toLowerCase() === formDataAdd.PoliceStation.toLowerCase()
-                                        )?.PurchaserDristic}) and validity time`
+                                        )?.PurchaserDristic}) and validity time (${policeStationData.find(item =>
+                                            item.policeStation.toLowerCase() === formDataAdd.PoliceStation.toLowerCase()
+                                        )?.validity} hrs)`
                                         : ""}
                                 </p>
                             )}

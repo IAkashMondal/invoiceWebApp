@@ -77,6 +77,7 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
                             <div className="grid grid-flow-row">
                                 <p className=" p-0">{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 || ""}</p>
                                 <span >{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 || ""}</span>
+                                <p >{RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine3 || ""}</p>
                             </div>
                         </p>
                         }
