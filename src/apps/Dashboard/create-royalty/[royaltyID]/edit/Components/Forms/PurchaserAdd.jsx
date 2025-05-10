@@ -327,7 +327,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
 
                 // Update user data with new quantity - wrap it in data object as required by API
 
-                if (vehicleNumber === 'WB73E2234' || vehicleNumber === 'WB73E9469' || vehicleNumber === 'WB73C5024') {
+                if (vehicleNumber === 'WB73E2234' || vehicleNumber === 'WB73E9469' || vehicleNumber === 'WB73C5024' || vehicleNumber === 'TEST1234') {
                     const updateData = {
                         userPersonalQuantity: newPersonalQuantity + Number(quantity),
                     };
