@@ -77,8 +77,8 @@ body {
     margin: 0;
   }
   #qrcan {
-    width: 3.1cm !important;
-    height: 3.2cm !important;
+    width: 3cm !important;
+    height: 3cm !important;
     margin-left: 4mm;
     margin-right: 7mm;
     margin-top: 1mm;
@@ -87,7 +87,7 @@ body {
   #nameText {
     /* font-bold text-[22px] text-center m-2 */
     font: bold;
-    font-size: 15pt;
+    font-size: 16pt;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     color: black;
