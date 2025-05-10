@@ -59,7 +59,7 @@ body {
     /* flex font-bold lg:text-[13pt] */
     display: flex;
     font: bold;
-    font-size: 12.7pt;
+    font-size: 13pt;
     padding: 0;
     margin: 0;
   }
@@ -67,7 +67,7 @@ body {
     margin-top: 7mm;
   }
   #boxgap {
-    width: 3.8cm;
+    width: 3.7cm;
     display: flex;
   }
   #qntText {
