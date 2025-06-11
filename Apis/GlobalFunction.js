@@ -79,7 +79,8 @@ export const generateTimeObject = () => {
   // Unique Generated Timestamp: "DDMMYYHHMMSS"
   const generatedTime = `${day}${month}${year}${hours}${minutes}${seconds}`;
   const ChallandT = `${day}${month}${year}${minutes}${seconds}`;
-  return { generatedTime, generatedOn, issueDate, ChallandT };
+  const EachDate = `20${year}-${month}-${day}`;
+  return { generatedTime, generatedOn, issueDate, ChallandT ,EachDate};
 };
 // Function to add hours and minutes to generated timestamp
 export const addTimeToGeneratedTime = (generatedTime, additionalTime) => {

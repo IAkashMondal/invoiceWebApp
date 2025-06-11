@@ -12,6 +12,8 @@ import { addUserQuantity, findMatchingClerkUser } from "../../../../../../../../
 import { useUser } from "@clerk/clerk-react";
 
 const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
+    // The component now imports policeStationData from TimeandPolicestation.js
+    // This reference should be used everywhere in the component instead of a local definition
     const { setRoyaltyData } = useContext(RoyaltyInfoContext);
     const { user } = useUser();
     const [ownersData, setOwnersData] = useState([]);
@@ -33,7 +35,6 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         PoliceStation: "",
         PurchaserDristic: "",
         ValidityDate: "",
-        TimeDiffrence: validityInputValue,
         OwnerName: "Prasanta Kumar Hait"
     });
 
@@ -46,9 +47,10 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         }
         fetchuser();
     }, [user]);
-
+    console.log(vehicleNumber, "ooc")
     // Function to auto-fill data based on police station
     const handlePoliceStationChange = (e) => {
+
         const inputPoliceStation = e.target.value;
         setFormDataAdd(prev => ({
             ...prev,
@@ -99,22 +101,17 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
             const { validityTime, VerefyChallanNum } = await addTimeToGeneratedTime(IssueDates?.generatedTime, validityInput);
 
             setValidypreview(validityTime);
-            setValidityInputValue(value); // Make sure to update validityInputValue
 
             // Save validity time in formDataAdd
-            setFormDataAdd((prev) => {
-                return {
-                    ...prev,
-                    ValidityDate: validityTime,
-                    VerefyChallanNum: VerefyChallanNum,
-                    TimeDiffrence: value // Add TimeDiffrence here
-                };
-            });
+            setFormDataAdd((prev) => ({
+                ...prev,
+                ValidityDate: validityTime,
+                VerefyChallanNum: VerefyChallanNum
+            }));
 
             setRoyaltyData((prev) => ({
                 ...prev,
                 ValidityDate: validityTime,
-                TimeDiffrence: value // Add TimeDiffrence here
             }));
         } catch (error) {
             console.error("Error calculating validity time:", error);
@@ -132,6 +129,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         setValidityInputValue(value);
         handleValidityCalculation(value);
     };
+    console.log("documentID", documentID);
 
     // Separate useEffect for fetching owner data
     useEffect(() => {
@@ -222,6 +220,19 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         }
     };
 
+    // Add debug to track district value changes
+    useEffect(() => {
+        console.log("District value updated:", formDataAdd.PurchaserDristic);
+
+        // Update RoyaltyData to ensure district is always in sync
+        if (formDataAdd.PurchaserDristic) {
+            setRoyaltyData(prev => ({
+                ...prev,
+                PurchaserDristic: formDataAdd.PurchaserDristic
+            }));
+        }
+    }, [formDataAdd.PurchaserDristic, setRoyaltyData]);
+
     // Separate useEffect for fetching vehicle details and setting up time data
     useEffect(() => {
         const fetchVehicleAndTimeData = async () => {
@@ -247,6 +258,7 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                 if (response.data?.data) {
                     setVehicleNumber(response.data.data.Registration_No);
                     setQuantity(response.data.data.quantity);
+                    console.log("Fetched Vehicle Data:", response.data.data.quantity);
                 } else {
                     console.warn("No vehicle data found for this Royalty ID.");
                 }
@@ -292,42 +304,52 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
         setLoading(true);
 
         try {
-
             // Make sure district is explicitly included in the context
             setRoyaltyData(prev => ({
                 ...prev,
                 PurchaserDristic: formDataAdd.PurchaserDristic,
                 PoliceStation: formDataAdd.PoliceStation,
                 PurchaserAdd: formDataAdd.PurchaserAdd,
-                ValidityDate: formDataAdd.ValidityDate,
-                TimeDiffrence: validityInputValue,
+                ValidityDate: formDataAdd.ValidityDate
             }));
 
-            // Create a new object with the updated TimeDiffrence
-            const updatedFormData = {
-                ...formDataAdd,
-                TimeDiffrence: validityInputValue
-            };
+            console.log("Submitting data with district:", formDataAdd.PurchaserDristic);
+
+            // Get vehicle details to determine the quantity
+            // const vehicleResponse = await GetParticularVehicle(params?.royaltyID);
+            // const quantity = Number(vehicleResponse?.data?.data?.VehicleCapacity || 0);
 
             if (documentID && documentID.id) {
+                // Calculate new quantity by adding vehicle capacity to current total
                 const newQuantity = Number(documentID.userTotalQuantity);
                 const newPersonalQuantity = Number(documentID.userPersonalQuantity);
+                console.log("newQuantity", newQuantity, newPersonalQuantity);
+
+                // Update user data with new quantity - wrap it in data object as required by API
 
                 if (vehicleNumber === 'WB73E2234' || vehicleNumber === 'WB73E9469' || vehicleNumber === 'WB73C5024' || vehicleNumber === 'TEST1234') {
                     const updateData = {
                         userPersonalQuantity: newPersonalQuantity + Number(quantity),
                     };
+                    // Call addUserQuantity with user ID and update data
                     await addUserQuantity(documentID.documentId, updateData);
+                    console.log("Updated user total quantity to:", updateData);
+
                 } else {
                     const updateDatas = {
+
                         userTotalQuantity: newQuantity + Number(quantity),
                         RemaningCapacity: Number(documentID.RemaningCapacity) - Number(quantity),
+
                     };
+                    // Call addUserQuantity with user ID and update data
                     await addUserQuantity(documentID.documentId, updateDatas);
+                    console.log("Updated user total quantity to:", updateDatas);
                 }
+
             }
 
-            await updatePurchaserDetails(params?.royaltyID, updatedFormData);
+            await updatePurchaserDetails(params?.royaltyID, formDataAdd);
             enableNext(true);
             setActiveFormIndex((prev) => Math.min(prev + 1, 3));
         } catch (error) {

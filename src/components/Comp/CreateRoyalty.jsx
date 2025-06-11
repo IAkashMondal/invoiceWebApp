@@ -79,7 +79,7 @@ const CreateRoyalty = () => {
         setError(null); // Clear any existing errors
 
         const uuid = uuidv4(); // Generate a unique identifier
-        const { generatedTime, generatedOn, ChallandT } = generateTimeObject();
+        const { generatedTime, generatedOn, ChallandT, EachDate } = generateTimeObject();
         setGeneratedon({ generatedTime, generatedOn, ChallandT });
         const EChallanNumber = `${newEChallanId}/T/${getDynamicYearRange()}/${ChallandT}/PS`
         const data = {
@@ -95,7 +95,8 @@ const CreateRoyalty = () => {
                 GeneratedDT: String(generatedOn),
                 TimeStamp: Number(generatedTime),
                 EChallanDT: String(ChallandT),
-                EChallanNo: String(`${EChallanNumber}`)
+                EChallanNo: String(`${EChallanNumber}`),
+                EachDate: EachDate,
             }
         };
 
