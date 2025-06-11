@@ -35,6 +35,7 @@ const router = createBrowserRouter([
       { path: `${ViteUrl}`, element: <Dashboard /> },
       { path: "/dashboard/feedback", element: <FeedbackFrom /> },
       { path: `${ViteUrl}/:royaltyID/create`, element: <EditRoyalty /> },
+      { path: `${ViteUrl}/:royaltyID/edit`, element: <EditRoyalty /> },
       { path: "/recharge", element: <RechargePage /> },
       { path: "/dashboard/graph", element: <Graph /> },
       { path: "/dashboard/admin", element: <AdminPanel /> },
