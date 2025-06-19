@@ -16,9 +16,12 @@ import {
 } from "lucide-react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-
+import { addTimeToGeneratedTime, generateNewChallanID, generateTimeObject } from "../../../Apis/GlobalFunction";
+import { GetPrevChallanID } from "../../../Apis/GlobalApi";
+import { toast } from "sonner";
+import { GetOwnersDeatils } from "../../../Apis/Minors/MinorsApi";
 // Time utility functions
-export const generateTimeObject = () => {
+export const generateTimeObjects = () => {
 
     const now = new Date();
 
@@ -60,7 +63,9 @@ export const getDynamicYearRange = () => {
 };
 
 const RoyaltyCard = ({ data }) => {
+
     const ViteUrl = import.meta.env.VITE_REDIRECT;
+    const [datas, setDatas] = useState(data);
     const [isValid, setIsValid] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
     const navigate = useNavigate();
@@ -68,7 +73,8 @@ const RoyaltyCard = ({ data }) => {
     // Check validity based on challan verification time
     useEffect(() => {
         const checkValidity = async () => {
-            const { generatedTimeMili } = await generateTimeObject();
+
+            const { generatedTimeMili } = await generateTimeObjects();
 
             // Check if challan is valid based on verification time
             if (data?.VerefyChallanNum) {
@@ -81,6 +87,7 @@ const RoyaltyCard = ({ data }) => {
 
         checkValidity();
     }, [data]);
+
 
     // Colors based on validity status
     const statusColors = {
@@ -101,14 +108,168 @@ const RoyaltyCard = ({ data }) => {
 
     const handleEdit = () => {
         setShowDialog(false);
-        navigate(`${ViteUrl}/${data.documentId}/edit`);
+        navigate(`${ViteUrl}/${data.documentId}/edit`, {
+            state: { ownerData: datas }
+        });
     };
 
-    const handleRenew = () => {
-        setShowDialog(false);
-        // Add renewal logic here
-        navigate(`${ViteUrl}/${data.documentId}/renew`);
+
+    const fetchPrevChallanID = async () => {
+        try {
+            const response = await GetPrevChallanID();
+            if (response.data?.data?.length > 0) {
+                const newPrevChallanId = response?.data.data[0].PrevChallanID;
+                // Generate new ID using the newly fetched challan ID
+                if (newPrevChallanId) {
+                    const newID = generateNewChallanID(newPrevChallanId);
+                    setDatas(prevData => ({
+                        ...prevData,
+                        EchallanId: newID
+                    }));
+                    // Return only the new ID for use in handleRenew
+                    return { newID };
+                } else {
+                    console.warn("No valid previous Challan ID to generate new ID");
+                    toast.warning("Could not generate new Challan ID");
+                    return null;
+                }
+            } else {
+                console.warn("No previous Challan ID found in response");
+                toast.warning("No previous Challan ID found");
+                return null;
+            }
+        } catch (error) {
+            console.error("Error in fetchPrevChallanID:", {
+                message: error.message,
+                response: error.response?.data,
+                status: error.response?.status
+            });
+            toast.error("Failed to fetch previous Challan ID");
+            return null;
+        }
     };
+
+    const handleTimeGen = async () => {
+        const { issueDate, generatedTime, generatedOn, ChallandT, EachDate } = generateTimeObject();
+        setDatas(prevData => ({
+            ...prevData,
+            EChallanDT: generatedTime,
+            GeneratedDT: generatedOn,
+            ChallandT: ChallandT,
+            EachDate: EachDate,
+            IssueDate: issueDate
+        }));
+
+        const returnData = { ChallandT, generatedTime, generatedOn, EachDate, issueDate };
+        return returnData;
+    };
+
+    const handelValidityCal = async (generatedTime) => {
+        try {
+            if (!generatedTime) {
+                console.warn("⚠️ Generated time is missing");
+                return null;
+            }
+            const result = await addTimeToGeneratedTime(generatedTime, datas?.TimeDiffrence);
+
+            if (!result) {
+                console.warn("⚠️ Failed to calculate validity time - result is null");
+                return null;
+            }
+
+            const { validityTime = null, VerefyChallanNum = null } = result;
+            if (!validityTime || !VerefyChallanNum) {
+                console.warn("⚠️ Invalid validity calculation result:", result);
+                return null;
+            }
+
+            setDatas(prevData => ({
+                ...prevData,
+                ValidityDate: validityTime,
+                VerefyChallanNum: VerefyChallanNum
+            }));
+
+            return { IssueDate: generatedTime, ValidityDate: validityTime, VerefyChallanNum };
+
+        } catch (error) {
+            console.error("❌ Error in handelValidityCal:", {
+                message: error.message,
+                stack: error.stack,
+                generatedTime: generatedTime
+            });
+            return null;
+        }
+    };
+
+    const handleRenew = async () => {
+        setShowDialog(false);
+
+        try {
+            const result = await fetchPrevChallanID();
+            if (!result || !result.newID) {
+                toast.error("Failed to generate new Challan ID");
+                return;
+            }
+            const { newID } = result;
+
+            const timeData = await handleTimeGen();
+
+            const validityData = await handelValidityCal(timeData.generatedTime);
+
+            const EChallanNumber = `${newID}/T/${getDynamicYearRange()}/${timeData.ChallandT}/PS`;
+
+            // Create the complete updated data object with all new values
+            const updatedData = {
+                ...datas,
+                EChallanNo: EChallanNumber,
+                EchallanId: newID,
+                EChallanDT: timeData.generatedTime,
+                GeneratedDT: timeData.generatedOn,
+                ChallandT: timeData.ChallandT,
+                EachDate: timeData.EachDate,
+                IssueDate: timeData.issueDate,
+                ...(validityData && {
+                    ValidityDate: validityData.ValidityDate,
+                    VerefyChallanNum: validityData.VerefyChallanNum
+                })
+            };
+            // Update local state
+            setDatas(updatedData);
+
+            toast.success("Navigating to renewal page!");
+            // Navigate to renew page with the complete updated data
+            navigate(`${ViteUrl}/${data.documentId}/renew?challan=${EChallanNumber}`, {
+                state: { datas: updatedData, ownerData: updatedData }
+            });
+
+        } catch (error) {
+            console.error("Error in handleRenew:", error);
+            toast.error("Failed to prepare for renewal");
+        }
+    };
+
+    useEffect(() => {
+        const fetchOwnerData = async () => {
+            try {
+                const ownersResponse = await GetOwnersDeatils();
+                if (ownersResponse?.data?.data) {
+                    if (!datas.OwnerName) return;
+                    const matchedOwner = ownersResponse.data.data.find(
+                        owner => owner.OwnerName && owner.OwnerName.trim().toLowerCase() === datas.OwnerName.trim().toLowerCase()
+                    );
+                    if (matchedOwner) {
+                        setDatas(prev => ({
+                            ...prev,
+                            ...matchedOwner
+                        }));
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching owner details:", error.response?.data || error.message);
+            }
+        };
+        fetchOwnerData();
+    }, [datas.OwnerName]);
 
     return (
         <div className="relative w-full h-full">
@@ -116,10 +277,10 @@ const RoyaltyCard = ({ data }) => {
             <div
                 onClick={handleCardClick}
                 className="relative overflow-hidden rounded-xl p-3 sm:p-5 h-[195px] sm:h-[250px] md:h-[220px] 
-                transition-all duration-300 cursor-pointer
-                hover:shadow-lg hover:translate-y-[-5px] hover:border-blue-200
-                hover:bg-gradient-to-br hover:from-white hover:to-blue-50
-                group border border-gray-100 w-full bg-gradient-to-br from-white to-gray-50"
+                    transition-all duration-300 cursor-pointer
+                    hover:shadow-lg hover:translate-y-[-5px] hover:border-blue-200
+                    hover:bg-gradient-to-br hover:from-white hover:to-blue-50
+                    group border border-gray-100 w-full bg-gradient-to-br from-white to-gray-50"
             >
                 {/* Color indicator bar - expands on hover */}
                 <div className={`absolute top-0 right-0 w-1/3 h-1 ${statusColors.indicator} transition-all duration-300 group-hover:w-full`}></div>
@@ -316,8 +477,11 @@ RoyaltyCard.propTypes = {
         IssueDate: PropTypes.string,
         ValidityDate: PropTypes.string,
         GeneratedDT: PropTypes.string,
+        TimeDiffrence: PropTypes.string,
         VerefyChallanNum: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        userEmail: PropTypes.string,
+        userName: PropTypes.string,
     }).isRequired,
 };
 

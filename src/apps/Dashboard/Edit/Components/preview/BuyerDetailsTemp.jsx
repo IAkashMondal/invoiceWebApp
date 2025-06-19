@@ -1,7 +1,8 @@
 import PropTypes from "prop-types"; // Import PropTypes
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GetParticularVehicle } from "../../../../../../../../Apis/R_Apis/VehicleApis";
+import { GetParticularVehicle } from "../../../../../../Apis/R_Apis/VehicleApis";
+
 
 const BuyerDetailsTemp = ({ RoyaltyData }) => {
     const [vehicleNoQnt, setvehicleNoQnt] = useState("");
@@ -50,28 +51,28 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                             <p className="text-transparent sm:text-transparent">.</p>
                         </span>
                         <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.NameofPurchaser || "NA"}</span>
+                        <span>{RoyaltyData?.NameofPurchaser || "NA"}</span>
                     </p>
 
                     <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Mobile No. </span>
                         <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.PurchaserMobileNo || "NA"}</span>
+                        <span>{RoyaltyData?.PurchaserMobileNo || "NA"}</span>
                     </p>
                     <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm] sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Address</span>
                         <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.PurchaserAdd || "NA"}</span>
+                        <span>{RoyaltyData?.PurchaserAdd || "NA"}</span>
                     </p>
                     <p className="flex font-serif font-normal ml-[1mm] lg:mb-[6mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Police Station</span>
                         <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.PoliceStation || "NA"}</span>
+                        <span>{RoyaltyData?.PoliceStation || "NA"}</span>
                     </p>
                     <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm] sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">District</span>
                         <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.PurchaserDristic}</span>
+                        <span>{RoyaltyData?.PurchaserDristic}</span>
                     </p>
                     <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">State </span>
@@ -85,20 +86,20 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                             <span className="text-transparent">H</span>
                         </div>
                         <span className="mr-[2mm] ">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.VehicleType || "NA"}</span>
+                        <span>{RoyaltyData?.VehicleType || "NA"}</span>
                     </p>
                     <p id="sellergap" className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]   lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Registration No.</span>
                         <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.Registration_No || "NA"}</span>
+                        <span>{RoyaltyData?.Registration_No || "NA"}</span>
                     </p>
 
                     <p className="flex font-serif font-normal ml-[1mm] lg:mb-[2mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Capacity (in Kg) </span>
                         <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.VehicleCapacity || "NA"}</span>
+                        <span>{RoyaltyData?.VehicleCapacity || "NA"}</span>
                     </p>
-                    {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 &&
+                    {RoyaltyData?.OwnerAddressLine1 &&
                         <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm]">
                             <span className="lg:w-[3.7cm] sm:w-[2cm]"></span>
                             <div className="grid grid-flow-row">
@@ -119,14 +120,13 @@ BuyerDetailsTemp.propTypes = {
         NameofPurchaser: PropTypes.string,
         PurchaserMobileNo: PropTypes.string,
         PurchaserAdd: PropTypes.string,
-        PurchaserPoliceStaion: PropTypes.string,
-        PurchaserDistic: PropTypes.string,
+        PoliceStation: PropTypes.string,
+        PurchaserDristic: PropTypes.string,
         State: PropTypes.string,
         Registration_No: PropTypes.string,
         VehicleType: PropTypes.string,
         VehicleCapacity: PropTypes.string,
-        RoyaltyData: PropTypes.object,
-
+        OwnerAddressLine1: PropTypes.string,
     }),
 };
 

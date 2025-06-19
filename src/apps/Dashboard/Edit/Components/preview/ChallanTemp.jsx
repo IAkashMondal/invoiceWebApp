@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { QRCodeSVG } from "qrcode.react";
-import { getDynamicYearRange } from "../../../../../../../../Apis/GlobalFunction";
+import { getDynamicYearRange } from "../../../../../../Apis/GlobalFunction";
+
 
 const ChallanTemp = ({ qrCode, RoyaltyData }) => {
   const EChallanNumber = `${RoyaltyData?.EchallanId}/T/${getDynamicYearRange()}/${RoyaltyData?.EChallanDT}/PS`
@@ -40,14 +41,14 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
             <p id="boxtext" className="flex font-bold lg:text-[13pt] sm:text-[7pt] ">
               <span id="boxgap" className="lg:min-w-[3.7cm] sm:min-w-[2.7cm]">Quantity</span>
               <span className="mr-1">:</span>
-              <span>{`${RoyaltyData.quantity}.00 ctf`}<span id="qntText" className="lg:text-[9pt] font-light sm:text-[5pt]"> ({RoyaltyData.VehicleQunText} ctf)</span></span>
+              <span>{`${RoyaltyData?.quantity}.00 ctf`}<span id="qntText" className="lg:text-[9pt] font-light sm:text-[5pt]"> ({RoyaltyData?.VehicleQunText} ctf)</span></span>
             </p>
           </div>
           <div className="mb-[3mm] sm:mb-[0mm] leading-[8mm]">
             <p id="boxtext" className="flex font-bold lg:text-[13pt] sm:text-[7pt] ">
               <span id="boxgap" className=" lg:min-w-[3.7cm] sm:min-w-[2.7cm]">Vehicle No.</span>
               <span className="mr-1">:</span>
-              <span>{`${RoyaltyData.Registration_No} (${RoyaltyData?.VehicleType})`}</span>
+              <span>{`${RoyaltyData?.Registration_No} (${RoyaltyData?.VehicleType})`}</span>
             </p>
           </div>
         </div>

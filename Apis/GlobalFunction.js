@@ -169,7 +169,6 @@ export const getFinancialYear = () => {
   return `${startYear.toString().slice(-2)}-${endYear.toString().slice(-2)}`;
 };
 
-console.log(getFinancialYear()); // Example output: "24-25"
 
 export function numberToWords(num) {
   if (num === null || num === undefined || isNaN(num)) return "Invalid number";
