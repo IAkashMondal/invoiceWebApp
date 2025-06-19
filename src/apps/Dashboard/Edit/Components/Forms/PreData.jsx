@@ -1,11 +1,12 @@
-import RoyaltyPreview from '../RoyaltyPreview'
+
 import PropTypes from "prop-types";
+import EditRoyaltyPreview from "../../MainDoc/EditRoyaltyPreview";
 
 const PreData = ({ qrCode, RoyaltyData }) => {
 
   return (
     <div className="flex justify-center items-center sm:h-full w-full">
-      <RoyaltyPreview qrCode={qrCode} RoyaltyData={RoyaltyData} />
+      <EditRoyaltyPreview qrCode={qrCode} RoyaltyData={RoyaltyData} />
     </div>
   )
 }

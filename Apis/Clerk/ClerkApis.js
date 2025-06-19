@@ -275,7 +275,6 @@ const syncClerkUser = async (userData) => {
  * @returns {Promise<Object>} - Matching user data from clerck-webhooks or null if no match
  */
 const findMatchingClerkUser = async (userData) => {
-  console.log("userdata ", userData);
   try {
     if (!userData || !userData.id) {
       console.error("Missing id in user data");
@@ -283,7 +282,6 @@ const findMatchingClerkUser = async (userData) => {
     }
 
     const { id } = userData;
-    console.log(`Searching for matching user with ID: ${id}`);
 
     // Fetch user data by Clerk ID (the most precise match)
     try {
@@ -292,7 +290,6 @@ const findMatchingClerkUser = async (userData) => {
       );
 
       if (idResponse.data.data && idResponse.data.data.length > 0) {
-        console.log("Found match by Clerk ID:", idResponse.data.data[0]);
         return idResponse.data.data[0]; // Return the first match
       } else {
         console.log("No user found with the provided Clerk ID.");
@@ -319,7 +316,6 @@ const addUserQuantity = async (documentId, data) => {
       `/clerck-webhooks/${documentId}`,
       { data } // ✅ Wrap payload inside { data: ... }
     );
-    console.log("✅ Response:", response, "--- Sent data:", data);
     return response;
   } catch (error) {
     console.error(

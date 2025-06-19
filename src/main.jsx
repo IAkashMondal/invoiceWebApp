@@ -19,6 +19,8 @@ import ContactPage from './apps/Others/Contact.jsx';
 import Graph from './apps/Dashboard/Recharge/Graph.jsx';
 import AdminPanel from './apps/Admin/AdminPanel.jsx';
 import Renew from './apps/Renew/Renew.jsx';
+import EditOldRoyalty from './apps/Dashboard/Edit/index.jsx';
+import EditRoyaltyPreview from './apps/Dashboard/Edit/MainDoc/EditRoyaltyPreview.jsx';
 
 // ✅ Fetch Clerk Publishable Key Correctly
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -35,13 +37,14 @@ const router = createBrowserRouter([
       { path: `${ViteUrl}`, element: <Dashboard /> },
       { path: "/dashboard/feedback", element: <FeedbackFrom /> },
       { path: `${ViteUrl}/:royaltyID/create`, element: <EditRoyalty /> },
-      { path: `${ViteUrl}/:royaltyID/edit`, element: <EditRoyalty /> },
+      { path: `${ViteUrl}/:royaltyID/edit`, element: <EditOldRoyalty /> },
       { path: "/recharge", element: <RechargePage /> },
       { path: "/dashboard/graph", element: <Graph /> },
       { path: "/dashboard/admin", element: <AdminPanel /> },
       {
         path: `${ViteUrl}/:royaltyID/renew`, element: <Renew />
       },
+      { path: `${ViteUrl}/:royaltyID/view`, element: <EditRoyaltyPreview/>}
     ]
   },
   { path: "/", element: <Home /> },

@@ -32,15 +32,11 @@ const Dashboard = () => {
         return;
       }
 
-      console.log("User Object:", user); // Check if user is valid
-
       try {
         const ClerkData = await findMatchingClerkUser(user);
-        console.log("Clerk Data:", ClerkData); // Should print data here
         if (ClerkData) {
           setClerkData(ClerkData);
           setDataLoaded(true);
-          console.log("new data",ClerkData)
         }
       } catch (error) {
         console.error("Error fetching user capacity:", error);

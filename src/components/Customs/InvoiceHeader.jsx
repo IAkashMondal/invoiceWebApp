@@ -31,36 +31,15 @@ const InvoiceHeader = () => {
     const [remainingCapacity, setRemainingCapacity] = useState(0);
     const [dataLoaded, setDataLoaded] = useState(false);
 
-    // Log Clerk user data for debugging
-    console.log("user new object================>:::::::", user);
     useEffect(() => {
         if (isSignedIn && user) {
           
-            // console.log("Full user object:", user);
-            console.log("======================");
-
             // Find matching user in clerck-webhooks
             const fetchMatchingUser = async () => {
                 try {
                     setDataLoaded(false); // Reset loaded state while fetching
                     const match = await findMatchingClerkUser(user);
                     if (match) {
-                        console.log("========== MATCHING USER FOUND! ==========");
-                        console.log("Match criteria: email, name, username, and ID");
-                        console.log("User found in clerck-webhooks database:");
-                        console.log("ID:", match.id);
-                        console.log("Clerk ID:", match.attributes?.clerkID);
-                        console.log("Email:", match.attributes?.Clerk_Email);
-                        console.log("Name:", match.attributes?.Clerk_Full_Name ||
-                            `${match.attributes?.Clerk_First_name || ""} ${match.attributes?.Clerk_Last_Name || ""}`);
-                        console.log("Username:", match.attributes?.ClerkuserName);
-                        console.log("Balance:", match.attributes?.UserCurrentBalance);
-                        console.log("Limit:", match.attributes?.Userlimit);
-                        console.log("Total Quantity:", match.attributes?.userTotalQuantity);
-                        console.log("Personal Quantity:", match.attributes?.userPersonalQuantity);
-                        console.log("Full matched user data:", match);
-                        console.log("===========================================");
-
                         // Store user data in localStorage for admin panel access
                         
 
@@ -79,18 +58,6 @@ const InvoiceHeader = () => {
                         if (remaining === 0 && limit > 0) {
                             remaining = limit > total ? limit - total : 0;
                         }
-
-                        console.log("Extracted user data:", {
-                            total,
-                            personal,
-                            limit,
-                            remaining,
-                            rawTotal: match.attributes?.userTotalQuantity || match.userTotalQuantity,
-                            rawPersonal: match.attributes?.userPersonalQuantity || match.userPersonalQuantity,
-                            rawLimit: match.attributes?.Userlimit || match.Userlimit,
-                            rawRemaining: match.attributes?.RemaningCapacity || match.RemaningCapacity
-                        });
-
                         setUserTotalQuantity(total);
                         setUserPersonalQuantity(personal);
                         setRemainingCapacity(remaining);

@@ -1,15 +1,13 @@
-import { useContext, useEffect, useState } from "react";
-import { RoyaltyInfoContext } from "../../../../../../../Context/RoyaltyInfoContext";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import PropTypes from "prop-types";
-import { GetParticularVehicle, updatePurchaserDetails } from "../../../../../../../../Apis/R_Apis/VehicleApis";
+import { GetParticularVehicle, updatePurchaserDetails } from "../../../../../../Apis/R_Apis/VehicleApis";
 
-const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
-  const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
+const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode, RoyaltyData, setRoyaltyData }) => {
   const [EChallanId, setChallanID] = useState("Error");
   const [vehicleNoQnt, setVehicleNoQnt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -173,7 +171,7 @@ const PurchaserForm = ({ enableNext, setActiveFormIndex, generateQrCode }) => {
               value={formData.VehicleType}
             >
               <option value="">Select Vehicle Type</option>
-              {[ "4 Wheels", "6 Wheels", "10 Wheels", "12 Wheels", "14 Wheels", "16 Wheels", "18 Wheels", "22 Wheels"].map((type) => (
+              {["4 Wheels", "6 Wheels", "10 Wheels", "12 Wheels", "14 Wheels", "16 Wheels", "18 Wheels", "22 Wheels"].map((type) => (
                 <option key={type} value={type}>{type}</option>
               ))}
             </select>
@@ -198,4 +196,6 @@ PurchaserForm.propTypes = {
   enableNext: PropTypes.func.isRequired,
   setActiveFormIndex: PropTypes.func.isRequired,
   generateQrCode: PropTypes.func.isRequired,
+  RoyaltyData: PropTypes.object,
+  setRoyaltyData: PropTypes.func.isRequired
 };
