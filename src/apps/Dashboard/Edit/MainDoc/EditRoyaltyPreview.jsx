@@ -13,6 +13,7 @@ import { GetParticularVehicle } from "../../../../../Apis/R_Apis/VehicleApis";
 import { GetOwnersDeatils } from "../../../../../Apis/Minors/MinorsApi";
 
 const EditRoyaltyPreview = (props) => {
+
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoadind] = useState(false);
     const contentRef = useRef(null);
@@ -21,20 +22,21 @@ const EditRoyaltyPreview = (props) => {
     const qrCode = location.state?.qrCode || props.qrCode || "";
 
     const reactToPrintFn = () => {
-        document.title = `WBMD_TP_${props.RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`,
+        document.title = `WBMD_TP_${vehicleRegData?.EchallanId}_T_${getDynamicYearRange()}_RPS`,
             window.print()
     };
 
     // Fetch params from URL
     const params = useParams();
-
     useEffect(() => {
-        // QR Code generation is handled by the parent component
-        // No need to generate it here since qrCode is passed as prop
-    }, [vehicleRegData, params]);
-
-    useEffect(() => {
-        // Fetch vehicle details based on the Royalty ID
+        // If royaltyData is passed via navigation state, use it instantly
+        if (location.state?.royaltyData) {
+            setvehicleRegData(location.state.royaltyData);
+            setIsLoadind(true);
+            console.log('Merged royaltyData in EditRoyaltyPreview:', location.state.royaltyData);
+            return;
+        }
+        // Otherwise, fetch from API as fallback
         const fetchVehicleDetails = async () => {
             if (!params?.royaltyID) {
                 return;
@@ -69,7 +71,7 @@ const EditRoyaltyPreview = (props) => {
             }
         };
         fetchVehicleDetails();
-    }, [params?.royaltyID]);
+    }, [params?.royaltyID, location]);
 
     // Capture screenshot and generate PDF
     const captureScreenshot = async () => {
@@ -152,7 +154,7 @@ const EditRoyaltyPreview = (props) => {
             setIsGenerating(true);
 
             const pdfBlob = await captureScreenshot();
-            const fileName = `WBMD_TP_${props.RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS.pdf`;
+            const fileName = `WBMD_TP_${vehicleRegData}_T_${getDynamicYearRange()}_RPS.pdf`;
             const file = new File([pdfBlob], fileName, {
                 type: 'application/pdf',
                 lastModified: Date.now()
@@ -185,7 +187,7 @@ const EditRoyaltyPreview = (props) => {
             alert('Failed to process PDF. Trying direct download...');
             try {
                 const pdfBlob = await captureScreenshot();
-                const fileName = `WBMD_TP_${props.RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS.pdf`;
+                const fileName = `WBMD_TP_${vehicleRegData.EchallanId}_T_${getDynamicYearRange()}_RPS.pdf`;
                 const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
                 downloadPDF(file);
             } catch {

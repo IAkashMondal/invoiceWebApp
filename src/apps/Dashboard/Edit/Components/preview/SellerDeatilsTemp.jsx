@@ -1,6 +1,6 @@
 import PropTypes from "prop-types"; // Import PropTypes
 const SellerDetailsTemp = ({ RoyaltyData, }) => {
-
+    console.log(RoyaltyData)
     return (
         <div id="sellerboxs " className="m-0 mb-0  lg:mr-0 sm:m-0 sm:mb-0 sm:mr-[0.3cm] ">
 
@@ -17,15 +17,32 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
                     }}
                 >
                     {/* Directly access and display each RoyaltyData point */}
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm]  sm:mb-[2mm]  lg:text-[11pt] sm:text-[7pt]">
-                        <span className="lg:w-[3.7cm] ml-[-1px] sm:ml-[-1px] sm:w-[2cm]">
-                            <p className="ml-[-1px] sm:ml-[-1px]">PERMISSION</p>
-                            <p className="ml-[-1px] sm:ml-[-1px]">HOLDER Id</p>
-                        </span>
-                        <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.SandID || "NA"}</span>
-                    </p>
 
+                    {(RoyaltyData?.River !== null && RoyaltyData?.OwnerName === "Contemporary Remedies") ? (
+                        <p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
+                            <span className="lg:w-[3.7cm] sm:w-[2cm]">Sand Block Id</span>
+                            <span className="mr-[2mm]">:</span>
+                            <span>{RoyaltyData?.SandID || "NA"}</span>
+                        </p>
+                    ) : (
+                        <p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm]  sm:mb-[2mm]  lg:text-[11pt] sm:text-[7pt]">
+                            <span className="lg:w-[3.7cm] ml-[-1px] sm:ml-[-1px] sm:w-[2cm]">
+                                <p className="ml-[-1px] sm:ml-[-1px]">PERMISSION</p>
+                                <p className="ml-[-1px] sm:ml-[-1px]">HOLDER Id</p>
+                            </span>
+                            <span className="mr-[2mm]">:</span>
+                            <span>{RoyaltyData?.SandID || "NA"}</span>
+                        </p>
+                    )}
+                    {RoyaltyData?.River !== null && RoyaltyData?.OwnerName === "Contemporary Remedies" ?
+                        (<p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]  lg:text-[11pt] sm:text-[7pt]">
+                            <span className="lg:w-[3.7cm] ml-[-1px] sm:ml-[-1px] sm:w-[2cm]">
+                                <p className="ml-[-1px] sm:ml-[-1px]">River</p>
+
+                            </span>
+                            <span className="mr-[2mm]">:</span>
+                            <span>{RoyaltyData?.River || "NA"}</span>
+                        </p>) : ""}
                     <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Mouza</span>
                         <span className="mr-[2mm]">:</span>
@@ -53,10 +70,17 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
                     </p>
 
                     <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[6.5pt]">
-                        <div className="grid">
-                            <span className="lg:w-[3.7cm] sm:w-[2cm]">Name of the </span>
-                            <span>Permission Holder</span>
-                        </div>
+                        {RoyaltyData?.River !== null && RoyaltyData?.OwnerName === "Contemporary Remedies" ?
+                            (<div className="grid">
+                                <span className="lg:w-[3.7cm] sm:w-[2cm]">Name of the Mining</span>
+                                <span>Lease Holder</span>
+                            </div>)
+                            :
+                            <div className="grid">
+                                <span className="lg:w-[3.7cm] sm:w-[2cm]">Name of the </span>
+                                <span>Permission Holder</span>
+                            </div>}
+
                         <span className="mr-[2mm] ">:</span>
                         <span>{RoyaltyData?.OwnerName || "NA"}</span>
                     </p>
@@ -72,15 +96,24 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
                         <span>{RoyaltyData?.OwnerAddress || "NA"}</span>
                     </p>
                     {RoyaltyData?.OwnerAddressLine1 &&
-                        <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm]">
+                        <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt] ">
                             <span className="lg:w-[3.7cm] sm:w-[2cm]"></span>
                             <div className="grid grid-flow-row">
                                 <p className=" p-0">{RoyaltyData?.OwnerAddressLine1 || ""}</p>
                                 <span >{RoyaltyData?.OwnerAddressLine2 || ""}</span>
-                                <p >{RoyaltyData?.OwnerAddressLine3 || ""}</p>
                             </div>
                         </p>
                     }
+                    {RoyaltyData?.OwnerAddressLine3 &&
+                        <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt]">
+                            <span className="lg:w-[3.7cm] sm:w-[2cm]"></span>
+                            <div className="grid grid-flow-row">
+                                <p className=" p-0">{RoyaltyData?.OwnerAddressLine3 || ""}</p>
+                                <span >{RoyaltyData?.OwnerAddressLine4 || ""}</span>
+                            </div>
+                        </p>
+                    }
+                    <p className="ml-[1mm] lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm]"></p>
                 </div>
             </div>
         </div>
@@ -90,29 +123,20 @@ const SellerDetailsTemp = ({ RoyaltyData, }) => {
 // ✅ PropTypes Validation
 SellerDetailsTemp.propTypes = {
     RoyaltyData: PropTypes.shape({
-        NameofPurchaser: PropTypes.string,
-        PurchaserMobileNo: PropTypes.string,
-        PurchaserAdd: PropTypes.string,
-        PurchaserPoliceStaion: PropTypes.string,
-        PurchaserDistic: PropTypes.string,
-        State: PropTypes.string,
-        Registration_No: PropTypes.string,
-        VehicleType: PropTypes.string,
-        VehicleCapacity: PropTypes.string,
-        RoyaltyData: PropTypes.object,
-        SandID: PropTypes.string,
-        OwnerMouza: PropTypes.string,
-        OwnerGpWard: PropTypes.string,
-        OwnerSubDivision: PropTypes.string,
-        OwnerPoliceStation: PropTypes.string,
-        OwnerDistrict: PropTypes.string,
-        OwnerName: PropTypes.string,
-        OwnerMobileNo: PropTypes.string,
-        OwnerAddress: PropTypes.string,
+        SandID: PropTypes.string.isRequired,
+        OwnerMouza: PropTypes.string.isRequired,
+        OwnerGpWard: PropTypes.string.isRequired,
+        OwnerSubDivision: PropTypes.string.isRequired,
+        OwnerPoliceStation: PropTypes.string.isRequired,
+        OwnerDistrict: PropTypes.string.isRequired,
+        OwnerName: PropTypes.string.isRequired,
+        OwnerMobileNo: PropTypes.string.isRequired,
+        OwnerAddress: PropTypes.string.isRequired,
         OwnerAddressLine1: PropTypes.string,
         OwnerAddressLine2: PropTypes.string,
-        OwnerAddressLine3: PropTypes.string
-    }),
+        OwnerAddressLine3: PropTypes.string,
+        OwnerAddressLine4: PropTypes.string,
+    }).isRequired,
 };
 
 export default SellerDetailsTemp;
