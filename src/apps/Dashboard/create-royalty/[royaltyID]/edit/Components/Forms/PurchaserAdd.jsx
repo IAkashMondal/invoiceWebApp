@@ -174,6 +174,8 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                                 VidePermitNo: defaultOwner.VidePermitNo,
                                 OwnerAddressLine1: defaultOwner.OwnerAddressLine1,
                                 OwnerAddressLine2: defaultOwner.OwnerAddressLine2,
+                                OwnerAddressLine3: defaultOwner.OwnerAddressLine3,
+                                OwnerAddressLine4: defaultOwner.OwnerAddressLine4,
                             }
                         }));
                     }
@@ -217,6 +219,8 @@ const PurchaserAdd = ({ enableNext, setActiveFormIndex }) => {
                     VidePermitNo: ownerDetails.VidePermitNo,
                     OwnerAddressLine1: ownerDetails.OwnerAddressLine1,
                     OwnerAddressLine2: ownerDetails.OwnerAddressLine2,
+                    OwnerAddressLine3: ownerDetails.OwnerAddressLine3,
+                    OwnerAddressLine4: ownerDetails.OwnerAddressLine4,
                 },
             }));
         }

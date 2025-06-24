@@ -1,33 +1,8 @@
 import PropTypes from "prop-types"; // Import PropTypes
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { GetParticularVehicle } from "../../../../../../../../Apis/R_Apis/VehicleApis";
+
 
 const BuyerDetailsTemp = ({ RoyaltyData }) => {
-    const [vehicleNoQnt, setvehicleNoQnt] = useState("");
-    const params = useParams();
-    useEffect(() => {
-        const fetchVehicleDetails = async () => {
-            try {
-                if (!params?.royaltyID) {
-                    console.warn("Royalty ID is missing");
-                    return;
-                }
-                const response = await GetParticularVehicle(params.royaltyID); // Await API call
-                setvehicleNoQnt(response.data.data);
-                if (response.data?.data) {
-                    setvehicleNoQnt(response.data.data);
-                } else {
-                    console.warn("No vehicle data found for this Royalty ID.");
-                }
 
-            } catch (error) {
-                console.error("Error fetching vehicle details:", error.response?.data || error.message);
-            }
-        };
-
-        fetchVehicleDetails();
-    }, [params?.royaltyID, setvehicleNoQnt]);
     return (
         <div id="buyerbox " className="m-0 lg:ml-[0.3cm] mb-0  sm:mr-[0.3cm] sm:p-0 sm:m-0">
 
@@ -44,14 +19,24 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                         marginTop: "1mm"
                     }}
                 >
-                    <p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm] sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
-                        <span className="lg:w-[3.7cm] sm:w-[2cm]">
-                            <p>Name of Purchaser </p>
-                            <p className="text-transparent sm:text-transparent">.</p>
-                        </span>
-                        <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.NameofPurchaser || "NA"}</span>
-                    </p>
+
+                    {RoyaltyData?.RoyaltyData.RoyaltyOwners.River !== null && RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName === "Contemporary Remedies" ?
+                        (<p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm] sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                            <span className="lg:w-[3.7cm] sm:w-[2cm]">
+                                <p>Name of Purchaser </p>
+                            </span>
+                            <span className="mr-[2mm]">:</span>
+                            <span>{RoyaltyData?.RoyaltyData?.NameofPurchaser || "NA"}</span>
+                        </p>) :
+                        (<p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm] sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                            <span className="lg:w-[3.7cm] sm:w-[2cm]">
+                                <p>Name of Purchaser </p>
+                                <p className="text-transparent sm:text-transparent">.</p>
+                            </span>
+                            <span className="mr-[2mm]">:</span>
+                            <span>{RoyaltyData?.RoyaltyData?.NameofPurchaser || "NA"}</span>
+                        </p>)}
+
 
                     <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Mobile No. </span>
@@ -78,38 +63,56 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                         <span className="mr-[2mm]">:</span>
                         <span>{"West Bengal"}</span>
                     </p>
-
-                    <p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[6.5pt]">
-                        <div className="grid">
+                    {RoyaltyData?.RoyaltyData.RoyaltyOwners.River !== null && RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName === "Contemporary Remedies" ?
+                        (<p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm] sm:mb-[2mm]   lg:text-[11pt] sm:text-[7pt]">
                             <span className="lg:w-[3.7cm] sm:w-[2cm]">Vehicle Type </span>
-                            <span className="text-transparent">H</span>
-                        </div>
-                        <span className="mr-[2mm] ">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.VehicleType || "NA"}</span>
-                    </p>
+                            <span className="mr-[2mm]">:</span>
+                            <span>{RoyaltyData?.RoyaltyData?.VehicleType}</span>
+                        </p>)
+                        :
+                        (<p className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]  sm:mb-[2mm]   lg:text-[11pt] sm:text-[6.5pt]">
+                            <div className="grid">
+                                <span className="lg:w-[3.7cm] sm:w-[2cm]">Vehicle Type </span>
+                                <span className="text-transparent">H</span>
+                            </div>
+                            <span className="mr-[2mm] ">:</span>
+                            <span>{RoyaltyData?.RoyaltyData?.VehicleType || "NA"}</span>
+                        </p>)
+                    }
+
                     <p id="sellergap" className="flex font-serif font-normal ml-[1mm]  lg:mb-[6mm]   lg:text-[11pt] sm:text-[7pt]">
                         <span className="lg:w-[3.7cm] sm:w-[2cm]">Registration No.</span>
                         <span className="mr-[2mm]">:</span>
                         <span>{RoyaltyData?.RoyaltyData?.Registration_No || "NA"}</span>
                     </p>
-
-                    <p className="flex font-serif font-normal ml-[1mm] lg:mb-[2mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
-                        <span className="lg:w-[3.7cm] sm:w-[2cm]">Capacity (in Kg) </span>
-                        <span className="mr-[2mm]">:</span>
-                        <span>{RoyaltyData?.RoyaltyData?.VehicleCapacity || "NA"}</span>
-                    </p>
-                    {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 &&
-                        <p id="sellerBoxgrid" className="flex font-serif font-normal ml-[1mm] lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm]">
-                            <span className="lg:w-[3.7cm] sm:w-[2cm]"></span>
-                            <div className="grid grid-flow-row">
-                                <p className="text-transparent sm:text-transparent p-0">{"."}</p>
-                                <p className="text-transparent sm:text-transparent" >{"."}</p>
-                            </div>
-                        </p>
-                    }
+                    {RoyaltyData?.RoyaltyData.RoyaltyOwners.River !== null && RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName === "Contemporary Remedies" ?
+                        (<p className="flex font-serif font-normal ml-[1mm] lg:mb-[2mm] mt-[5mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                            <span className="lg:w-[3.7cm] sm:w-[2cm]">Capacity (in Kg) </span>
+                            <span className="mr-[2mm]">:</span>
+                            <span>{RoyaltyData?.RoyaltyData?.VehicleCapacity || "NA"}</span>
+                        </p>)
+                        :
+                        (<p className="flex font-serif font-normal ml-[1mm] lg:mb-[2mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                            <span className="lg:w-[3.7cm] sm:w-[2cm]">Capacity (in Kg) </span>
+                            <span className="mr-[2mm]">:</span>
+                            <span>{RoyaltyData?.RoyaltyData?.VehicleCapacity || "NA"}</span>
+                        </p>)}
+                    {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 && (
+                        <div  style={{ height: "12mm" }}>&nbsp;</div>
+                    )}
+                    {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine2 && RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName === "Contemporary Remedies" && (
+                        <div  style={{ height: "12mm" }}>&nbsp;</div>
+                    )}
+                    {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine3 && RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName === "Contemporary Remedies" && (
+                        <div style={{ height: "4mm" }}>&nbsp;</div>
+                    )}
+                    {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine4 && RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName === "Contemporary Remedies" && (
+                        <div  style={{ height: "10mm" }}>&nbsp;</div>
+                    )}
+                    <div className="ml-[1mm]  lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm] text-transparent sm:text-transparent"></div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

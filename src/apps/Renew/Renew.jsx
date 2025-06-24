@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { v4 as uuidv4 } from 'uuid';
 import { GetParticularVehicle, addNewVehicle } from "../../../Apis/R_Apis/VehicleApis";
 import { addPerChallaID, GetPrevChallanID } from "../../../Apis/GlobalApi";
+import { GetOwnersDeatils } from "../../../Apis/Minors/MinorsApi";
 
 import {
     ShieldBan,
@@ -30,6 +31,7 @@ const Renew = () => {
     const ViteUrl = import.meta.env.VITE_REDIRECT;
     const [receivedDatas, setReceivedDatas] = useState(null);
     const [fetchedData, setFetchedData] = useState(null);
+    const [ownerData, setOwnerData] = useState(null);
 
     const displayData = receivedDatas || fetchedData?.data;
     const [documentID, setDocumentID] = useState(null);
@@ -50,32 +52,51 @@ const Renew = () => {
         fetchuser();
     }, [user]);
     useEffect(() => {
-        const fetchRoyaltyData = async () => {
-            if (!royaltyID) {
-                setError("Royalty ID is missing");
-                setLoading(false);
-                return;
-            }
-
+        const fetchAllData = async () => {
+            setLoading(true);
             try {
-                const response = await GetParticularVehicle(royaltyID);
-                if (response?.data?.data) {
-                    setFetchedData(response.data.data);
+                const [vehicleRes, ownersRes] = await Promise.all([
+                    GetParticularVehicle(royaltyID),
+                    GetOwnersDeatils()
+                ]);
+                if (vehicleRes?.data?.data) {
+                    setFetchedData(vehicleRes.data.data);
+                    const ownerName = vehicleRes.data.data.OwnerName;
+                    if (ownersRes?.data?.data && ownerName) {
+                        const matchedOwner = ownersRes.data.data.find(
+                            owner => owner.OwnerName && owner.OwnerName.trim().toLowerCase() === ownerName.trim().toLowerCase()
+                        );
+                        setOwnerData(matchedOwner || null);
+                    } else {
+                        setOwnerData(null);
+                    }
                 } else {
                     setError("Royalty not found");
                 }
             } catch (error) {
-                console.error("Error fetching royalty data:", error);
-                setError("Failed to fetch royalty data");
+                setError("Failed to fetch data");
             } finally {
                 setLoading(false);
             }
         };
+        if (royaltyID) fetchAllData();
+    }, [royaltyID]);
 
-        fetchRoyaltyData();
-    }, [royaltyID, receivedDatas]);
+    useEffect(() => {
+        console.log("ownerData updated", ownerData);
+    }, [ownerData]);
+
+    // Helper to merge ownerData into royaltyData
+    const getMergedRoyaltyData = (royaltyData, ownerData) => ({
+        ...royaltyData,
+        ...(ownerData || {})
+    });
 
     const handleRenew = async () => {
+        if (!ownerData) {
+            toast.error("Owner data not loaded yet. Please wait.");
+            return;
+        }
         const dataToUse = receivedDatas || fetchedData?.data;
         if (!dataToUse) {
             toast.error("Renewal data not available. Please try again from the dashboard.");
@@ -152,8 +173,12 @@ const Renew = () => {
                 await addPerChallaID(echallanDocumentId, newChallanIdEntryData);
             }
             const qrValue = `${QRBASEURL}/WBMD/Page/each/aspx/id/${newChallanID}/S/24-25/RPS`;
+            // Pass both qrCode and royaltyData to the preview page for instant rendering
             navigate(`${ViteUrl}/${newDocumentIdForRenewedVehicle}/view`, {
-                state: { qrCode: qrValue }
+                state: {
+                    qrCode: qrValue,
+                    royaltyData: getMergedRoyaltyData(addVehicleResponse?.data?.data, ownerData)
+                }
             });
             if (documentID && documentID.id) {
                 const newQuantity = Number(documentID.userTotalQuantity);
@@ -180,6 +205,8 @@ const Renew = () => {
             setUpdating(false);
         }
     };
+
+    // Example function to navigate to EditRoyaltyPreview with ownerData
 
     if (loading) {
         return (
@@ -298,7 +325,7 @@ const Renew = () => {
                     </button>
                     <button
                         onClick={handleRenew}
-                        disabled={updating}
+                        disabled={updating || !ownerData}
                         className="w-full sm:w-1/2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm sm:text-base"
                     >
                         {updating ? (

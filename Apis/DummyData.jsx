@@ -24,6 +24,8 @@ const Dummydata = {
     OwnerAddress: "",
     OwnerAddressLine1: "",
     OwnerAddressLine2: "",
+    OwnerAddressLine3: "",
+    OwnerAddressLine4: "",
     OwnerMobileNo: "",
     OwnerMouza: "",
     OwnerDistrict: "",
