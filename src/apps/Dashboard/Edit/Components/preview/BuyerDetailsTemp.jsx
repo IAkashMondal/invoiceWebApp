@@ -23,19 +23,19 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                 >
 
                     {RoyaltyData?.River !== null && RoyaltyData?.OwnerName === "Contemporary Remedies" ?
-                        (<p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm] sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
-                            <span className="lg:w-[3.7cm] sm:w-[2cm]">
+                        (<p className=" flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm] sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                            <span className="  lg:w-[3.7cm] sm:w-[2cm]">
                                 <p>Name of Purchaser </p>
                             </span>
-                            <span className="mr-[2mm]">:</span>
+                            <span className="  mr-[2mm]">:</span>
                             <span>{RoyaltyData?.NameofPurchaser || "NA"}</span>
                         </p>) :
-                        (<p className="flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm] sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
-                            <span className="lg:w-[3.7cm] sm:w-[2cm]">
+                        (<p className=" flex font-serif font-normal ml-[1mm] mt-[3mm] lg:mb-[6mm] sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                            <span className="  lg:w-[3.7cm] sm:w-[2cm]">
                                 <p>Name of Purchaser </p>
-                                <p className="text-transparent sm:text-transparent">.</p>
+                                <p className=" text-transparent sm:text-transparent">.</p>
                             </span>
-                            <span className="mr-[2mm]">:</span>
+                            <span className=" mr-[2mm]">:</span>
                             <span>{RoyaltyData?.NameofPurchaser || "NA"}</span>
                         </p>)}
 

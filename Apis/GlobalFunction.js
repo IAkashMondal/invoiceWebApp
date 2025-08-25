@@ -78,9 +78,9 @@ export const generateTimeObject = () => {
 
   // Unique Generated Timestamp: "DDMMYYHHMMSS"
   const generatedTime = `${day}${month}${year}${hours}${minutes}${seconds}`;
-  const ChallandT = `${day}${month}${year}${minutes}${seconds}`;
+  const ChallandT = `${day}${month}20${year}${minutes}${seconds}`;
   const EachDate = `20${year}-${month}-${day}`;
-  return { generatedTime, generatedOn, issueDate, ChallandT ,EachDate};
+  return { generatedTime, generatedOn, issueDate, ChallandT, EachDate };
 };
 // Function to add hours and minutes to generated timestamp
 export const addTimeToGeneratedTime = (generatedTime, additionalTime) => {
@@ -168,7 +168,6 @@ export const getFinancialYear = () => {
 
   return `${startYear.toString().slice(-2)}-${endYear.toString().slice(-2)}`;
 };
-
 
 export function numberToWords(num) {
   if (num === null || num === undefined || isNaN(num)) return "Invalid number";
