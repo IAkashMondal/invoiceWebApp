@@ -8,7 +8,7 @@ const ChallanTemp = ({ qrCode, RoyaltyData }) => {
     <div className="lg:mb-0 w-full max-w-[20.1cm] sm:mb-1" id="pdf-container ">
       {/* Title */}
       <p id="nameText" className="font-bold lg:text-[15pt] font-helvetica sm:text-[11px]
-       text-center sm:w-full lg:mt-0 lg:p-0 sm:text-red-600 sm:m-[1mm] sm:mt-0">
+       text-center sm:w-full lg:mt-0 lg:p-0 sm:m-[1mm] sm:mt-0">
         Road E-Challan for sand / riverbed materials Transport
       </p>
       {/* Container for Details & QR Code */}

@@ -20,7 +20,8 @@ const EditRoyalty = () => {
         if (!QRBASEURL) {
             console.log("QRBASEURL no found")
         }
-        const url = `${QRBASEURL}/WBMD/Page/each/aspx/id/${EChallanId}/S/24-25/RPS`;
+        const url = `${QRBASEURL}/WBMD/Page/snstpass.aspx?id=${EChallanId}/S/24-25/RPS`;
+      
         setQrCode(url);
     };
     useEffect(() => {
