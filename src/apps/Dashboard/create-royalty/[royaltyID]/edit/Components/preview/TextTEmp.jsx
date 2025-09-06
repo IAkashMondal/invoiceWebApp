@@ -22,16 +22,14 @@ const TextTEmp = ({ RoyaltyData }) => {
                 </p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">{"2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify \n authenticity of the E-challan, please scan above  QR Code using smart phone."}</p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">{"3) This is a system generated document and does not requried any signature."}</p>
-                <div id="TempTex" className="font-serif lg:text-[11.3pt] mt-[5mm] sm:text-[6.5pt]">
-                    <p id="TempTex ">{"4) Self Certitication by Lessee/MDO : I/WE(Lessee/MDO/Q.P.) hereby declare that the above statements are correct and complete to be best of my knowledge and belied. "}
-                        <span id="TempTexBold " className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
-                            <span id="TempTexBold1"> {`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName}`}</span></span></p>
-
-                </div>
-                <p id="TempTex" className="font-serif lg:text-[11.3pt]  italic sm:text-[6.5pt]">Remarks :</p>
+                <p id="TempTex" className="font-serif lg:text-[11.3pt] mt-[5mm] sm:text-[5.5pt]">{"4) Self Certitication by Lessee/MDO : I/WE(Lessee/MDO/Q.P.) hereby declare that the above statements are correct and complete to be best of my knowledge and belied. "}
+                    <span id="TempTexBold" className="font  lg:text-[11.3pt] sm:text-[5.5pt]">
+                        {`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName}`}
+                    </span>
+                </p>
             </div>
 
-            <p id="TempTexBold1" className=" grid justify-end font-serif lg:text-[11.3pt] mt-[0mm] mr-[5mm] sm:text-[6.5pt] sm:mr-[2mm]">Issued by</p>
+            <p id="TempTexBold1" className=" grid justify-end font-serif lg:text-[11.3pt] mt-[11mm] mr-[5mm] sm:text-[6.5pt] sm:mr-[2mm]">Issued by</p>
             <p id="TempTexBold1" className=" grid justify-end font font-bold font-serif lg:text-[11.3pt]  mr-[5mm] sm:text-[6.5pt] sm:mr-[2mm] ">
                 {`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName}`}</p>
             <p id="TempTexBold1" className="grid justify-end font font-bold font-serif lg:text-[11.3pt]  mr-[5mm] sm:text-[6.5pt] sm:mr-[2mm]">{`
