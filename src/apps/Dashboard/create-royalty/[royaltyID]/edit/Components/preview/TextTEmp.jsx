@@ -23,7 +23,7 @@ const TextTEmp = ({ RoyaltyData }) => {
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">{"2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify \n authenticity of the E-challan, please scan above  QR Code using smart phone."}</p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">{"3) This is a system generated document and does not requried any signature."}</p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] mt-[5mm] sm:text-[5.5pt]">{"4) Self Certitication by Lessee/MDO : I/WE(Lessee/MDO/Q.P.) hereby declare that the above statements are correct and complete to be best of my knowledge and belied. "}
-                    <span id="TempTexBold" className="font  lg:text-[11.3pt] sm:text-[5.5pt]">
+                    <span id="TempTexBold1" className="font font-bold lg:text-[11.3pt] sm:text-[5.5pt]">
                         {`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName}`}
                     </span>
                 </p>
