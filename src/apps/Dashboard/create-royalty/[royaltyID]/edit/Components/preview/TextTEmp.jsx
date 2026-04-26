@@ -8,13 +8,13 @@ const TextTEmp = ({ RoyaltyData }) => {
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">Note :</p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt] ">{"1) Prior approval for excarvation permission  was accorded by : "}
                     <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
-                        {`ADM and DL & LRO, ${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerDistrict}`}
+                        {`ADM and DL & LRO, ${OwnerDistrict}`}
                     </span>
                     {" vide\u00a0permit "}
-                    <span className="lg:block">
+                    <span id="permitNoLine" className="block">
                         {"no. "}
                         <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
-                            {`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.VidePermitNo || "N/A"}`}
+                            {`${VidePermitNo || "N/A"}`}
                         </span>
                     </span>
                 </p>

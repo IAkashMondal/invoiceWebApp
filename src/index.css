@@ -239,6 +239,10 @@ body {
     font-size: 11.3pt;
   }
 
+  #permitNoLine {
+    display: block;
+  }
+
   #TempTexBold {
     font: serif;
     font-size: 11.3pt;
