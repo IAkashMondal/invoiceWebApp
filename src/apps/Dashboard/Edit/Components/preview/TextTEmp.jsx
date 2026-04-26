@@ -26,18 +26,16 @@ const TextTEmp = ({ RoyaltyData }) => {
         <div className="mt-0  m-0 p-0 sm:h-auto">
             <div className="mt-[5mm] sm:mt-[2mm]">
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">Note :</p>
-
-
-
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt] ">{"1) Prior approval for excarvation permission  was accorded by : "}
                     <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
-                        {`ADM and DL & LRO, ${OwnerDistrict}`}
+                        {`ADM and DL & LRO, ${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerDistrict}`}
                     </span>
-                    {" vide\u00a0permit"}
-                    <br />
-                    {"no. "}
-                    <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
-                        {`${VidePermitNo || "N/A"}`}
+                    {" vide\u00a0permit "}
+                    <span className="lg:block">
+                        {"no. "}
+                        <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
+                            {`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.VidePermitNo || "N/A"}`}
+                        </span>
                     </span>
                 </p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">{"2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify authenticity of the E-challan, please scan above scan QR Code using smart phone."}</p>

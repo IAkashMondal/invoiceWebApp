@@ -10,11 +10,12 @@ const TextTEmp = ({ RoyaltyData }) => {
                     <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
                         {`ADM and DL & LRO, ${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerDistrict}`}
                     </span>
-                    {" vide\u00a0permit"}
-                    <br />
-                    {"no. "}
-                    <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
-                        {`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.VidePermitNo || "N/A"}`}
+                    {" vide\u00a0permit "}
+                    <span className="lg:block">
+                        {"no. "}
+                        <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
+                            {`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.VidePermitNo || "N/A"}`}
+                        </span>
                     </span>
                 </p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">{"2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify \n authenticity of the E-challan, please scan above  QR Code using smart phone."}</p>
