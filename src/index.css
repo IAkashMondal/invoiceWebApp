@@ -236,7 +236,7 @@ body {
 
   #TempTex {
     font: serif;
-    font-size: 11.3pt;
+    font-size: 10pt;
   }
 
   #permitNoLine {
@@ -245,7 +245,7 @@ body {
 
   #TempTexBold {
     font: serif;
-    font-size: 11.3pt;
+    font-size: 10pt;
     font: bold;
   }
 
@@ -264,7 +264,7 @@ body {
     margin-top: 3mm;
     margin-left: -5mm;
     font: italic;
-    font-size: 9.3pt;
+    font-size: 7.5pt;
     font-family: serif;
   }
 

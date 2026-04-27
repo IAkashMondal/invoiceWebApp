@@ -8,16 +8,17 @@ const TextTEmp = ({ RoyaltyData }) => {
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">Note :</p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt] ">{"1) Prior approval for excarvation permission  was accorded by : "}
                     <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
-                        {`ADM and DL & LRO, ${OwnerDistrict}`}
+                        {`ADM and DL & LRO, ${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerDistrict}`}
                     </span>
-                    {" vide\u00a0permit "}
-                    <span id="permitNoLine" className="block">
-                        {"no. "}
-                        <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
-                            {`${VidePermitNo || "N/A"}`}
-                        </span>
-                    </span>
+                    {" vide permit "}
+
                 </p>
+                <span id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">
+                    {"no. "}
+                    <span id="TempTexBold" className="font font-bold lg:text-[11.3pt] sm:text-[6.5pt]">
+                        {`${RoyaltyData?.RoyaltyData?.RoyaltyOwners.VidePermitNo || "N/A"}`}
+                    </span>
+                </span>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">{"2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify \n authenticity of the E-challan, please scan above  QR Code using smart phone."}</p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] sm:text-[6.5pt]">{"3) This is a system generated document and does not requried any signature."}</p>
                 <p id="TempTex" className="font-serif lg:text-[11.3pt] mt-[5mm] sm:text-[5.5pt]">{"4) Self Certitication by Lessee/MDO : I/WE(Lessee/MDO/Q.P.) hereby declare that the above statements are correct and complete to be best of my knowledge and belied. "}
@@ -35,7 +36,7 @@ const TextTEmp = ({ RoyaltyData }) => {
              ${RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName === "Prasanta Kumar Hait" ? "PERMISSION HOLDER ID " : "Sand Block Id "} 
              ${RoyaltyData?.RoyaltyData?.RoyaltyOwners.SandID}`}</p>
 
-            <p id="qrText" className="lg:ml-[-5mm] lg:p-0 font font-bold font-serif lg:text-[11.5pt] italic mt-[3mm] sm:text-[4.5pt] sm:mt-[2mm]">{`** On QR code scanning pl check that the website address bar shows mdtcl.wb.gov.in as that is the only genuine website of the government.`}</p>
+            <p id="qrText" className="lg:ml-[-5mm] lg:p-0 font font-bold font-serif lg:text-[11pt] italic mt-[3mm] sm:text-[4.5pt] sm:mt-[2mm]">{`** On QR code scanning pl check that the website address bar shows mdtcl.wb.gov.in as that is the only genuine website of the government.`}</p>
 
         </div>
     )
