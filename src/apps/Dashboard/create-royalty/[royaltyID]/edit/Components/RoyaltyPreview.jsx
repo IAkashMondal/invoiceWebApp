@@ -15,11 +15,12 @@ const RoyaltyPreview = ({ qrCode }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoadind] = useState(false);
+    const [isGenerating, setIsGenerating] = useState(false);
     const contentRef = useRef(null);
 
     const reactToPrintFn = () => {
-        document.title = `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`,
-            window.print()
+        document.title = `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`;
+        window.print();
     };
 
     // Fetch params from URL
@@ -46,34 +47,216 @@ const RoyaltyPreview = ({ qrCode }) => {
         fetchVehicleDetails();
     }, [params?.royaltyID]);
 
-    // Capture screenshot and generate PDF
-    const captureScreenshot = async () => {
+    // Single-click direct PDF download with exact desktop A4 layout (Screenshot 2)
+    const captureAndDownloadPDF = async () => {
+        if (isGenerating) return;
         try {
+            setIsGenerating(true);
             const content = contentRef.current;
             if (!content) {
-                throw new Error('Content not found');
+                throw new Error('Content element not found');
             }
 
-            // Optimize canvas capture settings
             const canvas = await html2canvas(content, {
-                scale: 3, // Reduced scale for better performance
+                scale: 3,
                 useCORS: true,
                 logging: false,
                 allowTaint: true,
                 backgroundColor: '#ffffff',
-                imageTimeout: 2000,
-                removeContainer: true,
-                foreignObjectRendering: false,
-                async: true,
+                imageTimeout: 5000,
+                windowWidth: 1280,
+                windowHeight: 1800,
                 onclone: (clonedDoc) => {
-                    const buttons = clonedDoc.getElementsByTagName('button');
-                    for (let button of buttons) {
-                        button.remove();
-                    }
+                    // Remove buttons and non-printable elements
+                    const noPrintElems = clonedDoc.querySelectorAll('button, #no-print, .no-print');
+                    noPrintElems.forEach((el) => el.remove());
+
+                    // Inject CSS rules to enforce exact desktop A4 layout matching target design
+                    const styleElem = clonedDoc.createElement('style');
+                    styleElem.type = 'text/css';
+                    styleElem.innerHTML = `
+                        * {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                            box-sizing: border-box !important;
+                        }
+                        body {
+                            background-color: #ffffff !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                        }
+                        #print {
+                            width: 210mm !important;
+                            max-width: 210mm !important;
+                            min-width: 210mm !important;
+                            padding: 7mm !important;
+                            margin: 0 auto !important;
+                            background: #ffffff !important;
+                            position: relative !important;
+                        }
+                        #indigoborder {
+                            width: 19.1cm !important;
+                            height: 29.7cm !important;
+                            min-height: 29.7cm !important;
+                            max-height: 29.7cm !important;
+                            padding-left: 5mm !important;
+                            padding-right: 2mm !important;
+                            padding-top: 2mm !important;
+                            border: 1.5px solid #0000FF !important;
+                            background: #ffffff !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            position: relative !important;
+                        }
+                        #nameText {
+                            font-size: 15pt !important;
+                            font-weight: bold !important;
+                            font-family: helvetica, sans-serif !important;
+                            text-align: center !important;
+                            margin-top: 0 !important;
+                            margin-bottom: 0 !important;
+                            padding: 0 !important;
+                            color: #000000 !important;
+                            width: 100% !important;
+                        }
+                        #challnabox {
+                            display: grid !important;
+                            grid-auto-flow: column !important;
+                            font-family: serif !important;
+                            margin-bottom: 0 !important;
+                            padding: 0 !important;
+                        }
+                        #detalsDiv {
+                            width: 14.5cm !important;
+                            height: 3.6cm !important;
+                            padding-left: 2mm !important;
+                            padding-right: 2mm !important;
+                            border: 1.5px solid #000000 !important;
+                            margin-top: 0 !important;
+                        }
+                        #boxtext {
+                            display: flex !important;
+                            font-weight: bold !important;
+                            font-size: 13pt !important;
+                            font-family: serif !important;
+                            color: #000000 !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+                        #boxgap {
+                            min-width: 3.7cm !important;
+                            width: 3.7cm !important;
+                            display: inline-block !important;
+                        }
+                        #qntText {
+                            font-size: 9pt !important;
+                            font-weight: 300 !important;
+                        }
+                        #qrcan {
+                            width: 3.1cm !important;
+                            height: 3.2cm !important;
+                            margin-right: 7mm !important;
+                            margin-left: 1mm !important;
+                            margin-top: 4mm !important;
+                        }
+                        #ImageBehindContent {
+                            display: flex !important;
+                            justify-content: center !important;
+                            width: 100% !important;
+                            position: relative !important;
+                        }
+                        #ImageBehindContent > div {
+                            display: grid !important;
+                            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                            width: 100% !important;
+                            gap: 0 !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                        }
+                        #imgdiv {
+                            position: absolute !important;
+                            width: 7.4cm !important;
+                            height: 7.6cm !important;
+                            margin-top: 7.3cm !important;
+                            object-fit: contain !important;
+                            opacity: 0.25 !important;
+                        }
+                        #sellerBox, #buyerBox {
+                            width: 9cm !important;
+                            height: auto !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            margin-top: 1mm !important;
+                            justify-content: flex-start !important;
+                            border: 1.5px solid #000000 !important;
+                            padding: 0 !important;
+                        }
+                        #large-screen-styles {
+                            font-size: 10pt !important;
+                            font-weight: 600 !important;
+                            font-style: italic !important;
+                            font-family: serif !important;
+                            margin-top: 4mm !important;
+                            margin-left: 0.3cm !important;
+                            color: #000000 !important;
+                        }
+                        #sellerBox p, #buyerBox p, #sellerBox span, #buyerBox span {
+                            font-size: 11pt !important;
+                            font-family: serif !important;
+                            color: #000000 !important;
+                        }
+                        #sellerBox p {
+                            margin-bottom: 6mm !important;
+                            margin-left: 1mm !important;
+                            margin-top: 0 !important;
+                        }
+                        #buyerBox p {
+                            margin-bottom: 6mm !important;
+                            margin-left: 1mm !important;
+                            margin-top: 0 !important;
+                        }
+                        #TempTex, #TempTexBold, #TempTexBold1 {
+                            font-size: 11.3pt !important;
+                            font-family: serif !important;
+                            color: #000000 !important;
+                        }
+                        #qrText {
+                            font-size: 11pt !important;
+                            font-family: serif !important;
+                            font-weight: bold !important;
+                            font-style: italic !important;
+                            margin-left: -5mm !important;
+                            padding: 0 !important;
+                            margin-top: 3mm !important;
+                            color: #000000 !important;
+                        }
+                        #genaratedtex {
+                            display: flex !important;
+                            margin-top: 0 !important;
+                            position: relative !important;
+                            width: 100% !important;
+                        }
+                        #genaratedtex p {
+                            font-size: 8pt !important;
+                            font-weight: bold !important;
+                            font-family: serif !important;
+                            color: #000000 !important;
+                            margin: 0 !important;
+                        }
+                        #genaratedtex p:nth-child(1) {
+                            margin-left: 1cm !important;
+                        }
+                        #genaratedtex p:nth-child(2) {
+                            margin-left: 5.1cm !important;
+                        }
+                        #genaratedtex p:nth-child(3) {
+                            margin-left: 4.7cm !important;
+                        }
+                    `;
+                    clonedDoc.head.appendChild(styleElem);
                 }
             });
 
-            // Create PDF with optimized settings
             const imgWidth = 210;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
@@ -83,10 +266,9 @@ const RoyaltyPreview = ({ qrCode }) => {
                 format: 'a4'
             });
 
-            // Add image with compression
             pdf.addImage(
-                canvas.toDataURL('image/jpeg', 0.8),
-                'JPEG',
+                canvas.toDataURL('image/png', 1.0),
+                'PNG',
                 0,
                 0,
                 imgWidth,
@@ -95,84 +277,17 @@ const RoyaltyPreview = ({ qrCode }) => {
                 'FAST'
             );
 
-            // Get blob with compression
-            const pdfBlob = pdf.output('blob');
+            const echallanId = RoyaltyData?.EchallanId || vehicleRegData?.EchallanId || 'Challan';
+            const fileName = `WBMD_TP_${echallanId}_T_${getDynamicYearRange()}_RPS.pdf`;
 
-            canvas.remove();
-
-            return pdfBlob;
+            pdf.save(fileName);
         } catch (error) {
-            console.error('Screenshot capture failed:', error);
-            throw new Error('Failed to capture PDF content');
-        }
-    };
-
-    // Direct download function
-    const downloadPDF = (file) => {
-        const url = URL.createObjectURL(file);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = file.name;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setTimeout(() => URL.revokeObjectURL(url), 100);
-    };
-
-    // Handle share button click
-    const handleShare = async () => {
-        if (isGenerating) return;
-
-        try {
-            setIsGenerating(true);
-
-            const pdfBlob = await captureScreenshot();
-            const fileName = `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS.pdf`;
-            const file = new File([pdfBlob], fileName, {
-                type: 'application/pdf',
-                lastModified: Date.now()
-            });
-
-            // Try native sharing first
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    // Set a timeout for the share operation
-                    const sharePromise = navigator.share({
-                        files: [file]
-                    });
-
-                    // If share takes too long, fall back to download
-                    const timeoutPromise = new Promise((_, reject) =>
-                        setTimeout(() => reject(new Error('Share timeout')), 5000)
-                    );
-
-                    await Promise.race([sharePromise, timeoutPromise]);
-                } catch (err) {
-                    console.warn('Share failed, downloading instead:', err);
-                    downloadPDF(file);
-                }
-            } else {
-                // If sharing not supported, download directly
-                downloadPDF(file);
-            }
-        } catch (error) {
-            console.error('Operation failed:', error);
-            alert('Failed to process PDF. Trying direct download...');
-            try {
-                const pdfBlob = await captureScreenshot();
-                const fileName = `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS.pdf`;
-                const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
-                downloadPDF(file);
-            } catch {
-                alert('Failed to generate PDF. Please try again.');
-            }
+            console.error('PDF download failed:', error);
+            alert('Failed to generate PDF. Please try again.');
         } finally {
             setIsGenerating(false);
         }
     };
-
-    // Share the generated PDF with loading state
-    const [isGenerating, setIsGenerating] = useState(false);
 
     return (
         <div id="Maindiv" className="flex flex-col items-center">
@@ -214,42 +329,50 @@ const RoyaltyPreview = ({ qrCode }) => {
                 </div>
             </div>
 
-            {/* Button to Download as PDF */}
-            <button
-                id="no-print"
-                disabled={!isLoading}
-                onClick={reactToPrintFn}
-                className="mt-32 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-[100px] sm:mt-10 sm:mb-[60px]"
-            >
-                Download as PDF
-            </button>
+            {/* Action Buttons for Direct 1-Click PDF Download */}
+            <div id="no-print" className="flex flex-col sm:flex-row gap-4 mt-8 mb-16">
+                <button
+                    disabled={!isLoading || isGenerating}
+                    onClick={captureAndDownloadPDF}
+                    className={`px-6 py-3 rounded-lg text-white font-medium shadow-md transition-all flex items-center justify-center gap-2 ${
+                        isGenerating ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 active:scale-95'
+                    }`}
+                >
+                    {isGenerating ? (
+                        <>
+                            <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                            Generating PDF...
+                        </>
+                    ) : (
+                        <>
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Download PDF
+                        </>
+                    )}
+                </button>
 
-            {/* Updated Share/Download Button */}
-            <button
-                id="no-print"
-                disabled={!isLoading || isGenerating}
-                onClick={handleShare}
-                className={`mt-10 ${isGenerating ? 'bg-gray-500' : 'bg-green-500'
-                    } text-white px-4 py-2 rounded hover:bg-green-700 mb-[60px] flex items-center gap-2`}
-            >
-                {isGenerating ? (
-                    <>
-                        <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                        </svg>
-                        Processing...
-                    </>
-                ) : (
-                    'Share PDF unde devlopment'
-                )}
-            </button>
+                <button
+                    disabled={!isLoading || isGenerating}
+                    onClick={reactToPrintFn}
+                    className="px-6 py-3 rounded-lg bg-blue-600 text-white font-medium shadow-md hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+                >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Print Document
+                </button>
+            </div>
         </div>
     );
 };
 
 RoyaltyPreview.propTypes = {
-    qrCode: PropTypes.string, // QR code should be a string (URL or encoded data)
+    qrCode: PropTypes.string,
 };
 
 export default RoyaltyPreview;

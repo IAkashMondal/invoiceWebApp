@@ -1,17 +1,4 @@
-import axios from "axios";
-
-// ✅ Load environment variables for API keys
-const API_KEY = import.meta.env.VITE_STRAPI_API_KEY;
-const BASE_URL = import.meta.env.VITE_BASE_URL + "api/";
-
-// ✅ Configure Axios client
-const axiosClient = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${API_KEY}`,
-  },
-});
+import axiosClient from "../axiosClient";
 /**
  * ✅ Maps Clerk webhook data to match our backend schema
  * @param {Object} clerkData - Raw data from Clerk webhook

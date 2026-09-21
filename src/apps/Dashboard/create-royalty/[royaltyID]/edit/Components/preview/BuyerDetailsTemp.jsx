@@ -92,12 +92,13 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                             <span>{RoyaltyData?.RoyaltyData?.VehicleCapacity || "NA"}</span>
                         </p>)
                         :
-                        (<p className="flex font-serif font-normal ml-[1mm] lg:mb-[2mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
+                        (<p className="flex font-serif font-normal ml-[1mm] lg:mb-[3mm]  sm:mb-[2mm] lg:text-[11pt] sm:text-[7pt]">
                             <span className="lg:w-[3.7cm] sm:w-[2cm]">Capacity (in Kg) </span>
                             <span className="mr-[2mm]">:</span>
                             <span>{RoyaltyData?.RoyaltyData?.VehicleCapacity || "NA"}</span>
                         </p>)}
-                    {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 && (
+                    <div style={{ height: "1mm" }}>&nbsp;</div>
+                    {/* {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine1 && (
                         <div style={{ height: "12mm" }}>&nbsp;</div>
                     )}
                     {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine3 && RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName === "Contemporary Remedies" || "EXCEL MOVERS" && (
@@ -111,7 +112,7 @@ const BuyerDetailsTemp = ({ RoyaltyData }) => {
                     )}
                     {RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerAddressLine4 && RoyaltyData?.RoyaltyData?.RoyaltyOwners.OwnerName === "Contemporary Remedies" && (
                         <div style={{ height: "10mm" }}>&nbsp;</div>
-                    )}
+                    )} */}
                     <div className="ml-[1mm]  lg:text-[11pt] sm:text-[5pt] mb-[2mm]  sm:mb-[2mm] text-transparent sm:text-transparent"></div>
                 </div>
             </div>

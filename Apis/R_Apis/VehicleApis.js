@@ -1,18 +1,5 @@
-import axios from "axios";
+import axiosClient from "../axiosClient";
 import { findMatchingClerkUser, updateUserLimits } from "../Clerk/ClerkApis";
-
-// ✅ Load environment variables for API keys
-const API_KEY = import.meta.env.VITE_STRAPI_API_KEY;
-const BASE_URL = import.meta.env.VITE_BASE_URL + "api/";
-
-// ✅ Configure Axios client
-const axiosClient = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${API_KEY}`,
-  },
-});
 /**
  * ✅ Fetches ALL vehicle data for a specific user without any pagination limits.
  * @param {string} userEmail - Email of the user.

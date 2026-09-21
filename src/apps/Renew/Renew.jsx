@@ -172,7 +172,7 @@ const Renew = () => {
                 };
                 await addPerChallaID(echallanDocumentId, newChallanIdEntryData);
             }
-            const qrValue = `${QRBASEURL}/WBMD/Page/each/aspx/id/${newChallanID}/S/24-25/RPS`;
+            const qrValue = `${QRBASEURL}/WBMD/Page/ech_pst_to_citizen.aspx/id/${newChallanID}/T/26-27/RPS`;
             // Pass both qrCode and royaltyData to the preview page for instant rendering
             navigate(`${ViteUrl}/${newDocumentIdForRenewedVehicle}/view`, {
                 state: {
