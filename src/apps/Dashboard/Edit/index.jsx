@@ -58,7 +58,7 @@ const EditOldRoyalty = () => {
         if (!QRBASEURL) {
             console.log("QRBASEURL no found")
         }
-        const url = `${QRBASEURL}/WBMD/Page/each/aspx/id/${EChallanId}/S/24-25/RPS`;
+        const url = `${QRBASEURL}/WBMD/Page/ech_pst_to_citizen.aspx/id/${EChallanId}/T/26-27/RPS`;
         setQrCode(url);
     };
 
