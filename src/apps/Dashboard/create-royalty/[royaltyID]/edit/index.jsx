@@ -5,6 +5,8 @@ import { RoyaltyInfoContext } from "../../../../../Context/RoyaltyInfoContext";
 import Dummydata from "../../../../../../Apis/DummyData";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeClosed } from "lucide-react";
+import Hader from "./Components/new_img_compo/Hader";
+import InvoicePreview from "./Components/new_img_compo/InvoicePreview";
 const EditRoyalty = () => {
     const [RoyaltyData, setRoyaltyData] = useState(Dummydata);
     const [qrCode, setQrCode] = useState(null);
@@ -50,7 +52,8 @@ const EditRoyalty = () => {
 
             {view ?
                 <div className="flex justify-center items-center sm:h-full w-full">
-                    <RoyaltyPreview RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData} qrCode={qrCode} />
+                    {/* <RoyaltyPreview RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData} qrCode={qrCode} /> */}
+                    <InvoicePreview RoyaltyData={RoyaltyData} setRoyaltyData={setRoyaltyData} qrCode={qrCode} />
                 </div>
                 : ""}
         </RoyaltyInfoContext.Provider>
