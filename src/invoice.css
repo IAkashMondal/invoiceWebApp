@@ -1,0 +1,559 @@
+/* =========================================
+   Incoice
+   A4 PRINT / PDF CSS
+========================================= */
+
+
+/* =========================================
+   A4 PAGE
+========================================= */
+
+.invoice-page {
+
+    position: relative;
+
+    width: 210mm;
+
+    height: 297mm;
+
+    margin: 0 auto;
+
+    background: #FCE8C5;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: #1E1E1E;
+
+    isolation: isolate;
+
+}
+
+
+
+/* =========================================
+   FULL PAGE REPEATING WATERMARK
+======================================== */
+
+.invoice-page::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.20;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='793.33' height='1122.67' viewBox='0 0 595 842'%3E%3Ctext x='-261.6' y='969.11' transform='rotate(-30,-261.6,969.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='969.11' transform='rotate(-30,-91.6,969.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='969.11' transform='rotate(-30,78.4,969.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='969.11' transform='rotate(-30,248.4,969.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='969.11' transform='rotate(-30,418.4,969.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='969.11' transform='rotate(-30,588.4,969.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='969.11' transform='rotate(-30,758.4,969.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='949.11' transform='rotate(-30,-261.6,949.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='949.11' transform='rotate(-30,-91.6,949.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='949.11' transform='rotate(-30,78.4,949.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='949.11' transform='rotate(-30,248.4,949.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='949.11' transform='rotate(-30,418.4,949.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='949.11' transform='rotate(-30,588.4,949.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='949.11' transform='rotate(-30,758.4,949.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='929.11' transform='rotate(-30,-261.6,929.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='929.11' transform='rotate(-30,-91.6,929.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='929.11' transform='rotate(-30,78.4,929.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='929.11' transform='rotate(-30,248.4,929.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='929.11' transform='rotate(-30,418.4,929.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='929.11' transform='rotate(-30,588.4,929.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='929.11' transform='rotate(-30,758.4,929.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='909.11' transform='rotate(-30,-261.6,909.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='909.11' transform='rotate(-30,-91.6,909.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='909.11' transform='rotate(-30,78.4,909.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='909.11' transform='rotate(-30,248.4,909.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='909.11' transform='rotate(-30,418.4,909.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='909.11' transform='rotate(-30,588.4,909.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='909.11' transform='rotate(-30,758.4,909.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='889.11' transform='rotate(-30,-261.6,889.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='889.11' transform='rotate(-30,-91.6,889.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='889.11' transform='rotate(-30,78.4,889.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='889.11' transform='rotate(-30,248.4,889.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='889.11' transform='rotate(-30,418.4,889.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='889.11' transform='rotate(-30,588.4,889.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='889.11' transform='rotate(-30,758.4,889.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='869.11' transform='rotate(-30,-261.6,869.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='869.11' transform='rotate(-30,-91.6,869.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='869.11' transform='rotate(-30,78.4,869.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='869.11' transform='rotate(-30,248.4,869.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='869.11' transform='rotate(-30,418.4,869.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='869.11' transform='rotate(-30,588.4,869.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='869.11' transform='rotate(-30,758.4,869.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='849.11' transform='rotate(-30,-261.6,849.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='849.11' transform='rotate(-30,-91.6,849.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='849.11' transform='rotate(-30,78.4,849.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='849.11' transform='rotate(-30,248.4,849.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='849.11' transform='rotate(-30,418.4,849.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='849.11' transform='rotate(-30,588.4,849.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='849.11' transform='rotate(-30,758.4,849.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='829.11' transform='rotate(-30,-261.6,829.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='829.11' transform='rotate(-30,-91.6,829.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='829.11' transform='rotate(-30,78.4,829.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='829.11' transform='rotate(-30,248.4,829.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='829.11' transform='rotate(-30,418.4,829.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='829.11' transform='rotate(-30,588.4,829.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='829.11' transform='rotate(-30,758.4,829.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='809.11' transform='rotate(-30,-261.6,809.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='809.11' transform='rotate(-30,-91.6,809.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='809.11' transform='rotate(-30,78.4,809.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='809.11' transform='rotate(-30,248.4,809.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='809.11' transform='rotate(-30,418.4,809.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='809.11' transform='rotate(-30,588.4,809.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='809.11' transform='rotate(-30,758.4,809.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='789.11' transform='rotate(-30,-261.6,789.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='789.11' transform='rotate(-30,-91.6,789.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='789.11' transform='rotate(-30,78.4,789.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='789.11' transform='rotate(-30,248.4,789.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='789.11' transform='rotate(-30,418.4,789.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='789.11' transform='rotate(-30,588.4,789.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='789.11' transform='rotate(-30,758.4,789.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='769.11' transform='rotate(-30,-261.6,769.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='769.11' transform='rotate(-30,-91.6,769.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='769.11' transform='rotate(-30,78.4,769.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='769.11' transform='rotate(-30,248.4,769.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='769.11' transform='rotate(-30,418.4,769.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='769.11' transform='rotate(-30,588.4,769.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='769.11' transform='rotate(-30,758.4,769.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='749.11' transform='rotate(-30,-261.6,749.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='749.11' transform='rotate(-30,-91.6,749.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='749.11' transform='rotate(-30,78.4,749.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='749.11' transform='rotate(-30,248.4,749.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='749.11' transform='rotate(-30,418.4,749.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='749.11' transform='rotate(-30,588.4,749.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='749.11' transform='rotate(-30,758.4,749.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='729.11' transform='rotate(-30,-261.6,729.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='729.11' transform='rotate(-30,-91.6,729.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='729.11' transform='rotate(-30,78.4,729.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='729.11' transform='rotate(-30,248.4,729.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='729.11' transform='rotate(-30,418.4,729.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='729.11' transform='rotate(-30,588.4,729.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='729.11' transform='rotate(-30,758.4,729.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='709.11' transform='rotate(-30,-261.6,709.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='709.11' transform='rotate(-30,-91.6,709.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='709.11' transform='rotate(-30,78.4,709.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='709.11' transform='rotate(-30,248.4,709.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='709.11' transform='rotate(-30,418.4,709.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='709.11' transform='rotate(-30,588.4,709.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='709.11' transform='rotate(-30,758.4,709.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='689.11' transform='rotate(-30,-261.6,689.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='689.11' transform='rotate(-30,-91.6,689.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='689.11' transform='rotate(-30,78.4,689.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='689.11' transform='rotate(-30,248.4,689.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='689.11' transform='rotate(-30,418.4,689.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='689.11' transform='rotate(-30,588.4,689.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='689.11' transform='rotate(-30,758.4,689.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='669.11' transform='rotate(-30,-261.6,669.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='669.11' transform='rotate(-30,-91.6,669.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='669.11' transform='rotate(-30,78.4,669.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='669.11' transform='rotate(-30,248.4,669.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='669.11' transform='rotate(-30,418.4,669.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='669.11' transform='rotate(-30,588.4,669.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='669.11' transform='rotate(-30,758.4,669.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='649.11' transform='rotate(-30,-261.6,649.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='649.11' transform='rotate(-30,-91.6,649.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='649.11' transform='rotate(-30,78.4,649.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='649.11' transform='rotate(-30,248.4,649.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='649.11' transform='rotate(-30,418.4,649.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='649.11' transform='rotate(-30,588.4,649.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='649.11' transform='rotate(-30,758.4,649.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='629.11' transform='rotate(-30,-261.6,629.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='629.11' transform='rotate(-30,-91.6,629.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='629.11' transform='rotate(-30,78.4,629.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='629.11' transform='rotate(-30,248.4,629.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='629.11' transform='rotate(-30,418.4,629.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='629.11' transform='rotate(-30,588.4,629.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='629.11' transform='rotate(-30,758.4,629.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='609.11' transform='rotate(-30,-261.6,609.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='609.11' transform='rotate(-30,-91.6,609.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='609.11' transform='rotate(-30,78.4,609.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='609.11' transform='rotate(-30,248.4,609.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='609.11' transform='rotate(-30,418.4,609.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='609.11' transform='rotate(-30,588.4,609.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='609.11' transform='rotate(-30,758.4,609.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='589.11' transform='rotate(-30,-261.6,589.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='589.11' transform='rotate(-30,-91.6,589.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='589.11' transform='rotate(-30,78.4,589.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='589.11' transform='rotate(-30,248.4,589.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='589.11' transform='rotate(-30,418.4,589.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='589.11' transform='rotate(-30,588.4,589.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='589.11' transform='rotate(-30,758.4,589.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='569.11' transform='rotate(-30,-261.6,569.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='569.11' transform='rotate(-30,-91.6,569.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='569.11' transform='rotate(-30,78.4,569.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='569.11' transform='rotate(-30,248.4,569.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='569.11' transform='rotate(-30,418.4,569.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='569.11' transform='rotate(-30,588.4,569.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='569.11' transform='rotate(-30,758.4,569.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='549.11' transform='rotate(-30,-261.6,549.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='549.11' transform='rotate(-30,-91.6,549.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='549.11' transform='rotate(-30,78.4,549.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='549.11' transform='rotate(-30,248.4,549.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='549.11' transform='rotate(-30,418.4,549.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='549.11' transform='rotate(-30,588.4,549.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='549.11' transform='rotate(-30,758.4,549.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='529.11' transform='rotate(-30,-261.6,529.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='529.11' transform='rotate(-30,-91.6,529.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='529.11' transform='rotate(-30,78.4,529.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='529.11' transform='rotate(-30,248.4,529.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='529.11' transform='rotate(-30,418.4,529.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='529.11' transform='rotate(-30,588.4,529.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='529.11' transform='rotate(-30,758.4,529.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='509.11' transform='rotate(-30,-261.6,509.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='509.11' transform='rotate(-30,-91.6,509.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='509.11' transform='rotate(-30,78.4,509.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='509.11' transform='rotate(-30,248.4,509.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='509.11' transform='rotate(-30,418.4,509.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='509.11' transform='rotate(-30,588.4,509.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='509.11' transform='rotate(-30,758.4,509.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='489.11' transform='rotate(-30,-261.6,489.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='489.11' transform='rotate(-30,-91.6,489.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='489.11' transform='rotate(-30,78.4,489.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='489.11' transform='rotate(-30,248.4,489.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='489.11' transform='rotate(-30,418.4,489.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='489.11' transform='rotate(-30,588.4,489.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='489.11' transform='rotate(-30,758.4,489.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='469.11' transform='rotate(-30,-261.6,469.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='469.11' transform='rotate(-30,-91.6,469.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='469.11' transform='rotate(-30,78.4,469.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='469.11' transform='rotate(-30,248.4,469.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='469.11' transform='rotate(-30,418.4,469.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='469.11' transform='rotate(-30,588.4,469.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='469.11' transform='rotate(-30,758.4,469.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='449.11' transform='rotate(-30,-261.6,449.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='449.11' transform='rotate(-30,-91.6,449.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='449.11' transform='rotate(-30,78.4,449.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='449.11' transform='rotate(-30,248.4,449.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='449.11' transform='rotate(-30,418.4,449.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='449.11' transform='rotate(-30,588.4,449.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='449.11' transform='rotate(-30,758.4,449.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='429.11' transform='rotate(-30,-261.6,429.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='429.11' transform='rotate(-30,-91.6,429.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='429.11' transform='rotate(-30,78.4,429.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='429.11' transform='rotate(-30,248.4,429.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='429.11' transform='rotate(-30,418.4,429.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='429.11' transform='rotate(-30,588.4,429.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='429.11' transform='rotate(-30,758.4,429.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='409.11' transform='rotate(-30,-261.6,409.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='409.11' transform='rotate(-30,-91.6,409.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='409.11' transform='rotate(-30,78.4,409.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='409.11' transform='rotate(-30,248.4,409.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='409.11' transform='rotate(-30,418.4,409.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='409.11' transform='rotate(-30,588.4,409.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='409.11' transform='rotate(-30,758.4,409.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='389.11' transform='rotate(-30,-261.6,389.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='389.11' transform='rotate(-30,-91.6,389.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='389.11' transform='rotate(-30,78.4,389.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='389.11' transform='rotate(-30,248.4,389.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='389.11' transform='rotate(-30,418.4,389.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='389.11' transform='rotate(-30,588.4,389.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='389.11' transform='rotate(-30,758.4,389.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='369.11' transform='rotate(-30,-261.6,369.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='369.11' transform='rotate(-30,-91.6,369.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='369.11' transform='rotate(-30,78.4,369.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='369.11' transform='rotate(-30,248.4,369.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='369.11' transform='rotate(-30,418.4,369.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='369.11' transform='rotate(-30,588.4,369.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='369.11' transform='rotate(-30,758.4,369.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='349.11' transform='rotate(-30,-261.6,349.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='349.11' transform='rotate(-30,-91.6,349.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='349.11' transform='rotate(-30,78.4,349.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='349.11' transform='rotate(-30,248.4,349.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='349.11' transform='rotate(-30,418.4,349.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='349.11' transform='rotate(-30,588.4,349.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='349.11' transform='rotate(-30,758.4,349.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='329.11' transform='rotate(-30,-261.6,329.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='329.11' transform='rotate(-30,-91.6,329.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='329.11' transform='rotate(-30,78.4,329.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='329.11' transform='rotate(-30,248.4,329.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='329.11' transform='rotate(-30,418.4,329.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='329.11' transform='rotate(-30,588.4,329.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='329.11' transform='rotate(-30,758.4,329.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='309.11' transform='rotate(-30,-261.6,309.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='309.11' transform='rotate(-30,-91.6,309.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='309.11' transform='rotate(-30,78.4,309.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='309.11' transform='rotate(-30,248.4,309.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='309.11' transform='rotate(-30,418.4,309.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='309.11' transform='rotate(-30,588.4,309.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='309.11' transform='rotate(-30,758.4,309.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='289.11' transform='rotate(-30,-261.6,289.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='289.11' transform='rotate(-30,-91.6,289.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='289.11' transform='rotate(-30,78.4,289.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='289.11' transform='rotate(-30,248.4,289.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='289.11' transform='rotate(-30,418.4,289.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='289.11' transform='rotate(-30,588.4,289.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='289.11' transform='rotate(-30,758.4,289.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='269.11' transform='rotate(-30,-261.6,269.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='269.11' transform='rotate(-30,-91.6,269.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='269.11' transform='rotate(-30,78.4,269.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='269.11' transform='rotate(-30,248.4,269.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='269.11' transform='rotate(-30,418.4,269.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='269.11' transform='rotate(-30,588.4,269.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='269.11' transform='rotate(-30,758.4,269.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='249.11' transform='rotate(-30,-261.6,249.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='249.11' transform='rotate(-30,-91.6,249.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='249.11' transform='rotate(-30,78.4,249.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='249.11' transform='rotate(-30,248.4,249.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='249.11' transform='rotate(-30,418.4,249.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='249.11' transform='rotate(-30,588.4,249.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='249.11' transform='rotate(-30,758.4,249.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='229.11' transform='rotate(-30,-261.6,229.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='229.11' transform='rotate(-30,-91.6,229.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='229.11' transform='rotate(-30,78.4,229.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='229.11' transform='rotate(-30,248.4,229.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='229.11' transform='rotate(-30,418.4,229.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='229.11' transform='rotate(-30,588.4,229.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='229.11' transform='rotate(-30,758.4,229.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='209.11' transform='rotate(-30,-261.6,209.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='209.11' transform='rotate(-30,-91.6,209.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='209.11' transform='rotate(-30,78.4,209.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='209.11' transform='rotate(-30,248.4,209.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='209.11' transform='rotate(-30,418.4,209.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='209.11' transform='rotate(-30,588.4,209.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='209.11' transform='rotate(-30,758.4,209.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='189.11' transform='rotate(-30,-261.6,189.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='189.11' transform='rotate(-30,-91.6,189.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='189.11' transform='rotate(-30,78.4,189.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='189.11' transform='rotate(-30,248.4,189.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='189.11' transform='rotate(-30,418.4,189.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='189.11' transform='rotate(-30,588.4,189.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='189.11' transform='rotate(-30,758.4,189.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='169.11' transform='rotate(-30,-261.6,169.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='169.11' transform='rotate(-30,-91.6,169.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='169.11' transform='rotate(-30,78.4,169.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='169.11' transform='rotate(-30,248.4,169.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='169.11' transform='rotate(-30,418.4,169.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='169.11' transform='rotate(-30,588.4,169.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='169.11' transform='rotate(-30,758.4,169.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='149.11' transform='rotate(-30,-261.6,149.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='149.11' transform='rotate(-30,-91.6,149.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='149.11' transform='rotate(-30,78.4,149.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='149.11' transform='rotate(-30,248.4,149.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='149.11' transform='rotate(-30,418.4,149.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='149.11' transform='rotate(-30,588.4,149.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='149.11' transform='rotate(-30,758.4,149.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='129.11' transform='rotate(-30,-261.6,129.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='129.11' transform='rotate(-30,-91.6,129.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='129.11' transform='rotate(-30,78.4,129.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='129.11' transform='rotate(-30,248.4,129.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='129.11' transform='rotate(-30,418.4,129.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='129.11' transform='rotate(-30,588.4,129.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='129.11' transform='rotate(-30,758.4,129.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='109.11' transform='rotate(-30,-261.6,109.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='109.11' transform='rotate(-30,-91.6,109.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='109.11' transform='rotate(-30,78.4,109.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='109.11' transform='rotate(-30,248.4,109.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='109.11' transform='rotate(-30,418.4,109.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='109.11' transform='rotate(-30,588.4,109.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='109.11' transform='rotate(-30,758.4,109.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='89.11' transform='rotate(-30,-261.6,89.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='89.11' transform='rotate(-30,-91.6,89.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='89.11' transform='rotate(-30,78.4,89.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='89.11' transform='rotate(-30,248.4,89.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='89.11' transform='rotate(-30,418.4,89.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='89.11' transform='rotate(-30,588.4,89.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='89.11' transform='rotate(-30,758.4,89.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='69.11' transform='rotate(-30,-261.6,69.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='69.11' transform='rotate(-30,-91.6,69.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='69.11' transform='rotate(-30,78.4,69.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='69.11' transform='rotate(-30,248.4,69.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='69.11' transform='rotate(-30,418.4,69.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='69.11' transform='rotate(-30,588.4,69.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='69.11' transform='rotate(-30,758.4,69.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='49.11' transform='rotate(-30,-261.6,49.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='49.11' transform='rotate(-30,-91.6,49.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='49.11' transform='rotate(-30,78.4,49.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='49.11' transform='rotate(-30,248.4,49.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='49.11' transform='rotate(-30,418.4,49.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='49.11' transform='rotate(-30,588.4,49.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='49.11' transform='rotate(-30,758.4,49.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='29.11' transform='rotate(-30,-261.6,29.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='29.11' transform='rotate(-30,-91.6,29.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='29.11' transform='rotate(-30,78.4,29.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='29.11' transform='rotate(-30,248.4,29.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='29.11' transform='rotate(-30,418.4,29.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='29.11' transform='rotate(-30,588.4,29.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='29.11' transform='rotate(-30,758.4,29.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='9.11' transform='rotate(-30,-261.6,9.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='9.11' transform='rotate(-30,-91.6,9.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='9.11' transform='rotate(-30,78.4,9.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='9.11' transform='rotate(-30,248.4,9.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='9.11' transform='rotate(-30,418.4,9.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='9.11' transform='rotate(-30,588.4,9.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='9.11' transform='rotate(-30,758.4,9.11)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='-10.89' transform='rotate(-30,-261.6,-10.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='-10.89' transform='rotate(-30,-91.6,-10.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='-10.89' transform='rotate(-30,78.4,-10.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='-10.89' transform='rotate(-30,248.4,-10.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='-10.89' transform='rotate(-30,418.4,-10.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='-10.89' transform='rotate(-30,588.4,-10.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='-10.89' transform='rotate(-30,758.4,-10.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='-30.89' transform='rotate(-30,-261.6,-30.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='-30.89' transform='rotate(-30,-91.6,-30.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='-30.89' transform='rotate(-30,78.4,-30.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='-30.89' transform='rotate(-30,248.4,-30.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='-30.89' transform='rotate(-30,418.4,-30.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='-30.89' transform='rotate(-30,588.4,-30.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='-30.89' transform='rotate(-30,758.4,-30.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-261.6' y='-50.89' transform='rotate(-30,-261.6,-50.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='-91.6' y='-50.89' transform='rotate(-30,-91.6,-50.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='78.4' y='-50.89' transform='rotate(-30,78.4,-50.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='248.4' y='-50.89' transform='rotate(-30,248.4,-50.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='418.4' y='-50.89' transform='rotate(-30,418.4,-50.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='588.4' y='-50.89' transform='rotate(-30,588.4,-50.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3Ctext x='758.4' y='-50.89' transform='rotate(-30,758.4,-50.89)' font-family='Helvetica,Arial,sans-serif' font-size='7.5' font-weight='400' fill='%23DC913C'%3Ee-challan for Transportation of Sand / Riverbed Materials%3C/text%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.invoice-page>* {
+    position: relative;
+    z-index: 2;
+}
+
+
+
+
+
+/* =========================================
+   BORDER
+========================================= */
+
+
+.invoice-page::before {
+
+
+    content: "";
+
+
+    position: absolute;
+
+
+    top: 7.5mm;
+
+
+    left: 8mm;
+
+
+
+    width: calc(100% - 16mm);
+
+
+    height: calc(100% - 14mm);
+
+
+
+    z-index: 3;
+
+
+
+    pointer-events: none;
+
+}
+
+
+
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+
+.invoice-content {
+
+
+    position: relative;
+
+
+    z-index: 2;
+
+
+
+    width: 100%;
+
+
+    height: 100%;
+
+
+
+    padding: 8mm;
+
+
+
+    box-sizing: border-box;
+
+
+
+    background: transparent;
+
+}
+
+
+
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+
+.header {
+
+
+    height: 11mm;
+
+
+
+    display: flex;
+
+
+    justify-content: center;
+
+
+    align-items: center;
+
+
+
+    font-size: 16px;
+
+
+
+    font-weight: bold;
+
+}
+
+
+
+
+
+/* =========================================
+   QR WARNING
+========================================= */
+
+
+.qr-warning {
+
+
+    height: 9mm;
+
+
+
+    display: flex;
+
+
+    /* align-items: center; */
+
+
+
+    font-size: 15px;
+
+}
+
+
+
+
+
+/* =========================================
+   COMMON SECTION
+========================================= */
+
+
+.section {
+
+
+    width: 100%;
+
+
+
+    border: 0.35mm solid #E68C32;
+
+
+
+    box-sizing: border-box;
+
+}
+
+
+
+
+
+.section-title {
+
+
+    height: 8mm;
+
+
+
+    display: flex;
+
+
+    justify-content: center;
+
+
+    align-items: center;
+
+
+
+    background: #FBC990;
+
+
+
+    border-bottom: 0.35mm solid #E68C32;
+
+
+
+    font-size: 13px;
+
+
+
+    font-weight: bold;
+
+}
+
+
+
+
+
+/* =========================================
+   CHALLAN SUMMARY
+========================================= */
+
+
+.challan-summary {
+
+
+    height: 32mm;
+
+}
+
+
+
+
+
+/* =========================================
+   TWO COLUMN AREA
+========================================= */
+
+
+.two-column {
+
+
+    display: grid;
+
+
+
+    grid-template-columns: 50% 50%;
+
+
+
+    height: 82mm;
+
+}
+
+
+
+
+
+.column {
+
+
+    border-right: 0.35mm solid #E68C32;
+
+}
+
+
+
+
+
+.column:last-child {
+
+
+    border-right: none;
+
+}
+
+
+
+
+
+/* =========================================
+   FIXED HEIGHT SECTIONS
+========================================= */
+
+
+.lease-holder {
+
+
+    height: 28mm;
+
+}
+
+
+
+
+
+.notes {
+
+
+    height: 60mm;
+
+}
+
+
+
+
+
+.issued-by {
+
+
+    height: 22mm;
+
+}
+
+
+
+
+
+.remarks {
+
+
+    height: 18mm;
+
+}
+
+
+
+
+.footer {
+    position: absolute;
+    bottom: 8mm;
+    left: 8mm;
+    width: 551pt;
+    height: 5mm;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+
+
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+
+table {
+
+
+    width: 100%;
+
+
+
+    border-collapse: collapse;
+
+
+
+    font-size: 11px;
+
+}
+
+
+
+
+
+td,
+th {
+
+
+    border: 0.25mm solid #E68C32;
+
+
+
+    padding: 2mm;
+
+
+
+    vertical-align: middle;
+
+}
+
+
+
+
+
+th {
+
+
+    background: #FBC990;
+
+}
+
+
+
+
+
+/* =========================================
+   PRINT BUTTON
+========================================= */
+
+
+.no-print {
+
+
+    display: block;
+
+}
+
+
+
+
+
+/* =========================================
+   PRINT SETTINGS
+========================================= */
+
+
+@page {
+
+
+    size: A4 portrait;
+
+
+
+    margin: 0;
+
+}
+
+
+
+
+
+@media print {
+
+
+
+    * {
+
+
+        -webkit-print-color-adjust: exact !important;
+
+
+
+        print-color-adjust: exact !important;
+
+    }
+
+
+
+
+    html,
+    body {
+
+
+        width: 210mm;
+
+
+
+        height: 297mm;
+
+
+
+        margin: 0;
+
+
+
+        padding: 0;
+
+    }
+
+
+
+
+
+    body {
+
+
+        overflow: hidden;
+
+    }
+
+
+
+
+
+    .invoice-page {
+
+
+        width: 210mm;
+
+
+
+        height: 297mm;
+
+
+
+        margin: 0;
+
+    }
+
+
+
+
+
+    .no-print {
+
+
+        display: none !important;
+
+    }
+
+}
