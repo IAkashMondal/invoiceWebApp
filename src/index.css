@@ -16,27 +16,27 @@ body {
 /* PRINT Mode: Force A4 Size */
 @media print {
   #print {
-    width: 21.1cm !important;
-    height: 29.7cm !important;
-    max-width: none;
-    max-height: none;
-    transform: scale(1);
-    /* Ensure A4 size */
-    transform-origin: top left;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: 210mm !important;
+    max-height: 297mm !important;
+    transform: none !important;
     display: block !important;
     position: relative;
-    padding-left: 5mm;
-    padding-top: 5mm;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   /* Hide buttons during print */
-  #no-print {
-    display: none;
+  #no-print,
+  .no-print {
+    display: none !important;
   }
 
+  html,
   body {
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
     box-shadow: none;
   }
 
