@@ -71,7 +71,8 @@ export const generateTimeObject = () => {
   const formattedHours = String(hours % 12 || 12).padStart(2, "0");
 
   // Generated Time: "MM/DD/YYYY HH:MM AM/PM"
-  const generatedOn = `${month}/${day}/20${year} ${formattedHours}:${minutes} ${ampm}`;
+  // const generatedOn = `${month}/${day}/20${year} ${formattedHours}:${minutes} ${ampm}`;
+  const generatedOn = `${day}-${month}-20${year} ${formattedHours}:${minutes} ${ampm}`;
 
   // Issue Date: "DD/MM/YYYY HH:MM AM/PM"
   const issueDate = `${day}/${month}/20${year} ${formattedHours}:${minutes} ${ampm}`;
