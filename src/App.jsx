@@ -2,7 +2,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import './App.css'
 import { useUser } from '@clerk/clerk-react';
-import { Toaster } from 'sonner';
+
 import InvoiceHeader from './components/Customs/InvoiceHeader';
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
     <>
       <InvoiceHeader />
       <Outlet />
-      <Toaster id="no-print" />
+
     </>
   )
 }
