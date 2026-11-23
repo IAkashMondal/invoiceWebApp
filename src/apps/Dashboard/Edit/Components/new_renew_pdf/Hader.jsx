@@ -21,7 +21,6 @@ const formatQuantity = (value) => {
 };
 
 const Hader = ({ qrCode, RoyaltyData, vehicleRegData }) => {
-    // Merge data from EditRoyaltyPreview / vehicleRegData / RoyaltyData
     const data = {
         ...(vehicleRegData || {}),
         ...(RoyaltyData?.RoyaltyData || {}),
@@ -56,7 +55,7 @@ const Hader = ({ qrCode, RoyaltyData, vehicleRegData }) => {
     };
 
     return (
-        <div style={{ width: "551pt", marginBottom: "8pt", breakInside: "avoid" }}>
+        <div style={{ width: "100%", maxWidth: "551pt", marginBottom: "8pt", breakInside: "avoid" }}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 551 127"
@@ -64,9 +63,9 @@ const Hader = ({ qrCode, RoyaltyData, vehicleRegData }) => {
                 aria-label="Road E-Challan header and transportation details"
                 style={{
                     display: "block",
-                    width: "551pt",
-                    height: "127pt",
-                    maxWidth: "none",
+                    width: "100%",
+                    height: "auto",
+                    maxWidth: "551pt",
                     overflow: "visible",
                     fontFamily: "Helvetica, Arial, sans-serif",
                     letterSpacing: 0,

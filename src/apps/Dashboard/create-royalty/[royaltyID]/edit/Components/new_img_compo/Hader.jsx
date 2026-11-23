@@ -17,7 +17,6 @@ const formatQuantity = (value) => {
     if (typeof value === "number" && !Number.isFinite(value)) return "";
     const text = String(value).trim();
     const parts = text.match(/^([+-]?\d+)(?:\.(\d*))?$/);
-    // Add missing decimal places without rounding the supplied quantity.
     return parts ? `${parts[1]}.${(parts[2] ?? "").padEnd(2, "0")}` : text;
 };
 
@@ -44,10 +43,7 @@ const Hader = ({ qrCode, RoyaltyData }) => {
     };
 
     return (
-        <div style={{ width: "551pt", marginBottom: "8pt", breakInside: "avoid" }}>
-            {/* One SVG user unit equals one PDF point at these physical dimensions.
-                The reference places this component at page x=22pt, top=18pt.
-                Parent positioning is intentionally kept outside this component. */}
+        <div style={{ width: "100%", maxWidth: "551pt", marginBottom: "8pt", breakInside: "avoid" }}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 551 127"
@@ -55,9 +51,9 @@ const Hader = ({ qrCode, RoyaltyData }) => {
                 aria-label="Road E-Challan header and transportation details"
                 style={{
                     display: "block",
-                    width: "551pt",
-                    height: "127pt",
-                    maxWidth: "none",
+                    width: "100%",
+                    height: "auto",
+                    maxWidth: "551pt",
                     overflow: "visible",
                     fontFamily: "Helvetica, Arial, sans-serif",
                     letterSpacing: 0,
@@ -73,7 +69,6 @@ const Hader = ({ qrCode, RoyaltyData }) => {
                     Road E-Challan for Sand / Riverbed Materials Transport
                 </text>
 
-                {/* Transparent detail area preserves the page watermark underneath. */}
                 <rect
                     x="0" y="29" width="551" height="98"
                     fill="none" stroke="#E68C32" strokeWidth="1"
@@ -116,11 +111,11 @@ const Hader = ({ qrCode, RoyaltyData }) => {
 Hader.propTypes = {
     RoyaltyData: PropTypes.shape({
         EchallanId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        EChallanDT: PropTypes.string.isRequired,
-        IssueDate: PropTypes.string.isRequired,
-        ValidityDate: PropTypes.string.isRequired,
-        quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-        Registration_No: PropTypes.string.isRequired,
+        EChallanDT: PropTypes.string,
+        IssueDate: PropTypes.string,
+        ValidityDate: PropTypes.string,
+        quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        Registration_No: PropTypes.string,
         VehicleQunText: PropTypes.string,
         VehicleType: PropTypes.string
     }),

@@ -12,27 +12,54 @@ import html2canvas from 'html2canvas';
 import { useReactToPrint } from 'react-to-print';
 import { GetParticularVehicle } from "../../../../../../../Apis/R_Apis/VehicleApis";
 
-// A4 dimensions in mm
+// Exact A4 physical constants at 96 DPI
 const A4_WIDTH_MM = 210;
 const A4_HEIGHT_MM = 297;
+const A4_WIDTH_PX = 794;
+const A4_HEIGHT_PX = 1123;
+
+// Robust viewport calculation that prevents mobile overflow blowouts
+const getDeviceViewportWidth = () => {
+    if (typeof window === "undefined") return A4_WIDTH_PX;
+    const visualVp = window.visualViewport ? window.visualViewport.width : null;
+    const clientWidth = document.documentElement?.clientWidth || null;
+    const innerWidth = window.innerWidth || null;
+
+    const validWidths = [visualVp, clientWidth, innerWidth].filter(
+        (w) => typeof w === "number" && w > 0
+    );
+
+    return validWidths.length > 0 ? Math.min(...validWidths) : A4_WIDTH_PX;
+};
+
+const calculateInitialScale = () => {
+    if (typeof window === "undefined") return 1;
+    const vpWidth = getDeviceViewportWidth();
+    const padding = 24; // 12px margins
+    const available = vpWidth - padding;
+    if (available >= A4_WIDTH_PX) return 1;
+    return Math.max(0.25, available / A4_WIDTH_PX);
+};
 
 const RoyaltyPreview = ({ qrCode }) => {
     const { RoyaltyData, setRoyaltyData } = useContext(RoyaltyInfoContext);
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoadind] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [scale, setScale] = useState(1);
+    const [scale, setScale] = useState(calculateInitialScale);
     const contentRef = useRef(null);
-    const pageNaturalWidth = useRef(null);
+
+    const echallanId = RoyaltyData?.EchallanId || vehicleRegData?.EchallanId || 'Challan';
+    const documentTitle = `WBMD_TP_${echallanId}_T_${getDynamicYearRange()}_RPS`;
 
     const handlePrint = useReactToPrint({
         contentRef: contentRef,
-        documentTitle: `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`,
-        pageStyle: `@page { size: A4 portrait; margin: 0mm !important; } html, body { margin: 0mm !important; padding: 0mm !important; width: 210mm !important; height: 297mm !important; overflow: hidden !important; background: #ffffff !important; } #print { margin: 0 !important; padding: 7mm !important; width: 210mm !important; height: 297mm !important; }`,
+        documentTitle: documentTitle,
+        pageStyle: `@page { size: A4 portrait; margin: 0mm !important; } @page :first { margin: 0mm !important; } *, *::before, *::after { box-sizing: border-box !important; } html, body { margin: 0mm !important; padding: 0mm !important; width: 210mm !important; height: 297mm !important; overflow: hidden !important; background: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; } #print { margin: 0 !important; padding: 7mm !important; width: 210mm !important; height: 297mm !important; max-width: 210mm !important; max-height: 297mm !important; position: fixed !important; top: 0 !important; left: 0 !important; transform: none !important; overflow: hidden !important; box-sizing: border-box !important; } #no-print, .no-print, button { display: none !important; }`,
     });
 
     const reactToPrintFn = () => {
-        document.title = `WBMD_TP_${RoyaltyData?.EchallanId}_T_${getDynamicYearRange()}_RPS`;
+        document.title = documentTitle;
         if (typeof handlePrint === 'function') {
             handlePrint();
         } else {
@@ -65,19 +92,16 @@ const RoyaltyPreview = ({ qrCode }) => {
     }, [params?.royaltyID]);
 
     /**
-     * Viewport scaling: measures the A4 page's natural rendered width
+     * Viewport scaling: measures the device viewport width
      * and computes a CSS transform scale factor so the entire page
      * fits within the viewport on mobile — like a PDF viewer.
      */
     const updateScale = useCallback(() => {
-        if (contentRef.current && !pageNaturalWidth.current) {
-            pageNaturalWidth.current = contentRef.current.offsetWidth;
-        }
-        const pageWidth = pageNaturalWidth.current || 794; // 210mm ≈ 794px at 96dpi
-        const viewportWidth = window.innerWidth;
-        const padding = 32; // 16px margin on each side
-        const maxWidth = viewportWidth - padding;
-        setScale(maxWidth >= pageWidth ? 1 : maxWidth / pageWidth);
+        const vpWidth = getDeviceViewportWidth();
+        const padding = 24; // 12px margin on each side
+        const maxWidth = vpWidth - padding;
+        const newScale = maxWidth >= A4_WIDTH_PX ? 1 : Math.max(0.25, maxWidth / A4_WIDTH_PX);
+        setScale(newScale);
     }, []);
 
     useEffect(() => {
@@ -160,8 +184,11 @@ const RoyaltyPreview = ({ qrCode }) => {
         }
     };
 
+    const scaledWidth = Math.round(A4_WIDTH_PX * scale);
+    const scaledHeight = Math.round(A4_HEIGHT_PX * scale);
+
     return (
-        <div id="Maindiv" className="flex flex-col items-center print:p-0 print:m-0">
+        <div id="Maindiv" className="flex flex-col items-center print:p-0 print:m-0 w-full max-w-full overflow-x-hidden">
             {/* ═══════════════════════════════════════════════════════════
                 InvoiceViewport — responsive scaling wrapper
                 ─────────────────────────────────────────────────────────
@@ -173,10 +200,14 @@ const RoyaltyPreview = ({ qrCode }) => {
             <div
                 className="invoice-viewport"
                 style={{
-                    width: scale < 1 ? `calc(${A4_WIDTH_MM}mm * ${scale})` : `${A4_WIDTH_MM}mm`,
-                    height: scale < 1 ? `calc(${A4_HEIGHT_MM}mm * ${scale})` : `${A4_HEIGHT_MM}mm`,
-                    overflow: 'hidden',
-                    margin: '0 auto',
+                    width: `${scaledWidth}px`,
+                    height: `${scaledHeight}px`,
+                    maxWidth: "100%",
+                    minWidth: 0,
+                    overflow: "hidden",
+                    position: "relative",
+                    margin: "0 auto",
+                    boxSizing: "border-box",
                 }}
             >
                 {/* Transform wrapper — applies the scale */}
@@ -184,7 +215,12 @@ const RoyaltyPreview = ({ qrCode }) => {
                     className="invoice-scale-wrapper"
                     style={{
                         transform: `scale(${scale})`,
-                        transformOrigin: 'top left',
+                        transformOrigin: "top left",
+                        width: `${A4_WIDTH_PX}px`,
+                        height: `${A4_HEIGHT_PX}px`,
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
                     }}
                 >
                     {/* ═══════════════════════════════════════════════════════════
@@ -200,14 +236,14 @@ const RoyaltyPreview = ({ qrCode }) => {
                         id="print"
                         ref={contentRef}
                         style={{
-                            width: `${A4_WIDTH_MM}mm`,
-                            height: `${A4_HEIGHT_MM}mm`,
-                            minWidth: `${A4_WIDTH_MM}mm`,
-                            maxWidth: `${A4_WIDTH_MM}mm`,
-                            minHeight: `${A4_HEIGHT_MM}mm`,
-                            maxHeight: `${A4_HEIGHT_MM}mm`,
+                            width: `${A4_WIDTH_PX}px`,
+                            height: `${A4_HEIGHT_PX}px`,
+                            minWidth: `${A4_WIDTH_PX}px`,
+                            maxWidth: `${A4_WIDTH_PX}px`,
+                            minHeight: `${A4_HEIGHT_PX}px`,
+                            maxHeight: `${A4_HEIGHT_PX}px`,
                             padding: '7mm',
-                            margin: '0 auto',
+                            margin: 0,
                             position: 'relative',
                             background: '#ffffff',
                             boxSizing: 'border-box',

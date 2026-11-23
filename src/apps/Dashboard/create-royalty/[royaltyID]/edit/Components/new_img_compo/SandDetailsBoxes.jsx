@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-// Exact baseline definitions relative to SVG top (pitch: 15.5pt)
 const LEFT_BOX_ROWS = [
     { key: "stockPointId", label: "Sand Stock Point Id", y: 32.5 },
     { key: "river", label: "River", y: 48 },
@@ -31,7 +30,6 @@ const BOTTOM_BOX_ROWS = [
 ];
 
 const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
-    // Normalize data from RoyaltyData context/prop (supports direct object or nested RoyaltyData)
     const royalty = RoyaltyData?.RoyaltyData ?? RoyaltyData ?? data?.RoyaltyData ?? data ?? {};
     const owners = royalty?.RoyaltyOwners ?? {};
 
@@ -87,7 +85,7 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
     };
 
     return (
-        <div style={{ width: "551pt", marginBottom: "8pt", breakInside: "avoid" }}>
+        <div style={{ width: "100%", maxWidth: "551pt", marginBottom: "8pt", breakInside: "avoid" }}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 551 237"
@@ -95,9 +93,9 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
                 aria-label="Sand processing stock and mining leaseholder details"
                 style={{
                     display: "block",
-                    width: "551pt",
-                    height: "237pt",
-                    maxWidth: "none",
+                    width: "100%",
+                    height: "auto",
+                    maxWidth: "551pt",
                     overflow: "visible",
                     fontFamily: "Helvetica, Arial, sans-serif",
                     letterSpacing: 0,
@@ -105,18 +103,10 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
                     printColorAdjust: "exact"
                 }}
             >
-                {/* ==================== 1. HEADING FILLS (#FBC990) ==================== */}
-                {/* Upper Left Header Fill */}
                 <rect x="0" y="0" width="275.5" height="19.5" fill="#FBC990" stroke="none" />
-
-                {/* Upper Right Header Fill */}
                 <rect x="275.5" y="0" width="275.5" height="19.5" fill="#FBC990" stroke="none" />
-
-                {/* Lower Header Fill */}
                 <rect x="0" y="169" width="551" height="19.5" fill="#FBC990" stroke="none" />
 
-                {/* ==================== 2. BORDER STROKES (#E68C32, 1pt) ==================== */}
-                {/* Upper Block - Outer Frame, Dividers, & Boundaries */}
                 <line x1="0.5" y1="0.5" x2="550.5" y2="0.5" stroke="#E68C32" strokeWidth="1" />
                 <line x1="0" y1="19.5" x2="551" y2="19.5" stroke="#E68C32" strokeWidth="1" />
                 <line x1="275.5" y1="0" x2="275.5" y2="19.5" stroke="#E68C32" strokeWidth="1" />
@@ -127,7 +117,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
                     strokeWidth="1"
                 />
 
-                {/* Lower Block - Outer Frame & Header/Body Boundary */}
                 <rect
                     x="0"
                     y="169"
@@ -146,7 +135,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
                     strokeWidth="1"
                 />
 
-                {/* ==================== 3. HEADINGS (#1E1E1E, 9.5pt Helvetica-Bold) ==================== */}
                 <g fontFamily="Helvetica, Arial, sans-serif" fontSize="9.5" fontWeight="700" fill="#1E1E1E">
                     <text x="5" y="14.5">
                         SAND Processing/Stock &amp; leaseholder/MDO Details
@@ -159,8 +147,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
                     </text>
                 </g>
 
-                {/* ==================== 4. BODY CONTENT (#1E1E1E, 8.5pt Helvetica) ==================== */}
-                {/* Upper Left Column Content */}
                 <g fontFamily="Helvetica, Arial, sans-serif" fontSize="8.5" fill="#1E1E1E">
                     {LEFT_BOX_ROWS.map(({ key, label, y }) => (
                         <React.Fragment key={key}>
@@ -183,7 +169,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
                     ))}
                 </g>
 
-                {/* Upper Right Column Content */}
                 <g fontFamily="Helvetica, Arial, sans-serif" fontSize="8.5" fill="#1E1E1E">
                     {RIGHT_BOX_ROWS.map(({ key, label, y }) => (
                         <React.Fragment key={key}>
@@ -206,7 +191,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
                     ))}
                 </g>
 
-                {/* Lower Panel Content */}
                 <g fontFamily="Helvetica, Arial, sans-serif" fontSize="8.5" fill="#1E1E1E">
                     {BOTTOM_BOX_ROWS.map(({ key, label, y }) => (
                         <React.Fragment key={key}>
@@ -236,28 +220,7 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data }) => {
 SandDetailsBoxes.propTypes = {
     RoyaltyData: PropTypes.object,
     vehicleRegData: PropTypes.object,
-    data: PropTypes.shape({
-        stockPointId: PropTypes.string,
-        river: PropTypes.string,
-        mouza: PropTypes.string,
-        gpWard: PropTypes.string,
-        blockUlb: PropTypes.string,
-        stockPoliceStation: PropTypes.string,
-        stockDistrict: PropTypes.string,
-        purchaserName: PropTypes.string,
-        purchaserMobile: PropTypes.string,
-        purchaserAddress: PropTypes.string,
-        destinationPoliceStation: PropTypes.string,
-        destinationDistrict: PropTypes.string,
-        destinationState: PropTypes.string,
-        vehicleType: PropTypes.string,
-        registrationNo: PropTypes.string,
-        capacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        lesseeName: PropTypes.string,
-        lesseeMobile: PropTypes.string,
-        lesseeAddress: PropTypes.string,
-        OwnerAddress: PropTypes.string
-    })
+    data: PropTypes.object
 };
 
 export default SandDetailsBoxes;
