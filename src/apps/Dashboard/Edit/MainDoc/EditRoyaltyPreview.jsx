@@ -114,7 +114,7 @@ const EditRoyaltyPreview = ({ qrCode: propQrCode, RoyaltyData: propRoyaltyData, 
                                 (owner) =>
                                     owner.OwnerName &&
                                     owner.OwnerName.trim().toLowerCase() ===
-                                        vehicleData.OwnerName.trim().toLowerCase()
+                                    vehicleData.OwnerName.trim().toLowerCase()
                             );
                             if (matchedOwner) {
                                 vehicleData = { ...vehicleData, ...matchedOwner };
@@ -248,24 +248,22 @@ const EditRoyaltyPreview = ({ qrCode: propQrCode, RoyaltyData: propRoyaltyData, 
                 <button
                     type="button"
                     onClick={() => setActiveTemplate("new_renew_pdf")}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                        activeTemplate === "new_renew_pdf"
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeTemplate === "new_renew_pdf"
                             ? "bg-amber-600 text-white shadow-md shadow-amber-200 scale-105"
                             : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
-                    }`}
+                        }`}
                 >
-                    New Renew PDF (Orange)
+                    (Orange)
                 </button>
                 <button
                     type="button"
                     onClick={() => setActiveTemplate("classic")}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                        activeTemplate === "classic"
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeTemplate === "classic"
                             ? "bg-blue-600 text-white shadow-md shadow-blue-200 scale-105"
                             : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
-                    }`}
+                        }`}
                 >
-                    Classic Royalty Preview (Blue)
+                    (Blue)
                 </button>
             </div>
 
@@ -434,11 +432,10 @@ const EditRoyaltyPreview = ({ qrCode: propQrCode, RoyaltyData: propRoyaltyData, 
                 <button
                     disabled={!isLoading || isGenerating}
                     onClick={captureAndDownloadPDF}
-                    className={`w-full px-5 py-2.5 rounded-lg text-white font-medium shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer text-sm sm:text-base ${
-                        isGenerating
+                    className={`w-full px-5 py-2.5 rounded-lg text-white font-medium shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer text-sm sm:text-base ${isGenerating
                             ? "bg-gray-500 cursor-not-allowed"
                             : "bg-green-600 hover:bg-green-700 active:scale-95"
-                    }`}
+                        }`}
                 >
                     {isGenerating ? (
                         <>
@@ -461,11 +458,10 @@ const EditRoyaltyPreview = ({ qrCode: propQrCode, RoyaltyData: propRoyaltyData, 
                 <button
                     disabled={!isLoading || isGenerating}
                     onClick={reactToPrintFn}
-                    className={`no-print w-full px-5 py-2.5 rounded-lg text-white font-medium shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer text-sm sm:text-base ${
-                        activeTemplate === "new_renew_pdf"
+                    className={`no-print w-full px-5 py-2.5 rounded-lg text-white font-medium shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer text-sm sm:text-base ${activeTemplate === "new_renew_pdf"
                             ? "bg-amber-600 hover:bg-amber-700"
                             : "bg-blue-600 hover:bg-blue-700"
-                    }`}
+                        }`}
                 >
                     <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
