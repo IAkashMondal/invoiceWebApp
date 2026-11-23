@@ -6,6 +6,19 @@ body {
   @apply font-sans;
 }
 
+/* =========================================
+   A4 PRINT CONFIGURATION (CSS Paged Media)
+   Forces browser print dialog to default to A4 portrait
+========================================= */
+@page {
+  size: A4 portrait;
+  margin: 0mm !important;
+}
+
+@page :first {
+  margin: 0mm !important;
+}
+
 /* Mobile View: Fit on screen */
 #print-container {
   width: 100%;
@@ -15,6 +28,23 @@ body {
 
 /* PRINT Mode: Force A4 Size */
 @media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  html,
+  body {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-shadow: none;
+    background: #ffffff !important;
+  }
+
   #print {
     width: 210mm !important;
     height: 297mm !important;
@@ -25,19 +55,14 @@ body {
     position: relative;
     padding: 0 !important;
     margin: 0 !important;
+    box-sizing: border-box !important;
   }
 
   /* Hide buttons during print */
   #no-print,
-  .no-print {
+  .no-print,
+  button {
     display: none !important;
-  }
-
-  html,
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    box-shadow: none;
   }
 
 

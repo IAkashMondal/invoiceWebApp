@@ -17,8 +17,7 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
 
     return (
         <>
-            {/* Lower content block: Note, Issued by, Remarks, QR warning */}
-            <div style={{ width: "551pt", breakInside: "avoid" }}>
+            <div style={{ width: "100%", maxWidth: "551pt", breakInside: "avoid" }}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 551 232"
@@ -26,9 +25,9 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
                     aria-label="Challan notes, issuer, remarks and warning"
                     style={{
                         display: "block",
-                        width: "551pt",
-                        height: "232pt",
-                        maxWidth: "none",
+                        width: "100%",
+                        height: "auto",
+                        maxWidth: "551pt",
                         overflow: "visible",
                         fontFamily: "Helvetica, Arial, sans-serif",
                         letterSpacing: 0,
@@ -36,7 +35,6 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
                         printColorAdjust: "exact"
                     }}
                 >
-                    {/* Note box: x=0, y=0, w=551, h=110 */}
                     <g id="notes-section">
                         <rect
                             x="0"
@@ -47,29 +45,24 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
                             stroke="#E68C32"
                             strokeWidth="1"
                         />
-
                         <text x="7" y="17" fontSize="10" fontWeight="700" fill="#1E1E1E">
                             Note :
                         </text>
-
                         <text x="7" y="34" fontSize="8.5" fill="#1E1E1E">
                             <tspan fontWeight="400">1) Prior approval for stock permission was accorded by : </tspan>
                             <tspan fontWeight="700">{approvalAuthority}</tspan>
                             <tspan fontWeight="400"> vide Stock no. </tspan>
                             <tspan fontWeight="700">{stockNo}.</tspan>
                         </text>
-
                         <text x="7" y="51" fontSize="8.5" fill="#1E1E1E">
                             2) Loaded vehicle must depart for its destination within 30 minutes from issuance of this E-challan. To verify authenticity of the E-challan,
                         </text>
                         <text x="7" y="59.5" fontSize="8.5" fill="#1E1E1E">
                             please scan above QR Code using smart phone.
                         </text>
-
                         <text x="7" y="76.5" fontSize="8.5" fill="#1E1E1E">
                             3) This is a system generated document and does not require any signature.
                         </text>
-
                         <text x="7" y="93.5" fontSize="8.5" fill="#1E1E1E">
                             4) Self Certification by Lessee/MDO : I/We (Lessee/MDO/Q.P.) hereby declare that the above statements are correct and complete to best of
                         </text>
@@ -79,7 +72,6 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
                         </text>
                     </g>
 
-                    {/* Issued by box: x=0, y=115, w=551, h=37.5 */}
                     <g id="issued-by-section">
                         <rect
                             x="0"
@@ -101,7 +93,6 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
                         </text>
                     </g>
 
-                    {/* Remarks box: x=0, y=157.5, w=551, h=32.5 */}
                     <g id="remarks-section">
                         <rect
                             x="0"
@@ -117,7 +108,6 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
                         </text>
                     </g>
 
-                    {/* QR warning: left aligned, two lines, outside all boxes */}
                     <g id="qr-warning" fontSize="8.5" fill="#1E1E1E">
                         <text x="0" y="214.8">
                             <tspan fontWeight="400">** On QR code scanning pl check that the website address bar shows </tspan>
@@ -131,14 +121,15 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
                 </svg>
             </div>
 
-            {/* Page footer: anchored to the page, not to content flow */}
             <div
                 className="footer"
                 style={{
                     position: "absolute",
                     top: "812pt",
-                    left: "15pt",
-                    width: "551pt",
+                    left: 0,
+                    right: 0,
+                    paddingLeft: "15pt",
+                    paddingRight: "15pt",
                     pointerEvents: "none"
                 }}
             >
@@ -149,8 +140,9 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
                     aria-label="Page footer details"
                     style={{
                         display: "block",
-                        width: "551pt",
-                        height: "20pt",
+                        width: "100%",
+                        height: "auto",
+                        maxWidth: "551pt",
                         fontFamily: "Helvetica, Arial, sans-serif"
                     }}
                 >
@@ -175,16 +167,7 @@ const Footer = ({ RoyaltyData, vehicleRegData, data }) => {
 Footer.propTypes = {
     RoyaltyData: PropTypes.object,
     vehicleRegData: PropTypes.object,
-    data: PropTypes.shape({
-        approvalAuthority: PropTypes.string,
-        approvalAuthorityDistrict: PropTypes.string,
-        stockNo: PropTypes.string,
-        lesseeName: PropTypes.string,
-        issuedByName: PropTypes.string,
-        stockPointId: PropTypes.string,
-        remarks: PropTypes.string,
-        generatedOn: PropTypes.string
-    })
+    data: PropTypes.object
 };
 
 export default Footer;

@@ -15,40 +15,60 @@ import { GetParticularVehicle } from "../../../../../../Apis/R_Apis/VehicleApis"
 import { GetOwnersDeatils } from "../../../../../../Apis/Minors/MinorsApi";
 import "../../../../../invoice.css";
 
-// A4 dimensions in mm
+// Exact A4 physical constants at 96 DPI
 const A4_WIDTH_MM = 210;
 const A4_HEIGHT_MM = 297;
+const A4_WIDTH_PX = 794;
+const A4_HEIGHT_PX = 1123;
+
+// Robust viewport calculation that prevents mobile overflow blowouts
+const getDeviceViewportWidth = () => {
+    if (typeof window === "undefined") return A4_WIDTH_PX;
+    const visualVp = window.visualViewport ? window.visualViewport.width : null;
+    const clientWidth = document.documentElement?.clientWidth || null;
+    const innerWidth = window.innerWidth || null;
+
+    const validWidths = [visualVp, clientWidth, innerWidth].filter(
+        (w) => typeof w === "number" && w > 0
+    );
+
+    return validWidths.length > 0 ? Math.min(...validWidths) : A4_WIDTH_PX;
+};
+
+const calculateInitialScale = () => {
+    if (typeof window === "undefined") return 1;
+    const vpWidth = getDeviceViewportWidth();
+    const padding = 24; // 12px margins
+    const available = vpWidth - padding;
+    if (available >= A4_WIDTH_PX) return 1;
+    return Math.max(0.25, available / A4_WIDTH_PX);
+};
 
 const InvoicePreview = (props) => {
-    // Context from RoyaltyInfoContext (like RoyaltyPreview.jsx)
     const contextData = useContext(RoyaltyInfoContext);
     const contextRoyaltyData = contextData?.RoyaltyData;
-    const setContextRoyaltyData = contextData?.setRoyaltyData;
 
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [scale, setScale] = useState(1);
+    // Initialize already scaled to device width to prevent mobile layout jump/stretch
+    const [scale, setScale] = useState(calculateInitialScale);
     const contentRef = useRef(null);
-    const pageNaturalWidth = useRef(null);
 
     const location = useLocation();
     const params = useParams();
 
-    // QR code resolution priority: navigation state -> props -> context
+    // QR code resolution
     const qrCode = location.state?.qrCode || props.qrCode || "";
 
-    // Data fetching logic directly from EditRoyaltyPreview.jsx
+    // Data fetching logic
     useEffect(() => {
-        // If royaltyData is passed via navigation state, use it instantly
         if (location.state?.royaltyData) {
             setvehicleRegData(location.state.royaltyData);
             setIsLoading(true);
-            console.log("Merged royaltyData in new_renew_pdf InvoicePreview:", location.state.royaltyData);
             return;
         }
 
-        // Fallback: Fetch from API as in EditRoyaltyPreview
         const fetchVehicleDetails = async () => {
             if (!params?.royaltyID) {
                 return;
@@ -57,12 +77,9 @@ const InvoicePreview = (props) => {
                 const response = await GetParticularVehicle(params.royaltyID);
                 let vehicleData = response.data?.data || {};
 
-                // Merge owner data from navigation state if present
                 if (location.state?.ownerData) {
-                    console.log("Merging ownerData into vehicleData", location.state.ownerData);
                     vehicleData = { ...vehicleData, ...location.state.ownerData };
                 } else if (vehicleData.OwnerName) {
-                    // Fetch and merge by OwnerName matching
                     try {
                         const ownersResponse = await GetOwnersDeatils();
                         if (ownersResponse?.data?.data) {
@@ -90,7 +107,6 @@ const InvoicePreview = (props) => {
         fetchVehicleDetails();
     }, [params?.royaltyID, location]);
 
-    // Unified merged data: combines vehicle data, owner data, and live edited form fields
     const activeRoyaltyData = {
         ...vehicleRegData,
         ...(props.RoyaltyData || {}),
@@ -100,11 +116,11 @@ const InvoicePreview = (props) => {
     const echallanId = activeRoyaltyData?.EchallanId || vehicleRegData?.EchallanId || "Challan";
     const documentTitle = `WBMD_TP_${echallanId}_T_${getDynamicYearRange()}_RPS`;
 
-    // Print functionality (identical to RoyaltyPreview.jsx)
+    // Print setup
     const handlePrint = useReactToPrint({
         contentRef: contentRef,
         documentTitle: documentTitle,
-        pageStyle: `@page { size: A4 portrait; margin: 0mm !important; } html, body { margin: 0mm !important; padding: 0mm !important; width: 210mm !important; height: 297mm !important; overflow: hidden !important; background: #ffffff !important; } .invoice-page { margin: 0 !important; padding: 0 !important; width: 210mm !important; height: 297mm !important; top: 0 !important; left: 0 !important; }`,
+        pageStyle: `@page { size: A4 portrait; margin: 0mm !important; } @page :first { margin: 0mm !important; } *, *::before, *::after { box-sizing: border-box !important; } html, body { margin: 0mm !important; padding: 0mm !important; width: 210mm !important; height: 297mm !important; overflow: hidden !important; background: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; } .invoice-page, #print { margin: 0 !important; padding: 0 !important; width: 210mm !important; height: 297mm !important; max-width: 210mm !important; max-height: 297mm !important; min-width: 210mm !important; min-height: 297mm !important; top: 0 !important; left: 0 !important; transform: none !important; position: fixed !important; overflow: hidden !important; box-sizing: border-box !important; } #no-print, .no-print, button { display: none !important; }`,
     });
 
     const reactToPrintFn = () => {
@@ -117,30 +133,34 @@ const InvoicePreview = (props) => {
     };
 
     /**
-     * Viewport scaling: measures the A4 page's natural rendered width
-     * and computes CSS transform scale factor so page fits viewport on mobile
-     * (identical to RoyaltyPreview.jsx)
+     * Viewport scaling calculation
      */
     const updateScale = useCallback(() => {
-        if (contentRef.current && !pageNaturalWidth.current) {
-            pageNaturalWidth.current = contentRef.current.offsetWidth;
-        }
-        const pageWidth = pageNaturalWidth.current || 794; // 210mm ≈ 794px at 96dpi
-        const viewportWidth = window.innerWidth;
-        const padding = 32; // 16px padding on each side
-        const maxWidth = viewportWidth - padding;
-        setScale(maxWidth >= pageWidth ? 1 : maxWidth / pageWidth);
+        const vpWidth = getDeviceViewportWidth();
+        const padding = 24; // 12px margin on each side
+        const maxWidth = vpWidth - padding;
+        const newScale = maxWidth >= A4_WIDTH_PX ? 1 : Math.max(0.25, maxWidth / A4_WIDTH_PX);
+        setScale(newScale);
     }, []);
 
     useEffect(() => {
         updateScale();
         window.addEventListener("resize", updateScale);
-        return () => window.removeEventListener("resize", updateScale);
+        window.addEventListener("orientationchange", updateScale);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("resize", updateScale);
+        }
+        return () => {
+            window.removeEventListener("resize", updateScale);
+            window.removeEventListener("orientationchange", updateScale);
+            if (window.visualViewport) {
+                window.visualViewport.removeEventListener("resize", updateScale);
+            }
+        };
     }, [updateScale]);
 
     /**
-     * Single-click direct PDF download with guaranteed single-page A4
-     * (identical to RoyaltyPreview.jsx)
+     * PDF capture and download
      */
     const captureAndDownloadPDF = async () => {
         if (isGenerating) return;
@@ -166,10 +186,15 @@ const InvoicePreview = (props) => {
 
                     clonedElement.style.transform = "none";
                     clonedElement.style.webkitTransform = "none";
+                    clonedElement.style.position = "relative";
+
                     let parent = clonedElement.parentElement;
                     while (parent && parent !== clonedDoc.documentElement) {
                         parent.style.transform = "none";
                         parent.style.webkitTransform = "none";
+                        parent.style.position = "static";
+                        parent.style.width = "auto";
+                        parent.style.height = "auto";
                         parent = parent.parentElement;
                     }
                 }
@@ -182,7 +207,6 @@ const InvoicePreview = (props) => {
                 compress: true
             });
 
-            // Force exactly A4 dimensions — guarantees single page, no overflow
             pdf.addImage(
                 canvas.toDataURL("image/png", 1.0),
                 "PNG",
@@ -203,48 +227,56 @@ const InvoicePreview = (props) => {
         }
     };
 
+    const scaledWidth = Math.round(A4_WIDTH_PX * scale);
+    const scaledHeight = Math.round(A4_HEIGHT_PX * scale);
+
     return (
-        <div id="Maindiv" className="flex flex-col items-center justify-center w-full py-4 print:py-0 print:p-0 print:m-0">
+        <div id="Maindiv" className="flex flex-col items-center justify-center w-full max-w-full py-2 print:py-0 print:p-0 print:m-0 overflow-x-hidden">
             {/* ═══════════════════════════════════════════════════════════
-                InvoiceViewport — responsive scaling wrapper
-                (Desktop: scale = 1; Mobile: scale < 1 shrinks viewport)
+                InvoiceViewport — responsive mobile-friendly scaling container
             ═══════════════════════════════════════════════════════════ */}
             <div
                 className="invoice-viewport"
                 style={{
-                    width: scale < 1 ? `calc(${A4_WIDTH_MM}mm * ${scale})` : `${A4_WIDTH_MM}mm`,
-                    height: scale < 1 ? `calc(${A4_HEIGHT_MM}mm * ${scale})` : `${A4_HEIGHT_MM}mm`,
+                    width: `${scaledWidth}px`,
+                    height: `${scaledHeight}px`,
+                    maxWidth: "100%",
+                    minWidth: 0,
                     overflow: "hidden",
+                    position: "relative",
                     margin: "0 auto",
-                    transition: "width 0.15s ease, height 0.15s ease",
+                    boxSizing: "border-box",
                 }}
             >
-                {/* Transform wrapper — applies the scale */}
+                {/* Transform wrapper — absolutely positioned so it never stretches viewport */}
                 <div
                     className="invoice-scale-wrapper"
                     style={{
                         transform: `scale(${scale})`,
                         transformOrigin: "top left",
-                        width: `${A4_WIDTH_MM}mm`,
-                        height: `${A4_HEIGHT_MM}mm`,
+                        width: `${A4_WIDTH_PX}px`,
+                        height: `${A4_HEIGHT_PX}px`,
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
                     }}
                 >
-                    {/* Fixed 210mm × 297mm A4 Page Canvas */}
+                    {/* Fixed 794px × 1123px (210mm × 297mm) A4 Document */}
                     <div
                         id="print"
                         ref={contentRef}
                         className="invoice-page shadow-2xl"
                         style={{
-                            width: `${A4_WIDTH_MM}mm`,
-                            height: `${A4_HEIGHT_MM}mm`,
-                            minWidth: `${A4_WIDTH_MM}mm`,
-                            maxWidth: `${A4_WIDTH_MM}mm`,
-                            minHeight: `${A4_HEIGHT_MM}mm`,
-                            maxHeight: `${A4_HEIGHT_MM}mm`,
+                            width: `${A4_WIDTH_PX}px`,
+                            height: `${A4_HEIGHT_PX}px`,
+                            minWidth: `${A4_WIDTH_PX}px`,
+                            maxWidth: `${A4_WIDTH_PX}px`,
+                            minHeight: `${A4_HEIGHT_PX}px`,
+                            maxHeight: `${A4_HEIGHT_PX}px`,
                             position: "relative",
                             overflow: "hidden",
                             boxSizing: "border-box",
-                            margin: "0 auto",
+                            margin: 0,
                         }}
                     >
                         <div className="invoice-content">
@@ -266,12 +298,12 @@ const InvoicePreview = (props) => {
                 </div>
             </div>
 
-            {/* Action Buttons for Direct 1-Click PDF Download & Print */}
-            <div id="no-print" className="no-print flex flex-col sm:flex-row gap-4 mt-8 mb-16">
+            {/* Action Buttons */}
+            <div id="no-print" className="no-print flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 mb-12 w-full max-w-sm px-4">
                 <button
                     disabled={!isLoading || isGenerating}
                     onClick={captureAndDownloadPDF}
-                    className={`px-6 py-3 rounded-lg text-white font-medium shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                    className={`w-full px-5 py-2.5 rounded-lg text-white font-medium shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer text-sm sm:text-base ${
                         isGenerating
                             ? "bg-gray-500 cursor-not-allowed"
                             : "bg-green-600 hover:bg-green-700 active:scale-95"
@@ -279,7 +311,7 @@ const InvoicePreview = (props) => {
                 >
                     {isGenerating ? (
                         <>
-                            <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+                            <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 mr-1 text-white" viewBox="0 0 24 24">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                             </svg>
@@ -287,7 +319,7 @@ const InvoicePreview = (props) => {
                         </>
                     ) : (
                         <>
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
                             Download PDF
@@ -298,9 +330,9 @@ const InvoicePreview = (props) => {
                 <button
                     disabled={!isLoading || isGenerating}
                     onClick={reactToPrintFn}
-                    className="no-print px-6 py-3 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-medium shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="no-print w-full px-5 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-medium shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer text-sm sm:text-base"
                 >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>
                     Print Document

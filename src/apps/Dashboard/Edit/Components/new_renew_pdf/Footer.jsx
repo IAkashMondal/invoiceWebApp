@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Footer = ({ RoyaltyData, vehicleRegData, data: propData }) => {
-    // Normalization & extraction matching EditRoyaltyPreview / preview/TextTEmp
     const data = {
         ...(vehicleRegData || {}),
         ...(propData || {}),
@@ -14,7 +13,6 @@ const Footer = ({ RoyaltyData, vehicleRegData, data: propData }) => {
     const OwnerDistrict = owners?.OwnerDistrict || data?.OwnerDistrict || data?.approvalAuthorityDistrict || "N/A";
     const approvalAuthority = data?.approvalAuthority || `ADM and DL & LRO, ${OwnerDistrict}`;
 
-    // Stock/Permit No. from TextTEmp logic
     const VidePermitNo = owners?.VidePermitNo || data?.VidePermitNo || owners?.SandID || data?.SandID || data?.stockNo || "N/A";
     const OwnerName = owners?.OwnerName || data?.OwnerName || data?.lesseeName || "N/A";
     const SandID = owners?.SandID || data?.SandID || data?.stockPointId || "N/A";
@@ -27,8 +25,7 @@ const Footer = ({ RoyaltyData, vehicleRegData, data: propData }) => {
 
     return (
         <>
-            {/* Lower content block: Note, Issued by, Remarks, QR warning */}
-            <div style={{ width: "551pt", breakInside: "avoid" }}>
+            <div style={{ width: "100%", maxWidth: "551pt", breakInside: "avoid" }}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 551 232"
@@ -36,9 +33,9 @@ const Footer = ({ RoyaltyData, vehicleRegData, data: propData }) => {
                     aria-label="Challan notes, issuer, remarks and warning"
                     style={{
                         display: "block",
-                        width: "551pt",
-                        height: "232pt",
-                        maxWidth: "none",
+                        width: "100%",
+                        height: "auto",
+                        maxWidth: "551pt",
                         overflow: "visible",
                         fontFamily: "Helvetica, Arial, sans-serif",
                         letterSpacing: 0,
@@ -127,8 +124,10 @@ const Footer = ({ RoyaltyData, vehicleRegData, data: propData }) => {
                 style={{
                     position: "absolute",
                     top: "812pt",
-                    left: "15pt",
-                    width: "551pt",
+                    left: 0,
+                    right: 0,
+                    paddingLeft: "15pt",
+                    paddingRight: "15pt",
                     pointerEvents: "none"
                 }}
             >
@@ -139,8 +138,9 @@ const Footer = ({ RoyaltyData, vehicleRegData, data: propData }) => {
                     aria-label="Page footer details"
                     style={{
                         display: "block",
-                        width: "551pt",
-                        height: "20pt",
+                        width: "100%",
+                        height: "auto",
+                        maxWidth: "551pt",
                         fontFamily: "Helvetica, Arial, sans-serif"
                     }}
                 >

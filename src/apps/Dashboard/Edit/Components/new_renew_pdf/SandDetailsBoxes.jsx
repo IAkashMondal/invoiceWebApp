@@ -31,7 +31,6 @@ const BOTTOM_BOX_ROWS = [
 ];
 
 const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data: propData }) => {
-    // Normalization & extraction from EditRoyaltyPreview / preview logic
     const data = {
         ...(vehicleRegData || {}),
         ...(propData || {}),
@@ -40,7 +39,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data: propData }) => {
     };
     const owners = data?.RoyaltyOwners || {};
 
-    // Special owner check from SellerDeatilsTemp
     const ownerName = owners?.OwnerName || data?.OwnerName || "";
     const isSpecialOwner =
         ownerName === "Contemporary Remedies" ||
@@ -50,7 +48,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data: propData }) => {
         ? "Stock Point Id"
         : (ownerName === "Prasanta Kumar Hait" ? "PERMISSION HOLDER Id" : "Sand Stock Point Id");
 
-    // River value logic
     const riverVal = owners?.River ?? data?.River;
     const riverDisplay = (riverVal && String(riverVal).trim() !== "")
         ? riverVal
@@ -82,7 +79,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data: propData }) => {
                 : "NA"
     };
 
-    // Address combination logic from SellerDeatilsTemp
     const addressParts = [
         owners?.OwnerAddressLine1 || data?.OwnerAddressLine1,
         owners?.OwnerAddressLine2 || data?.OwnerAddressLine2,
@@ -107,7 +103,7 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data: propData }) => {
     };
 
     return (
-        <div style={{ width: "551pt", marginBottom: "8pt", breakInside: "avoid" }}>
+        <div style={{ width: "100%", maxWidth: "551pt", marginBottom: "8pt", breakInside: "avoid" }}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 551 237"
@@ -115,9 +111,9 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data: propData }) => {
                 aria-label="Sand processing stock and mining leaseholder details"
                 style={{
                     display: "block",
-                    width: "551pt",
-                    height: "237pt",
-                    maxWidth: "none",
+                    width: "100%",
+                    height: "auto",
+                    maxWidth: "551pt",
                     overflow: "visible",
                     fontFamily: "Helvetica, Arial, sans-serif",
                     letterSpacing: 0,
@@ -155,7 +151,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data: propData }) => {
                 </g>
 
                 {/* ==================== 4. BODY CONTENT ==================== */}
-                {/* Upper Left Column Content */}
                 <g fontFamily="Helvetica, Arial, sans-serif" fontSize="8.5" fill="#1E1E1E">
                     {LEFT_BOX_ROWS.map(({ key, label, y }) => {
                         const displayLabel = key === "stockPointId" ? stockPointIdLabel : label;
@@ -171,7 +166,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data: propData }) => {
                     })}
                 </g>
 
-                {/* Upper Right Column Content */}
                 <g fontFamily="Helvetica, Arial, sans-serif" fontSize="8.5" fill="#1E1E1E">
                     {RIGHT_BOX_ROWS.map(({ key, label, y }) => (
                         <React.Fragment key={key}>
@@ -184,7 +178,6 @@ const SandDetailsBoxes = ({ RoyaltyData, vehicleRegData, data: propData }) => {
                     ))}
                 </g>
 
-                {/* Lower Panel Content */}
                 <g fontFamily="Helvetica, Arial, sans-serif" fontSize="8.5" fill="#1E1E1E">
                     {BOTTOM_BOX_ROWS.map(({ key, label, y }) => (
                         <React.Fragment key={key}>
