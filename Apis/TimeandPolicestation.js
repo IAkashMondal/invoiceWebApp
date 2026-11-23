@@ -20,7 +20,7 @@ export const policeStationData = [
   },
   {
     id: 4,
-    policeStation: "ISLAMPUR",
+    policeStation: "islampur",
     PurchaserDristic: "UTTAR DINAJPUR",
     validity: 12,
   },
