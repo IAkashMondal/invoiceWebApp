@@ -15,7 +15,6 @@ function App() {
     <>
       <InvoiceHeader />
       <Outlet />
-
     </>
   )
 }

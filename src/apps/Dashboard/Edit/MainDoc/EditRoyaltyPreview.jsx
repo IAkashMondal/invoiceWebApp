@@ -1,28 +1,64 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import ChallanTemp from "../Components/preview/ChallanTemp";
-import TextTEmp from "../Components/preview/TextTEmp";
-import SellerDetailsTemp from "../Components/preview/SellerDeatilsTemp";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { useReactToPrint } from "react-to-print";
+
+// Classic preview components
 import BuyerDetailsTemp from "../Components/preview/BuyerDetailsTemp";
+import ChallanTemp from "../Components/preview/ChallanTemp";
+import SellerDetailsTemp from "../Components/preview/SellerDeatilsTemp";
+import TextTEmp from "../Components/preview/TextTEmp";
+
+// New renew PDF components (4 JSX files)
+import InvoicePreview from "../Components/new_renew_pdf/InvoicePreview";
+import Hader from "../Components/new_renew_pdf/Hader";
+import SandDetailsBoxes from "../Components/new_renew_pdf/SandDetailsBoxes";
+import Footer from "../Components/new_renew_pdf/Footer";
+
+import { RoyaltyInfoContext } from "@/Context/RoyaltyInfoContext";
 import { getDynamicYearRange } from "../../../../../Apis/GlobalFunction";
 import { GetParticularVehicle } from "../../../../../Apis/R_Apis/VehicleApis";
 import { GetOwnersDeatils } from "../../../../../Apis/Minors/MinorsApi";
 
-const EditRoyaltyPreview = (props) => {
+// A4 dimensions in mm
+const A4_WIDTH_MM = 210;
+const A4_HEIGHT_MM = 297;
+
+const EditRoyaltyPreview = ({ qrCode: propQrCode, RoyaltyData: propRoyaltyData, setRoyaltyData: propSetRoyaltyData, ...props }) => {
+    const contextData = useContext(RoyaltyInfoContext);
+    const RoyaltyData = propRoyaltyData || contextData?.RoyaltyData;
+    const setRoyaltyData = propSetRoyaltyData || contextData?.setRoyaltyData;
+
     const [vehicleRegData, setvehicleRegData] = useState({});
     const [isLoading, setIsLoadind] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [scale, setScale] = useState(1);
+    const [activeTemplate, setActiveTemplate] = useState("new_renew_pdf"); // "new_renew_pdf" | "classic"
+
     const contentRef = useRef(null);
+    const pageNaturalWidth = useRef(null);
 
     const location = useLocation();
-    const qrCode = location.state?.qrCode || props.qrCode || "";
+    const qrCode = location.state?.qrCode || propQrCode || props.qrCode || "";
+
+    const echallanId = RoyaltyData?.EchallanId || vehicleRegData?.EchallanId || "Challan";
+    const documentTitle = `WBMD_TP_${echallanId}_T_${getDynamicYearRange()}_RPS`;
+
+    const handlePrint = useReactToPrint({
+        contentRef: contentRef,
+        documentTitle: documentTitle,
+        pageStyle: `@page { size: A4 portrait; margin: 0mm !important; } html, body { margin: 0mm !important; padding: 0mm !important; width: 210mm !important; height: 297mm !important; overflow: hidden !important; background: #ffffff !important; } #print { margin: 0 !important; padding: 7mm !important; width: 210mm !important; height: 297mm !important; }`,
+    });
 
     const reactToPrintFn = () => {
-        document.title = `WBMD_TP_${vehicleRegData?.EchallanId}_T_${getDynamicYearRange()}_RPS`;
-        window.print();
+        document.title = documentTitle;
+        if (typeof handlePrint === "function") {
+            handlePrint();
+        } else {
+            window.print();
+        }
     };
 
     // Fetch params from URL
@@ -33,10 +69,10 @@ const EditRoyaltyPreview = (props) => {
         if (location.state?.royaltyData) {
             setvehicleRegData(location.state.royaltyData);
             setIsLoadind(true);
-            console.log('Merged royaltyData in EditRoyaltyPreview:', location.state.royaltyData);
             return;
         }
-        // Otherwise, fetch from API as fallback
+
+        // Fetch vehicle details based on the Royalty ID
         const fetchVehicleDetails = async () => {
             if (!params?.royaltyID) {
                 return;
@@ -44,17 +80,19 @@ const EditRoyaltyPreview = (props) => {
             try {
                 const response = await GetParticularVehicle(params.royaltyID);
                 let vehicleData = response.data?.data || {};
+
                 // Merge owner data from navigation state if present
                 if (location.state?.ownerData) {
-                    console.log("Merging ownerData into vehicleData", location.state.ownerData);
                     vehicleData = { ...vehicleData, ...location.state.ownerData };
                 } else if (vehicleData.OwnerName) {
-                    // If no ownerData in state, fetch and merge by OwnerName
                     try {
                         const ownersResponse = await GetOwnersDeatils();
                         if (ownersResponse?.data?.data) {
                             const matchedOwner = ownersResponse.data.data.find(
-                                owner => owner.OwnerName && owner.OwnerName.trim().toLowerCase() === vehicleData.OwnerName.trim().toLowerCase()
+                                (owner) =>
+                                    owner.OwnerName &&
+                                    owner.OwnerName.trim().toLowerCase() ===
+                                        vehicleData.OwnerName.trim().toLowerCase()
                             );
                             if (matchedOwner) {
                                 vehicleData = { ...vehicleData, ...matchedOwner };
@@ -64,304 +102,319 @@ const EditRoyaltyPreview = (props) => {
                         console.error("Error fetching owners for merge:", err);
                     }
                 }
+
                 setvehicleRegData(vehicleData);
                 setIsLoadind(true);
             } catch (error) {
                 console.error("Error fetching vehicle details:", error.response?.data || error.message);
             }
         };
+
         fetchVehicleDetails();
     }, [params?.royaltyID, location]);
 
-    // Single-click direct PDF download with exact desktop A4 layout (Screenshot 2)
+    // Unified merged data for passing to new_renew_pdf components
+    const mergedRoyaltyData = {
+        ...vehicleRegData,
+        ...(RoyaltyData || {}),
+        ...(contextData?.RoyaltyData || {})
+    };
+
+    /**
+     * Viewport scaling: measures the A4 page's natural rendered width
+     * and computes a CSS transform scale factor so the entire page
+     * fits within the viewport on mobile — like a PDF viewer.
+     */
+    const updateScale = useCallback(() => {
+        if (contentRef.current && !pageNaturalWidth.current) {
+            pageNaturalWidth.current = contentRef.current.offsetWidth;
+        }
+        const pageWidth = pageNaturalWidth.current || 794; // 210mm ≈ 794px at 96dpi
+        const viewportWidth = window.innerWidth;
+        const padding = 32; // 16px margin on each side
+        const maxWidth = viewportWidth - padding;
+        setScale(maxWidth >= pageWidth ? 1 : maxWidth / pageWidth);
+    }, []);
+
+    useEffect(() => {
+        updateScale();
+        window.addEventListener("resize", updateScale);
+        return () => window.removeEventListener("resize", updateScale);
+    }, [updateScale]);
+
+    /**
+     * PDF capture and download.
+     * Captures the fixed-size A4 page element directly (contentRef)
+     * and forces addImage to exactly A4 dimensions for a guaranteed 1 page output.
+     */
     const captureAndDownloadPDF = async () => {
         if (isGenerating) return;
         try {
             setIsGenerating(true);
             const content = contentRef.current;
             if (!content) {
-                throw new Error('Content element not found');
+                throw new Error("Content element not found");
             }
+
+            const isNewRenew = activeTemplate === "new_renew_pdf";
 
             const canvas = await html2canvas(content, {
                 scale: 3,
                 useCORS: true,
                 logging: false,
                 allowTaint: true,
-                backgroundColor: '#ffffff',
+                backgroundColor: isNewRenew ? "#FCE8C5" : "#ffffff",
                 imageTimeout: 5000,
                 windowWidth: 1280,
-                windowHeight: 1800,
-                onclone: (clonedDoc) => {
-                    // Remove buttons and non-printable elements
-                    const noPrintElems = clonedDoc.querySelectorAll('button, #no-print, .no-print');
+                windowHeight: 1810,
+                onclone: (clonedDoc, clonedElement) => {
+                    // Remove buttons and non-printable elements from clone
+                    const noPrintElems = clonedDoc.querySelectorAll("button, #no-print, .no-print");
                     noPrintElems.forEach((el) => el.remove());
 
-                    // Inject CSS rules to enforce exact desktop A4 layout matching target design
-                    const styleElem = clonedDoc.createElement('style');
-                    styleElem.type = 'text/css';
-                    styleElem.innerHTML = `
-                        * {
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                            box-sizing: border-box !important;
-                        }
-                        body {
-                            background-color: #ffffff !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
-                        }
-                        #print {
-                            width: 210mm !important;
-                            max-width: 210mm !important;
-                            min-width: 210mm !important;
-                            padding: 7mm !important;
-                            margin: 0 auto !important;
-                            background: #ffffff !important;
-                            position: relative !important;
-                        }
-                        #indigoborder {
-                            width: 19.1cm !important;
-                            height: 29.7cm !important;
-                            min-height: 29.7cm !important;
-                            max-height: 29.7cm !important;
-                            padding-left: 5mm !important;
-                            padding-right: 2mm !important;
-                            padding-top: 2mm !important;
-                            border: 1.5px solid #0000FF !important;
-                            background: #ffffff !important;
-                            display: flex !important;
-                            flex-direction: column !important;
-                            position: relative !important;
-                        }
-                        #nameText {
-                            font-size: 15pt !important;
-                            font-weight: bold !important;
-                            font-family: helvetica, sans-serif !important;
-                            text-align: center !important;
-                            margin-top: 0 !important;
-                            margin-bottom: 0 !important;
-                            padding: 0 !important;
-                            color: #000000 !important;
-                            width: 100% !important;
-                        }
-                        #challnabox {
-                            display: grid !important;
-                            grid-auto-flow: column !important;
-                            font-family: serif !important;
-                            margin-bottom: 0 !important;
-                            padding: 0 !important;
-                        }
-                        #detalsDiv {
-                            width: 14.5cm !important;
-                            height: 3.6cm !important;
-                            padding-left: 2mm !important;
-                            padding-right: 2mm !important;
-                            border: 1.5px solid #000000 !important;
-                            margin-top: 0 !important;
-                        }
-                        #boxtext {
-                            display: flex !important;
-                            font-weight: bold !important;
-                            font-size: 13pt !important;
-                            font-family: serif !important;
-                            color: #000000 !important;
-                            padding: 0 !important;
-                            margin: 0 !important;
-                        }
-                        #boxgap {
-                            min-width: 3.7cm !important;
-                            width: 3.7cm !important;
-                            display: inline-block !important;
-                        }
-                        #qntText {
-                            font-size: 9pt !important;
-                            font-weight: 300 !important;
-                        }
-                        #qrcan {
-                            width: 3.1cm !important;
-                            height: 3.2cm !important;
-                            margin-right: 7mm !important;
-                            margin-left: 1mm !important;
-                            margin-top: 4mm !important;
-                        }
-                        #ImageBehindContent {
-                            display: flex !important;
-                            justify-content: center !important;
-                            width: 100% !important;
-                            position: relative !important;
-                        }
-                        #ImageBehindContent > div {
-                            display: grid !important;
-                            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                            width: 100% !important;
-                            gap: 0 !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
-                        }
-                        #imgdiv {
-                            position: absolute !important;
-                            width: 7.4cm !important;
-                            height: 7.6cm !important;
-                            margin-top: 7.3cm !important;
-                            object-fit: contain !important;
-                            opacity: 0.25 !important;
-                        }
-                        #sellerBox, #buyerBox {
-                            width: 9cm !important;
-                            height: auto !important;
-                            display: flex !important;
-                            flex-direction: column !important;
-                            margin-top: 1mm !important;
-                            justify-content: flex-start !important;
-                            border: 1.5px solid #000000 !important;
-                            padding: 0 !important;
-                        }
-                        #large-screen-styles {
-                            font-size: 10pt !important;
-                            font-weight: 600 !important;
-                            font-style: italic !important;
-                            font-family: serif !important;
-                            margin-top: 4mm !important;
-                            margin-left: 0.3cm !important;
-                            color: #000000 !important;
-                        }
-                        #sellerBox p, #buyerBox p, #sellerBox span, #buyerBox span {
-                            font-size: 11pt !important;
-                            font-family: serif !important;
-                            color: #000000 !important;
-                        }
-                        #sellerBox p {
-                            margin-bottom: 6mm !important;
-                            margin-left: 1mm !important;
-                            margin-top: 0 !important;
-                        }
-                        #buyerBox p {
-                            margin-bottom: 6mm !important;
-                            margin-left: 1mm !important;
-                            margin-top: 0 !important;
-                        }
-                        #TempTex, #TempTexBold, #TempTexBold1 {
-                            font-size: 11.3pt !important;
-                            font-family: serif !important;
-                            color: #000000 !important;
-                        }
-                        #qrText {
-                            font-size: 11pt !important;
-                            font-family: serif !important;
-                            font-weight: bold !important;
-                            font-style: italic !important;
-                            margin-left: -5mm !important;
-                            padding: 0 !important;
-                            margin-top: 3mm !important;
-                            color: #000000 !important;
-                        }
-                        #genaratedtex {
-                            display: flex !important;
-                            margin-top: 0 !important;
-                            position: relative !important;
-                            width: 100% !important;
-                        }
-                        #genaratedtex p {
-                            font-size: 8pt !important;
-                            font-weight: bold !important;
-                            font-family: serif !important;
-                            color: #000000 !important;
-                            margin: 0 !important;
-                        }
-                        #genaratedtex p:nth-child(1) {
-                            margin-left: 1cm !important;
-                        }
-                        #genaratedtex p:nth-child(2) {
-                            margin-left: 5.1cm !important;
-                        }
-                        #genaratedtex p:nth-child(3) {
-                            margin-left: 4.7cm !important;
-                        }
-                    `;
-                    clonedDoc.head.appendChild(styleElem);
+                    // Reset viewport scaling transforms on all ancestors
+                    clonedElement.style.transform = "none";
+                    clonedElement.style.webkitTransform = "none";
+                    let parent = clonedElement.parentElement;
+                    while (parent && parent !== clonedDoc.documentElement) {
+                        parent.style.transform = "none";
+                        parent.style.webkitTransform = "none";
+                        parent = parent.parentElement;
+                    }
                 }
             });
 
-            const imgWidth = 210;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
             const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4",
+                compress: true
             });
 
+            // Force exactly A4 dimensions — guarantees single page, no overflow
             pdf.addImage(
-                canvas.toDataURL('image/png', 1.0),
-                'PNG',
+                canvas.toDataURL("image/png", 1.0),
+                "PNG",
                 0,
                 0,
-                imgWidth,
-                imgHeight,
+                A4_WIDTH_MM,
+                A4_HEIGHT_MM,
                 undefined,
-                'FAST'
+                "FAST"
             );
 
-            const echallanId = vehicleRegData?.EchallanId || 'Challan';
-            const fileName = `WBMD_TP_${echallanId}_T_${getDynamicYearRange()}_RPS.pdf`;
-
-            pdf.save(fileName);
+            pdf.save(`${documentTitle}.pdf`);
         } catch (error) {
-            console.error('PDF download failed:', error);
-            alert('Failed to generate PDF. Please try again.');
+            console.error("PDF download failed:", error);
+            alert("Failed to generate PDF. Please try again.");
         } finally {
             setIsGenerating(false);
         }
     };
 
     return (
-        <div id="Maindiv" className="flex flex-col items-center">
-            {/* The entire Royalty Preview component wrapped inside a reference */}
-            <div className="">
-                <div id="print" ref={contentRef} className="m-0 relative lg:p-[7mm] sm:p-[0.3cm]">
-                    {/* A4 Sized Container */}
-                    <div id="indigoborder" className="border-[1.5px] border-[#0000FF] lg:w-[19.1cm] lg:h-[29.7cm] lg:pl-[5mm] sm:h-auto sm:w-[100%] sm:p-[0.3cm] m-0 pt-[0mm] bg-white flex flex-col">
+        <div id="Maindiv" className="flex flex-col items-center print:p-0 print:m-0 w-full">
+            {/* Template Switcher Tabs */}
+            <div id="no-print" className="no-print flex items-center gap-3 mt-2 mb-4 bg-gray-100 p-1.5 rounded-xl border border-gray-200 shadow-sm">
+                <button
+                    type="button"
+                    onClick={() => setActiveTemplate("new_renew_pdf")}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        activeTemplate === "new_renew_pdf"
+                            ? "bg-amber-600 text-white shadow-md shadow-amber-200 scale-105"
+                            : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
+                    }`}
+                >
+                    New Renew PDF (Orange)
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setActiveTemplate("classic")}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        activeTemplate === "classic"
+                            ? "bg-blue-600 text-white shadow-md shadow-blue-200 scale-105"
+                            : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
+                    }`}
+                >
+                    Classic Royalty Preview (Blue)
+                </button>
+            </div>
 
-                        {/* Challan Section */}
-                        <ChallanTemp qrCode={qrCode} RoyaltyData={vehicleRegData} />
-
-                        {/* Image Behind Content */}
-                        <div id="ImageBehindContent" className="flex justify-center sm:p-0 sm:w-[100%]">
-                            <img
-                                id="imgdiv"
-                                className="absolute sm:absolute lg:w-[7.4cm] lg:h-[7.6cm] object-contain opacity-25 lg:mt-[7.3cm] sm:w-[4.2cm] sm:h-[4.2cm] sm:mt-36"
-                                src="/mid_imga.png"
-                                alt="background"
-                            />
-                            {/* Buyer & Seller Details */}
-                            <div className="z-10 grid grid-cols-1 sm:grid-cols-2 w-full sm:w-full gap-0 sm:gap-0 m-0 sm:m-0 sm:mr-0 sm:ml-0 p-0">
-                                <SellerDetailsTemp RoyaltyData={vehicleRegData} />
-                                <BuyerDetailsTemp RoyaltyData={vehicleRegData} />
+            {/* ═══════════════════════════════════════════════════════════
+                InvoiceViewport — responsive scaling wrapper
+                ─────────────────────────────────────────────────────────
+                Desktop: scale = 1, displays at natural A4 size.
+                Mobile:  scale < 1, entire A4 page shrinks to fit
+                         viewport width — like a PDF viewer.
+                The DOCUMENT never reflows. Only the viewport scales.
+            ═══════════════════════════════════════════════════════════ */}
+            <div
+                className="invoice-viewport"
+                style={{
+                    width: scale < 1 ? `calc(${A4_WIDTH_MM}mm * ${scale})` : `${A4_WIDTH_MM}mm`,
+                    height: scale < 1 ? `calc(${A4_HEIGHT_MM}mm * ${scale})` : `${A4_HEIGHT_MM}mm`,
+                    overflow: "hidden",
+                    margin: "0 auto",
+                    transition: "width 0.15s ease, height 0.15s ease",
+                }}
+            >
+                {/* Transform wrapper — applies the scale */}
+                <div
+                    className="invoice-scale-wrapper"
+                    style={{
+                        transform: `scale(${scale})`,
+                        transformOrigin: "top left",
+                        width: `${A4_WIDTH_MM}mm`,
+                        height: `${A4_HEIGHT_MM}mm`,
+                    }}
+                >
+                    {activeTemplate === "new_renew_pdf" ? (
+                        /* ─────────────────────────────────────────────────────────
+                            NEW RENEW PDF TEMPLATE
+                            Sends values directly to new_renew_pdf and its 4 JSX files
+                        ───────────────────────────────────────────────────────── */
+                        <div
+                            id="print"
+                            ref={contentRef}
+                            className="invoice-page shadow-2xl"
+                            style={{
+                                width: `${A4_WIDTH_MM}mm`,
+                                height: `${A4_HEIGHT_MM}mm`,
+                                minWidth: `${A4_WIDTH_MM}mm`,
+                                maxWidth: `${A4_WIDTH_MM}mm`,
+                                minHeight: `${A4_HEIGHT_MM}mm`,
+                                maxHeight: `${A4_HEIGHT_MM}mm`,
+                                position: "relative",
+                                overflow: "hidden",
+                                boxSizing: "border-box",
+                                margin: "0 auto",
+                            }}
+                        >
+                            <div className="invoice-content">
+                                <Hader
+                                    qrCode={qrCode}
+                                    RoyaltyData={mergedRoyaltyData}
+                                    vehicleRegData={vehicleRegData}
+                                />
+                                <SandDetailsBoxes
+                                    RoyaltyData={mergedRoyaltyData}
+                                    vehicleRegData={vehicleRegData}
+                                />
+                                <Footer
+                                    RoyaltyData={mergedRoyaltyData}
+                                    vehicleRegData={vehicleRegData}
+                                />
                             </div>
                         </div>
+                    ) : (
+                        /* ─────────────────────────────────────────────────────────
+                            CLASSIC ROYALTY PREVIEW TEMPLATE
+                            (Exact code and layout from RoyaltyPreview.jsx)
+                        ───────────────────────────────────────────────────────── */
+                        <div
+                            id="print"
+                            ref={contentRef}
+                            style={{
+                                width: `${A4_WIDTH_MM}mm`,
+                                height: `${A4_HEIGHT_MM}mm`,
+                                minWidth: `${A4_WIDTH_MM}mm`,
+                                maxWidth: `${A4_WIDTH_MM}mm`,
+                                minHeight: `${A4_HEIGHT_MM}mm`,
+                                maxHeight: `${A4_HEIGHT_MM}mm`,
+                                padding: "7mm",
+                                margin: "0 auto",
+                                position: "relative",
+                                background: "#ffffff",
+                                boxSizing: "border-box",
+                                overflow: "hidden",
+                                display: "flex",
+                                flexDirection: "column",
+                            }}
+                        >
+                            {/* Blue-bordered content area — fills available A4 space */}
+                            <div
+                                id="indigoborder"
+                                style={{
+                                    width: "19.1cm",
+                                    flex: "1 1 0",
+                                    paddingLeft: "5mm",
+                                    paddingRight: "2mm",
+                                    paddingTop: "2mm",
+                                    border: "1.5px solid #0000FF",
+                                    background: "#ffffff",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    position: "relative",
+                                    overflow: "hidden",
+                                    margin: 0,
+                                    boxSizing: "border-box",
+                                }}
+                            >
+                                {/* Challan Section */}
+                                <ChallanTemp className="" qrCode={qrCode} RoyaltyData={RoyaltyData} vehicleRegData={vehicleRegData} />
 
-                        {/* Additional Text Section */}
-                        <div className="z-10 m-0 p-0">
-                            <TextTEmp RoyaltyData={vehicleRegData} />
+                                {/* Image Behind Content */}
+                                <div id="ImageBehindContent" className="flex justify-center" style={{ width: "100%", position: "relative" }}>
+                                    <img
+                                        id="imgdiv"
+                                        style={{
+                                            position: "absolute",
+                                            width: "7.4cm",
+                                            height: "7.6cm",
+                                            objectFit: "contain",
+                                            opacity: 0.25,
+                                            marginTop: "7.3cm",
+                                        }}
+                                        src="/mid_imga.png"
+                                        alt="background"
+                                    />
+                                    {/* Buyer & Seller Details — always 2-column, never stacked */}
+                                    <div className="z-10 grid grid-cols-2 w-full gap-0 m-0 p-0">
+                                        <SellerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
+                                        <BuyerDetailsTemp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
+                                    </div>
+                                </div>
+
+                                {/* Additional Text Section */}
+                                <div className="z-10 m-0 p-0">
+                                    <TextTEmp RoyaltyData={{ RoyaltyData, setRoyaltyData }} />
+                                </div>
+                            </div>
+
+                            {/* Generated text — inside A4 page, below blue border */}
+                            <div
+                                id="genaratedtex"
+                                style={{
+                                    display: "flex",
+                                    marginTop: 0,
+                                    position: "relative",
+                                    width: "100%",
+                                }}
+                            >
+                                <p style={{ fontSize: "8pt", fontWeight: "bold", fontFamily: "serif", margin: 0, marginLeft: "1cm" }}>
+                                    Generated on: {vehicleRegData?.GeneratedDT}
+                                </p>
+                                <p style={{ fontSize: "8pt", fontWeight: "bold", fontFamily: "serif", margin: 0, marginLeft: "5.1cm" }}>
+                                    {`<NIC>`}
+                                </p>
+                                <p style={{ fontSize: "8pt", fontWeight: "bold", fontFamily: "serif", margin: 0, marginLeft: "4.7cm" }}>
+                                    Page No: 1
+                                </p>
+                            </div>
                         </div>
-                    </div>
-
-                    <div id="genaratedtex" className="relative flex mt-0">
-                        <p className="font font-bold font-serif lg:text-[8pt] lg:ml-[1cm] sm:text-[5pt] sm:ml-[0.3cm]">Generated on: {vehicleRegData?.GeneratedDT}</p>
-                        <p className="font font-bold font-serif lg:text-[8pt] lg:ml-[5.1cm] sm:ml-[3cm] sm:text-[5pt]">{`<NIC>`}</p>
-                        <p className="font font-bold font-serif lg:text-[8pt] lg:ml-[4.7cm] sm:text-[5pt] sm:ml-[3cm]">Page No: 1</p>
-                    </div>
+                    )}
                 </div>
             </div>
 
-            {/* Action Buttons for Direct 1-Click PDF Download */}
-            <div id="no-print" className="flex flex-col sm:flex-row gap-4 mt-8 mb-16">
+            {/* Action Buttons for Direct 1-Click PDF Download & Print */}
+            <div id="no-print" className="no-print flex flex-col sm:flex-row gap-4 mt-8 mb-16">
                 <button
                     disabled={!isLoading || isGenerating}
                     onClick={captureAndDownloadPDF}
-                    className={`px-6 py-3 rounded-lg text-white font-medium shadow-md transition-all flex items-center justify-center gap-2 ${
-                        isGenerating ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 active:scale-95'
+                    className={`px-6 py-3 rounded-lg text-white font-medium shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                        isGenerating
+                            ? "bg-gray-500 cursor-not-allowed"
+                            : "bg-green-600 hover:bg-green-700 active:scale-95"
                     }`}
                 >
                     {isGenerating ? (
@@ -385,7 +438,11 @@ const EditRoyaltyPreview = (props) => {
                 <button
                     disabled={!isLoading || isGenerating}
                     onClick={reactToPrintFn}
-                    className="px-6 py-3 rounded-lg bg-blue-600 text-white font-medium shadow-md hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+                    className={`no-print px-6 py-3 rounded-lg text-white font-medium shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                        activeTemplate === "new_renew_pdf"
+                            ? "bg-amber-600 hover:bg-amber-700"
+                            : "bg-blue-600 hover:bg-blue-700"
+                    }`}
                 >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -399,7 +456,10 @@ const EditRoyaltyPreview = (props) => {
 
 EditRoyaltyPreview.propTypes = {
     qrCode: PropTypes.string,
-    RoyaltyData: PropTypes.object
+    RoyaltyData: PropTypes.object,
+    setRoyaltyData: PropTypes.func,
+    generateQrCode: PropTypes.func
 };
 
 export default EditRoyaltyPreview;
+export { EditRoyaltyPreview as RoyaltyPreview };
